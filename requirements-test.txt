@@ -1,0 +1,6 @@
+# Test dependencies for the portfolio project
+pytest>=7.4.0
+pytest-django>=4.5.0
+pytest-cov>=4.1.0
+factory-boy>=3.3.0
+faker>=19.0.0

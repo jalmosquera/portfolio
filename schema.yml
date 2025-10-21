@@ -1,0 +1,1931 @@
+openapi: 3.0.3
+info:
+  title: Portfolio API
+  version: 1.0.0
+  description: API REST para el portafolio personal. Incluye endpoints para proyectos,
+    habilidades, información personal y mensajes de contacto. / REST API for personal
+    portfolio. Includes endpoints for projects, skills, personal information and contact
+    messages.
+  contact:
+    name: Portfolio API Support
+    email: support@portfolio.com
+  license:
+    name: MIT License
+paths:
+  /api/about/:
+    get:
+      operationId: aboutList
+      description: Retrieve a list of all about/bio profiles. / Obtiene una lista
+        de todos los perfiles about/bio.
+      summary: List all about profiles / Listar todos los perfiles about
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      tags:
+      - About
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAboutMeList'
+          description: ''
+    post:
+      operationId: aboutCreate
+      description: Create a new about/bio profile. / Crea un nuevo perfil about/bio.
+      summary: Create an about profile / Crear un perfil about
+      tags:
+      - About
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AboutMeRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AboutMe'
+          description: ''
+  /api/about/{id}/:
+    get:
+      operationId: aboutRetrieve
+      description: Get details of a specific about profile by ID. / Obtiene los detalles
+        de un perfil about específico por ID.
+      summary: Retrieve an about profile / Obtener un perfil about
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este About Me.
+        required: true
+      tags:
+      - About
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AboutMe'
+          description: ''
+    put:
+      operationId: aboutUpdate
+      description: Update all fields of an existing about profile. / Actualiza todos
+        los campos de un perfil about existente.
+      summary: Update an about profile / Actualizar un perfil about
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este About Me.
+        required: true
+      tags:
+      - About
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AboutMeRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AboutMe'
+          description: ''
+    patch:
+      operationId: aboutPartialUpdate
+      description: Update specific fields of an existing about profile. / Actualiza
+        campos específicos de un perfil about existente.
+      summary: Partial update an about profile / Actualizar parcialmente un perfil
+        about
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este About Me.
+        required: true
+      tags:
+      - About
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAboutMeRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AboutMe'
+          description: ''
+    delete:
+      operationId: aboutDestroy
+      description: Delete an existing about profile. / Elimina un perfil about existente.
+      summary: Delete an about profile / Eliminar un perfil about
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este About Me.
+        required: true
+      tags:
+      - About
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/about/active/:
+    get:
+      operationId: aboutActiveRetrieve
+      description: Retrieve the currently active about/bio profile. Only one profile
+        should be active at a time. / Obtiene el perfil about/bio actualmente activo.
+        Solo un perfil debe estar activo a la vez.
+      summary: Get active about profile / Obtener perfil about activo
+      tags:
+      - About
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AboutMe'
+          description: ''
+  /api/contact/:
+    get:
+      operationId: contactList
+      description: Retrieve a list of all contact messages received. / Obtiene una
+        lista de todos los mensajes de contacto recibidos.
+      summary: List all contact messages / Listar todos los mensajes de contacto
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      tags:
+      - Contact
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedContactMessageList'
+          description: ''
+    post:
+      operationId: contactCreate
+      description: Submit a new contact message (public endpoint). / Envía un nuevo
+        mensaje de contacto (endpoint público).
+      summary: Create a contact message / Crear un mensaje de contacto
+      tags:
+      - Contact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactMessageCreateRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactMessage'
+          description: ''
+  /api/contact/{id}/:
+    get:
+      operationId: contactRetrieve
+      description: Get details of a specific contact message by ID. / Obtiene los
+        detalles de un mensaje de contacto específico por ID.
+      summary: Retrieve a contact message / Obtener un mensaje de contacto
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Contact Message.
+        required: true
+      tags:
+      - Contact
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactMessage'
+          description: ''
+    put:
+      operationId: contactUpdate
+      description: Update all fields of an existing contact message. / Actualiza todos
+        los campos de un mensaje de contacto existente.
+      summary: Update a contact message / Actualizar un mensaje de contacto
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Contact Message.
+        required: true
+      tags:
+      - Contact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactMessageRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactMessage'
+          description: ''
+    patch:
+      operationId: contactPartialUpdate
+      description: Update specific fields of an existing contact message. / Actualiza
+        campos específicos de un mensaje de contacto existente.
+      summary: Partial update a contact message / Actualizar parcialmente un mensaje
+        de contacto
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Contact Message.
+        required: true
+      tags:
+      - Contact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedContactMessageRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactMessage'
+          description: ''
+    delete:
+      operationId: contactDestroy
+      description: Delete an existing contact message. / Elimina un mensaje de contacto
+        existente.
+      summary: Delete a contact message / Eliminar un mensaje de contacto
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Contact Message.
+        required: true
+      tags:
+      - Contact
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/contact/{id}/mark_read/:
+    post:
+      operationId: contactMarkReadCreate
+      description: Mark a contact message as read. / Marca un mensaje de contacto
+        como leído.
+      summary: Mark message as read / Marcar mensaje como leído
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Contact Message.
+        required: true
+      tags:
+      - Contact
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactMessage'
+          description: ''
+  /api/contact/{id}/mark_replied/:
+    post:
+      operationId: contactMarkRepliedCreate
+      description: Mark a contact message as replied. / Marca un mensaje de contacto
+        como respondido.
+      summary: Mark message as replied / Marcar mensaje como respondido
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Contact Message.
+        required: true
+      tags:
+      - Contact
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactMessage'
+          description: ''
+  /api/contact/unread/:
+    get:
+      operationId: contactUnreadList
+      description: Retrieve only contact messages that haven't been read yet. / Obtiene
+        solo los mensajes de contacto que aún no han sido leídos.
+      summary: Get unread messages / Obtener mensajes no leídos
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      tags:
+      - Contact
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedContactMessageList'
+          description: ''
+  /api/projects/:
+    get:
+      operationId: projectsList
+      description: Retrieve a list of all portfolio projects with pagination, search
+        and ordering support. / Obtiene una lista de todos los proyectos del portfolio
+        con soporte de paginación, búsqueda y ordenamiento.
+      summary: List all projects / Listar todos los proyectos
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Qué campo usar para ordenar los resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: Un término de búsqueda.
+        schema:
+          type: string
+      tags:
+      - Projects
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProjectList'
+          description: ''
+    post:
+      operationId: projectsCreate
+      description: Create a new portfolio project. / Crea un nuevo proyecto de portfolio.
+      summary: Create a project / Crear un proyecto
+      tags:
+      - Projects
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+  /api/projects/{id}/:
+    get:
+      operationId: projectsRetrieve
+      description: Get details of a specific project by ID. / Obtiene los detalles
+        de un proyecto específico por ID.
+      summary: Retrieve a project / Obtener un proyecto
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Project.
+        required: true
+      tags:
+      - Projects
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+    put:
+      operationId: projectsUpdate
+      description: Update all fields of an existing project. / Actualiza todos los
+        campos de un proyecto existente.
+      summary: Update a project / Actualizar un proyecto
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Project.
+        required: true
+      tags:
+      - Projects
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+    patch:
+      operationId: projectsPartialUpdate
+      description: Update specific fields of an existing project. / Actualiza campos
+        específicos de un proyecto existente.
+      summary: Partial update a project / Actualizar parcialmente un proyecto
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Project.
+        required: true
+      tags:
+      - Projects
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+    delete:
+      operationId: projectsDestroy
+      description: Delete an existing project. / Elimina un proyecto existente.
+      summary: Delete a project / Eliminar un proyecto
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Project.
+        required: true
+      tags:
+      - Projects
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/projects/featured/:
+    get:
+      operationId: projectsFeaturedList
+      description: Retrieve only projects marked as featured. / Obtiene solo los proyectos
+        marcados como destacados.
+      summary: Get featured projects / Obtener proyectos destacados
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Qué campo usar para ordenar los resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: Un término de búsqueda.
+        schema:
+          type: string
+      tags:
+      - Projects
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProjectList'
+          description: ''
+  /api/skill-categories/:
+    get:
+      operationId: skillCategoriesList
+      description: Retrieve a list of all skill categories with their skills. / Obtiene
+        una lista de todas las categorías de habilidades con sus habilidades.
+      summary: List all skill categories / Listar todas las categorías de habilidades
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      tags:
+      - Skills
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSkillCategoryList'
+          description: ''
+    post:
+      operationId: skillCategoriesCreate
+      description: Create a new skill category. / Crea una nueva categoría de habilidades.
+      summary: Create a skill category / Crear una categoría de habilidades
+      tags:
+      - Skills
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillCategoryRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkillCategory'
+          description: ''
+  /api/skill-categories/{id}/:
+    get:
+      operationId: skillCategoriesRetrieve
+      description: Get details of a specific skill category by ID. / Obtiene los detalles
+        de una categoría de habilidades específica por ID.
+      summary: Retrieve a skill category / Obtener una categoría de habilidades
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Skill Category.
+        required: true
+      tags:
+      - Skills
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkillCategory'
+          description: ''
+    put:
+      operationId: skillCategoriesUpdate
+      description: Update all fields of an existing skill category. / Actualiza todos
+        los campos de una categoría de habilidades existente.
+      summary: Update a skill category / Actualizar una categoría de habilidades
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Skill Category.
+        required: true
+      tags:
+      - Skills
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillCategoryRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkillCategory'
+          description: ''
+    patch:
+      operationId: skillCategoriesPartialUpdate
+      description: Update specific fields of an existing skill category. / Actualiza
+        campos específicos de una categoría de habilidades existente.
+      summary: Partial update a skill category / Actualizar parcialmente una categoría
+        de habilidades
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Skill Category.
+        required: true
+      tags:
+      - Skills
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSkillCategoryRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkillCategory'
+          description: ''
+    delete:
+      operationId: skillCategoriesDestroy
+      description: Delete an existing skill category. / Elimina una categoría de habilidades
+        existente.
+      summary: Delete a skill category / Eliminar una categoría de habilidades
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Skill Category.
+        required: true
+      tags:
+      - Skills
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/skills/:
+    get:
+      operationId: skillsList
+      description: Retrieve a list of all skills with search and ordering support.
+        / Obtiene una lista de todas las habilidades con soporte de búsqueda y ordenamiento.
+      summary: List all skills / Listar todas las habilidades
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Qué campo usar para ordenar los resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: Un término de búsqueda.
+        schema:
+          type: string
+      tags:
+      - Skills
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSkillList'
+          description: ''
+    post:
+      operationId: skillsCreate
+      description: Create a new skill. / Crea una nueva habilidad.
+      summary: Create a skill / Crear una habilidad
+      tags:
+      - Skills
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+          description: ''
+  /api/skills/{id}/:
+    get:
+      operationId: skillsRetrieve
+      description: Get details of a specific skill by ID. / Obtiene los detalles de
+        una habilidad específica por ID.
+      summary: Retrieve a skill / Obtener una habilidad
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Skill.
+        required: true
+      tags:
+      - Skills
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+          description: ''
+    put:
+      operationId: skillsUpdate
+      description: Update all fields of an existing skill. / Actualiza todos los campos
+        de una habilidad existente.
+      summary: Update a skill / Actualizar una habilidad
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Skill.
+        required: true
+      tags:
+      - Skills
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+          description: ''
+    patch:
+      operationId: skillsPartialUpdate
+      description: Update specific fields of an existing skill. / Actualiza campos
+        específicos de una habilidad existente.
+      summary: Partial update a skill / Actualizar parcialmente una habilidad
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Skill.
+        required: true
+      tags:
+      - Skills
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSkillRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+          description: ''
+    delete:
+      operationId: skillsDestroy
+      description: Delete an existing skill. / Elimina una habilidad existente.
+      summary: Delete a skill / Eliminar una habilidad
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Skill.
+        required: true
+      tags:
+      - Skills
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/skills/by_category/:
+    get:
+      operationId: skillsByCategoryList
+      description: Retrieve all skill categories with their associated skills. / Obtiene
+        todas las categorías de habilidades con sus habilidades asociadas.
+      summary: Get skills grouped by category / Obtener habilidades agrupadas por
+        categoría
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Qué campo usar para ordenar los resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: Un término de búsqueda.
+        schema:
+          type: string
+      tags:
+      - Skills
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSkillCategoryList'
+          description: ''
+  /api/skills/featured/:
+    get:
+      operationId: skillsFeaturedList
+      description: Retrieve only skills marked as featured. / Obtiene solo las habilidades
+        marcadas como destacadas.
+      summary: Get featured skills / Obtener habilidades destacadas
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Qué campo usar para ordenar los resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: Un término de búsqueda.
+        schema:
+          type: string
+      tags:
+      - Skills
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSkillList'
+          description: ''
+components:
+  schemas:
+    AboutMe:
+      type: object
+      description: |-
+        Serializer for AboutMe model with camelCase field names.
+        Serializador para el modelo AboutMe con nombres de campos en camelCase.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Full name
+          maxLength: 200
+        title:
+          type: string
+          title: Professional Title
+          description: Professional title or role
+          maxLength: 200
+        bio:
+          type: string
+          title: Biography
+          description: Short biography
+        email:
+          type: string
+          format: email
+          title: Correo electrónico
+          description: Contact email
+          maxLength: 254
+        phone:
+          type: string
+          description: Contact phone number
+          maxLength: 20
+        location:
+          type: string
+          description: City, Country
+          maxLength: 200
+        profileImage:
+          type: string
+          format: uri
+          nullable: true
+        resumeFile:
+          type: string
+          format: uri
+          nullable: true
+        linkedinUrl:
+          type: string
+          format: uri
+        githubUrl:
+          type: string
+          format: uri
+        twitterUrl:
+          type: string
+          format: uri
+        websiteUrl:
+          type: string
+          format: uri
+        isActive:
+          type: boolean
+          default: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - bio
+      - createdAt
+      - email
+      - id
+      - name
+      - title
+      - updatedAt
+    AboutMeRequest:
+      type: object
+      description: |-
+        Serializer for AboutMe model with camelCase field names.
+        Serializador para el modelo AboutMe con nombres de campos en camelCase.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Full name
+          maxLength: 200
+        title:
+          type: string
+          minLength: 1
+          title: Professional Title
+          description: Professional title or role
+          maxLength: 200
+        bio:
+          type: string
+          minLength: 1
+          title: Biography
+          description: Short biography
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Correo electrónico
+          description: Contact email
+          maxLength: 254
+        phone:
+          type: string
+          description: Contact phone number
+          maxLength: 20
+        location:
+          type: string
+          description: City, Country
+          maxLength: 200
+        profileImage:
+          type: string
+          format: binary
+          nullable: true
+        resumeFile:
+          type: string
+          format: binary
+          nullable: true
+        linkedinUrl:
+          type: string
+          format: uri
+        githubUrl:
+          type: string
+          format: uri
+        twitterUrl:
+          type: string
+          format: uri
+        websiteUrl:
+          type: string
+          format: uri
+        isActive:
+          type: boolean
+          default: true
+      required:
+      - bio
+      - email
+      - name
+      - title
+    ContactMessage:
+      type: object
+      description: |-
+        Serializer for ContactMessage model with camelCase field names.
+        Serializador para el modelo ContactMessage con nombres de campos en camelCase.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Sender's name
+          maxLength: 200
+        email:
+          type: string
+          format: email
+          title: Correo electrónico
+          description: Sender's email
+          maxLength: 254
+        subject:
+          type: string
+          description: Message subject
+          maxLength: 300
+        message:
+          type: string
+          description: Message content
+        phone:
+          type: string
+          description: Contact phone number
+          maxLength: 20
+        isRead:
+          type: boolean
+          default: false
+        isReplied:
+          type: boolean
+          default: false
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - createdAt
+      - email
+      - id
+      - message
+      - name
+      - subject
+      - updatedAt
+    ContactMessageCreateRequest:
+      type: object
+      description: |-
+        Serializer for creating contact messages (public endpoint).
+        Serializador para crear mensajes de contacto (endpoint público).
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Sender's name
+          maxLength: 200
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Correo electrónico
+          description: Sender's email
+          maxLength: 254
+        subject:
+          type: string
+          minLength: 1
+          description: Message subject
+          maxLength: 300
+        message:
+          type: string
+          minLength: 1
+          description: Message content
+        phone:
+          type: string
+          description: Contact phone number
+          maxLength: 20
+      required:
+      - email
+      - message
+      - name
+      - subject
+    ContactMessageRequest:
+      type: object
+      description: |-
+        Serializer for ContactMessage model with camelCase field names.
+        Serializador para el modelo ContactMessage con nombres de campos en camelCase.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Sender's name
+          maxLength: 200
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Correo electrónico
+          description: Sender's email
+          maxLength: 254
+        subject:
+          type: string
+          minLength: 1
+          description: Message subject
+          maxLength: 300
+        message:
+          type: string
+          minLength: 1
+          description: Message content
+        phone:
+          type: string
+          description: Contact phone number
+          maxLength: 20
+        isRead:
+          type: boolean
+          default: false
+        isReplied:
+          type: boolean
+          default: false
+      required:
+      - email
+      - message
+      - name
+      - subject
+    PaginatedAboutMeList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AboutMe'
+    PaginatedContactMessageList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactMessage'
+    PaginatedProjectList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+    PaginatedSkillCategoryList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkillCategory'
+    PaginatedSkillList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Skill'
+    PatchedAboutMeRequest:
+      type: object
+      description: |-
+        Serializer for AboutMe model with camelCase field names.
+        Serializador para el modelo AboutMe con nombres de campos en camelCase.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Full name
+          maxLength: 200
+        title:
+          type: string
+          minLength: 1
+          title: Professional Title
+          description: Professional title or role
+          maxLength: 200
+        bio:
+          type: string
+          minLength: 1
+          title: Biography
+          description: Short biography
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Correo electrónico
+          description: Contact email
+          maxLength: 254
+        phone:
+          type: string
+          description: Contact phone number
+          maxLength: 20
+        location:
+          type: string
+          description: City, Country
+          maxLength: 200
+        profileImage:
+          type: string
+          format: binary
+          nullable: true
+        resumeFile:
+          type: string
+          format: binary
+          nullable: true
+        linkedinUrl:
+          type: string
+          format: uri
+        githubUrl:
+          type: string
+          format: uri
+        twitterUrl:
+          type: string
+          format: uri
+        websiteUrl:
+          type: string
+          format: uri
+        isActive:
+          type: boolean
+          default: true
+    PatchedContactMessageRequest:
+      type: object
+      description: |-
+        Serializer for ContactMessage model with camelCase field names.
+        Serializador para el modelo ContactMessage con nombres de campos en camelCase.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Sender's name
+          maxLength: 200
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Correo electrónico
+          description: Sender's email
+          maxLength: 254
+        subject:
+          type: string
+          minLength: 1
+          description: Message subject
+          maxLength: 300
+        message:
+          type: string
+          minLength: 1
+          description: Message content
+        phone:
+          type: string
+          description: Contact phone number
+          maxLength: 20
+        isRead:
+          type: boolean
+          default: false
+        isReplied:
+          type: boolean
+          default: false
+    PatchedProjectRequest:
+      type: object
+      description: |-
+        Serializer for Project model with camelCase field names.
+        Serializador para el modelo Project con nombres de campos en camelCase.
+      properties:
+        title:
+          type: string
+          minLength: 1
+          description: Project title
+          maxLength: 200
+        description:
+          type: string
+          minLength: 1
+          description: Detailed project description
+        shortDescription:
+          type: string
+        imageUrl:
+          type: string
+          format: binary
+          nullable: true
+        url:
+          type: string
+          format: uri
+          title: Project URL
+          description: Live project URL
+          maxLength: 200
+        githubUrl:
+          type: string
+          format: uri
+        technologies:
+          type: string
+          description: Technologies used (comma-separated)
+          maxLength: 500
+        isFeatured:
+          type: boolean
+          default: false
+        order:
+          type: integer
+          title: Orden
+          description: Display order (lower numbers first)
+    PatchedSkillCategoryRequest:
+      type: object
+      description: |-
+        Serializer for SkillCategory model with camelCase field names.
+        Serializador para el modelo SkillCategory con nombres de campos en camelCase.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Category Name
+          description: Name of the skill category
+          maxLength: 100
+        description:
+          type: string
+          description: Category description
+        order:
+          type: integer
+          title: Orden
+          description: Display order (lower numbers first)
+    PatchedSkillRequest:
+      type: object
+      description: |-
+        Serializer for Skill model with camelCase field names.
+        Serializador para el modelo Skill con nombres de campos en camelCase.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Skill Name
+          description: Name of the skill or technology
+          maxLength: 100
+        categoryId:
+          type: integer
+        proficiency:
+          allOf:
+          - $ref: '#/components/schemas/ProficiencyEnum'
+          title: Proficiency Level
+          description: |-
+            Level of proficiency
+
+            * `beginner` - Beginner
+            * `intermediate` - Intermediate
+            * `advanced` - Advanced
+            * `expert` - Expert
+        percentage:
+          type: integer
+          maximum: 100
+          minimum: 0
+          description: Proficiency percentage (0-100)
+        icon:
+          type: string
+          description: Icon class or URL
+          maxLength: 100
+        description:
+          type: string
+          description: Skill description
+        yearsExperience:
+          type: integer
+        isFeatured:
+          type: boolean
+          default: false
+        order:
+          type: integer
+          title: Orden
+          description: Display order within category
+    ProficiencyEnum:
+      enum:
+      - beginner
+      - intermediate
+      - advanced
+      - expert
+      type: string
+      description: |-
+        * `beginner` - Beginner
+        * `intermediate` - Intermediate
+        * `advanced` - Advanced
+        * `expert` - Expert
+    Project:
+      type: object
+      description: |-
+        Serializer for Project model with camelCase field names.
+        Serializador para el modelo Project con nombres de campos en camelCase.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          description: Project title
+          maxLength: 200
+        description:
+          type: string
+          description: Detailed project description
+        shortDescription:
+          type: string
+        imageUrl:
+          type: string
+          format: uri
+          nullable: true
+        url:
+          type: string
+          format: uri
+          title: Project URL
+          description: Live project URL
+          maxLength: 200
+        githubUrl:
+          type: string
+          format: uri
+        technologies:
+          type: string
+          description: Technologies used (comma-separated)
+          maxLength: 500
+        isFeatured:
+          type: boolean
+          default: false
+        order:
+          type: integer
+          title: Orden
+          description: Display order (lower numbers first)
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - createdAt
+      - description
+      - id
+      - title
+      - updatedAt
+    ProjectRequest:
+      type: object
+      description: |-
+        Serializer for Project model with camelCase field names.
+        Serializador para el modelo Project con nombres de campos en camelCase.
+      properties:
+        title:
+          type: string
+          minLength: 1
+          description: Project title
+          maxLength: 200
+        description:
+          type: string
+          minLength: 1
+          description: Detailed project description
+        shortDescription:
+          type: string
+        imageUrl:
+          type: string
+          format: binary
+          nullable: true
+        url:
+          type: string
+          format: uri
+          title: Project URL
+          description: Live project URL
+          maxLength: 200
+        githubUrl:
+          type: string
+          format: uri
+        technologies:
+          type: string
+          description: Technologies used (comma-separated)
+          maxLength: 500
+        isFeatured:
+          type: boolean
+          default: false
+        order:
+          type: integer
+          title: Orden
+          description: Display order (lower numbers first)
+      required:
+      - description
+      - title
+    Skill:
+      type: object
+      description: |-
+        Serializer for Skill model with camelCase field names.
+        Serializador para el modelo Skill con nombres de campos en camelCase.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Skill Name
+          description: Name of the skill or technology
+          maxLength: 100
+        categoryId:
+          type: integer
+        categoryName:
+          type: string
+          readOnly: true
+        proficiency:
+          allOf:
+          - $ref: '#/components/schemas/ProficiencyEnum'
+          title: Proficiency Level
+          description: |-
+            Level of proficiency
+
+            * `beginner` - Beginner
+            * `intermediate` - Intermediate
+            * `advanced` - Advanced
+            * `expert` - Expert
+        percentage:
+          type: integer
+          maximum: 100
+          minimum: 0
+          description: Proficiency percentage (0-100)
+        icon:
+          type: string
+          description: Icon class or URL
+          maxLength: 100
+        description:
+          type: string
+          description: Skill description
+        yearsExperience:
+          type: integer
+        isFeatured:
+          type: boolean
+          default: false
+        order:
+          type: integer
+          title: Orden
+          description: Display order within category
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - categoryId
+      - categoryName
+      - createdAt
+      - id
+      - name
+      - updatedAt
+      - yearsExperience
+    SkillCategory:
+      type: object
+      description: |-
+        Serializer for SkillCategory model with camelCase field names.
+        Serializador para el modelo SkillCategory con nombres de campos en camelCase.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Category Name
+          description: Name of the skill category
+          maxLength: 100
+        description:
+          type: string
+          description: Category description
+        order:
+          type: integer
+          title: Orden
+          description: Display order (lower numbers first)
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/Skill'
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - createdAt
+      - id
+      - name
+      - skills
+      - updatedAt
+    SkillCategoryRequest:
+      type: object
+      description: |-
+        Serializer for SkillCategory model with camelCase field names.
+        Serializador para el modelo SkillCategory con nombres de campos en camelCase.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Category Name
+          description: Name of the skill category
+          maxLength: 100
+        description:
+          type: string
+          description: Category description
+        order:
+          type: integer
+          title: Orden
+          description: Display order (lower numbers first)
+      required:
+      - name
+    SkillRequest:
+      type: object
+      description: |-
+        Serializer for Skill model with camelCase field names.
+        Serializador para el modelo Skill con nombres de campos en camelCase.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Skill Name
+          description: Name of the skill or technology
+          maxLength: 100
+        categoryId:
+          type: integer
+        proficiency:
+          allOf:
+          - $ref: '#/components/schemas/ProficiencyEnum'
+          title: Proficiency Level
+          description: |-
+            Level of proficiency
+
+            * `beginner` - Beginner
+            * `intermediate` - Intermediate
+            * `advanced` - Advanced
+            * `expert` - Expert
+        percentage:
+          type: integer
+          maximum: 100
+          minimum: 0
+          description: Proficiency percentage (0-100)
+        icon:
+          type: string
+          description: Icon class or URL
+          maxLength: 100
+        description:
+          type: string
+          description: Skill description
+        yearsExperience:
+          type: integer
+        isFeatured:
+          type: boolean
+          default: false
+        order:
+          type: integer
+          title: Orden
+          description: Display order within category
+      required:
+      - categoryId
+      - name
+      - yearsExperience
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+servers:
+- url: http://localhost:8000
+  description: Desarrollo local / Local development
+- url: https://api.portfolio.com
+  description: Producción / Production
