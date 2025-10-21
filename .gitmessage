@@ -1,0 +1,31 @@
+# Commit Message Template
+# Format: <type>: <emoji> <short description>
+#
+# Types:
+#   feat:     ✨ New feature
+#   fix:      🐛 Bug fix
+#   docs:     📚 Documentation only changes
+#   style:    💄 Code style changes (formatting, missing semi-colons, etc)
+#   refactor: ♻️  Code refactoring (neither fixes a bug nor adds a feature)
+#   perf:     ⚡ Performance improvements
+#   test:     ✅ Adding or updating tests
+#   build:    🏗️  Build system or external dependencies
+#   ci:       👷 CI configuration files and scripts
+#   chore:    🔧 Other changes that don't modify src or test files
+#   revert:   ⏪ Reverts a previous commit
+#
+# Example:
+# docs: 📚 restructure documentation with Spanish as primary
+# - Set README.md as Spanish primary documentation
+# - Create README_EN.md as English secondary documentation
+# - Add cross-language navigation links in both files
+# - Update project structure to reflect correct file naming
+# - Remove README_ES.md (renamed to README.md)
+#
+# Guidelines:
+# - Use present tense ("Add feature" not "Added feature")
+# - Start detailed items with "-" (bullet points)
+# - Keep the first line under 72 characters
+# - Add detailed explanations in bullet points
+# - Reference issues and pull requests when applicable
+
