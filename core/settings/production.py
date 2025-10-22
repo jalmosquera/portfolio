@@ -15,7 +15,7 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS",
-    default="*",
+    default="portfolio-production-2d83.up.railway.app",
     cast=lambda v: [s.strip() for s in v.split(",")]
 )
 
