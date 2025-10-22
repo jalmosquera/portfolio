@@ -15,7 +15,7 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS",
-    default="*",
+    default="portfolio-production-2d83.up.railway.app,portfolio.railway.internal",
     cast=lambda v: [s.strip() for s in v.split(",")]
 )
 
@@ -85,6 +85,14 @@ LOGGING = {
         },
     },
 }
+
+# CORS configuration for production
+# Configuración de CORS para producción
+CORS_ALLOWED_ORIGINS = config(
+    "CORS_ALLOWED_ORIGINS",
+    default="https://portfolio-production-2d83.up.railway.app",
+    cast=lambda v: [s.strip() for s in v.split(",")]
+)
 
 # Email configuration for production (configure with your provider)
 # Configuración de correo para producción (configurar con tu proveedor)
