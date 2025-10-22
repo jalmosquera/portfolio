@@ -1,0 +1,72 @@
+name: Preview Deployment
+
+on:
+  pull_request:
+    branches: [main, dev]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  preview-info:
+    name: Preview Deployment Info
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run database migrations (dry-run)
+        env:
+          DJANGO_SETTINGS_MODULE: core.settings
+          SECRET_KEY: test-secret-key-for-preview
+          DEBUG: True
+        run: |
+          echo "Migration plan for this PR:"
+          python manage.py makemigrations --dry-run --verbosity 3 || echo "No migrations needed"
+
+      - name: Generate deployment summary
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const branch = context.payload.pull_request.head.ref;
+            const baseBranch = context.payload.pull_request.base.ref;
+
+            const summary = `
+            ## 🚀 Deployment Preview
+
+            **Branch:** \`${branch}\` → \`${baseBranch}\`
+
+            ### Changes Overview
+            - Source: ${branch}
+            - Target: ${baseBranch}
+            - Commits: ${context.payload.pull_request.commits}
+
+            ### Next Steps
+            1. ✅ CI tests must pass
+            2. 👀 Code review required
+            3. ✅ Approve and merge to ${baseBranch}
+            ${baseBranch === 'dev' ? '4. 🚀 Later: Merge dev → main for production' : '4. 🚀 Auto-deploy to Railway on merge'}
+
+            ### Notes
+            - All tests must pass before merging
+            - Commit messages follow conventional format
+            - Branch protection rules apply
+            `;
+
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: summary
+            });

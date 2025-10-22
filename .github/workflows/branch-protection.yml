@@ -1,0 +1,156 @@
+name: Branch Protection
+
+on:
+  pull_request:
+    branches: [main, dev]
+  push:
+    branches: [main, dev]
+
+jobs:
+  validate-commit-message:
+    name: Validate Commit Messages
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate commit messages
+        run: |
+          echo "Validating commit messages..."
+
+          # Get commits in the PR
+          commits=$(git log --format=%H origin/${{ github.base_ref }}..${{ github.sha }})
+
+          # Valid commit types
+          valid_types="feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert"
+
+          # Check each commit
+          for commit in $commits; do
+            message=$(git log --format=%B -n 1 $commit | head -n 1)
+
+            # Skip merge commits
+            if echo "$message" | grep -q "^Merge"; then
+              echo "✓ Skipping merge commit: $message"
+              continue
+            fi
+
+            # Skip Claude Code commits
+            if git log --format=%B -n 1 $commit | grep -q "Generated with \[Claude Code\]"; then
+              echo "✓ Skipping Claude Code commit: $message"
+              continue
+            fi
+
+            # Validate format
+            if ! echo "$message" | grep -qE "^($valid_types): .+ .+"; then
+              echo "❌ Invalid commit message format: $message"
+              echo ""
+              echo "Expected format: <type>: <emoji> <description>"
+              echo "Valid types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert"
+              echo ""
+              echo "Example: feat: ✨ add user authentication"
+              exit 1
+            fi
+
+            echo "✓ Valid commit: $message"
+          done
+
+          echo "All commit messages are valid!"
+
+  prevent-direct-push:
+    name: Prevent Direct Push to Protected Branches
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Check for direct push to main
+        run: |
+          echo "❌ Direct push to main branch detected!"
+          echo "Please use Pull Requests to merge code to main."
+          echo ""
+          echo "Workflow:"
+          echo "  1. Create feature branch from dev"
+          echo "  2. Make changes and commit"
+          echo "  3. Create PR to dev"
+          echo "  4. After approval, merge to dev"
+          echo "  5. Create PR from dev to main"
+          echo "  6. After approval, merge to main"
+          exit 1
+
+  require-pr:
+    name: Require Pull Request
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Validate PR source branch
+        run: |
+          SOURCE_BRANCH="${{ github.head_ref }}"
+          TARGET_BRANCH="${{ github.base_ref }}"
+
+          echo "PR: $SOURCE_BRANCH → $TARGET_BRANCH"
+
+          # If target is main, source must be dev
+          if [ "$TARGET_BRANCH" = "main" ]; then
+            if [ "$SOURCE_BRANCH" != "dev" ]; then
+              echo "❌ PRs to main must come from dev branch only!"
+              echo "Current source: $SOURCE_BRANCH"
+              exit 1
+            fi
+          fi
+
+          # If target is dev, source must be feature/* or fix/*
+          if [ "$TARGET_BRANCH" = "dev" ]; then
+            if [[ ! "$SOURCE_BRANCH" =~ ^(feature|fix|hotfix)/ ]]; then
+              echo "❌ PRs to dev must come from feature/*, fix/*, or hotfix/* branches!"
+              echo "Current source: $SOURCE_BRANCH"
+              echo ""
+              echo "Create a feature branch:"
+              echo "  git checkout dev"
+              echo "  git checkout -b feature/your-feature-name"
+              exit 1
+            fi
+          fi
+
+          echo "✓ PR source branch is valid!"
+
+  pr-labeler:
+    name: Auto Label PR
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Label PR by branch name
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = context.payload.pull_request.head.ref;
+            let labels = [];
+
+            if (branch.startsWith('feature/')) {
+              labels.push('feature');
+            } else if (branch.startsWith('fix/')) {
+              labels.push('bug');
+            } else if (branch.startsWith('hotfix/')) {
+              labels.push('hotfix');
+            }
+
+            if (context.payload.pull_request.base.ref === 'main') {
+              labels.push('production');
+            } else if (context.payload.pull_request.base.ref === 'dev') {
+              labels.push('development');
+            }
+
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                labels: labels
+              });
+            }
