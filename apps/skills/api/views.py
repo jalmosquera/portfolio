@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from apps.skills.models import Skill, SkillCategory
-from .serializers import SkillSerializer, SkillCategorySerializer
+from .serializers import SkillSerializer, SkillCategorySerializer,SkillGetSerializers
 
 
 @extend_schema_view(
@@ -58,6 +58,14 @@ class SkillViewSet(viewsets.ModelViewSet):
     search_fields = ['name', 'description']
     ordering_fields = ['order', 'name', 'percentage']
     ordering = ['category__order', 'order', 'name']
+
+    def get_serializer_class(self):
+        """
+        Retorna diferentes serializers según la acción
+        """
+        if self.action == 'list':
+            return SkillGetSerializers
+        return SkillSerializer
 
     @extend_schema(
         summary="Get featured skills / Obtener habilidades destacadas",

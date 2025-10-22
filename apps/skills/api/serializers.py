@@ -43,6 +43,13 @@ class SkillSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'categoryName', 'createdAt', 'updatedAt']
 
 
+class SkillGetSerializers(serializers.ModelSerializer):
+    category = serializers.StringRelatedField()
+    
+    class Meta:
+        model = Skill
+        fields = '__all__'
+
 class SkillCategorySerializer(serializers.ModelSerializer):
     """
     Serializer for SkillCategory model with camelCase field names.
