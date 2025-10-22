@@ -91,6 +91,15 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-test.txt
 
+      - name: Run migrations
+        env:
+          DJANGO_SETTINGS_MODULE: core.settings
+          SECRET_KEY: test-secret-key-for-ci
+          DEBUG: True
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/portfolio_test
+        run: |
+          python manage.py migrate --noinput
+
       - name: Run tests with coverage
         env:
           DJANGO_SETTINGS_MODULE: core.settings
