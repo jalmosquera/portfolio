@@ -1,0 +1,784 @@
+{
+	"info": {
+		"_postman_id": "portfolio-api-collection",
+		"name": "Portfolio API - Django REST Framework",
+		"description": "Colección completa de endpoints para probar la API REST del Portfolio.\n\nBase URL Desarrollo: http://localhost:8000\nBase URL Producción: https://tu-dominio.com\n\nLa API devuelve respuestas en formato JSON con nomenclatura camelCase.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Projects",
+			"item": [
+				{
+					"name": "List Projects",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/projects/?page=1&page_size=10",
+							"host": ["{{base_url}}"],
+							"path": ["api", "projects", ""],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								},
+								{
+									"key": "page_size",
+									"value": "10",
+									"description": "Items per page (max: 100)"
+								},
+								{
+									"key": "search",
+									"value": "",
+									"description": "Search in title, description, technologies",
+									"disabled": true
+								},
+								{
+									"key": "ordering",
+									"value": "",
+									"description": "Order by: order, created_at, title, -created_at",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Obtiene lista paginada de todos los proyectos con opciones de búsqueda y ordenamiento."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Project Detail",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/projects/:id/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "projects", ":id", ""],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Project ID"
+								}
+							]
+						},
+						"description": "Obtiene los detalles completos de un proyecto específico."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Featured Projects",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/projects/featured/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "projects", "featured", ""]
+						},
+						"description": "Obtiene solo los proyectos destacados (isFeatured: true)."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Project (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Nuevo Proyecto\",\n  \"description\": \"Descripción detallada del proyecto con características principales y tecnologías utilizadas.\",\n  \"shortDescription\": \"Resumen breve del proyecto\",\n  \"url\": \"https://proyecto.example.com\",\n  \"githubUrl\": \"https://github.com/usuario/proyecto\",\n  \"technologies\": \"Django,React,PostgreSQL,Redis\",\n  \"isFeatured\": true,\n  \"order\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/projects/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "projects", ""]
+						},
+						"description": "Crea un nuevo proyecto. Requiere autenticación de administrador."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Project (Admin)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"isFeatured\": false,\n  \"order\": 5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/projects/:id/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "projects", ":id", ""],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Project ID"
+								}
+							]
+						},
+						"description": "Actualiza parcialmente un proyecto existente. Requiere autenticación de administrador."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Project (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/projects/:id/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "projects", ":id", ""],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Project ID"
+								}
+							]
+						},
+						"description": "Elimina un proyecto. Requiere autenticación de administrador."
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints para gestión de proyectos del portafolio."
+		},
+		{
+			"name": "Skills",
+			"item": [
+				{
+					"name": "List Skills",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/skills/?page=1&page_size=10",
+							"host": ["{{base_url}}"],
+							"path": ["api", "skills", ""],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "page_size",
+									"value": "10"
+								},
+								{
+									"key": "search",
+									"value": "",
+									"description": "Search in name, description",
+									"disabled": true
+								},
+								{
+									"key": "ordering",
+									"value": "",
+									"description": "Order by: order, name, percentage, -percentage",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Obtiene lista paginada de todas las habilidades."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Skill Detail",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/skills/:id/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "skills", ":id", ""],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Skill ID"
+								}
+							]
+						},
+						"description": "Obtiene los detalles completos de una habilidad específica."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Featured Skills",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/skills/featured/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "skills", "featured", ""]
+						},
+						"description": "Obtiene solo las habilidades destacadas (isFeatured: true)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Skills by Category",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/skills/by_category/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "skills", "by_category", ""]
+						},
+						"description": "Obtiene todas las habilidades agrupadas por categoría."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Skill (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"FastAPI\",\n  \"categoryId\": 1,\n  \"proficiency\": \"intermediate\",\n  \"percentage\": 70,\n  \"icon\": \"fastapi-icon\",\n  \"description\": \"Framework moderno para APIs con Python\",\n  \"yearsExperience\": 2,\n  \"isFeatured\": false,\n  \"order\": 5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/skills/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "skills", ""]
+						},
+						"description": "Crea una nueva habilidad. Requiere autenticación de administrador."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Skill (Admin)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"percentage\": 95,\n  \"proficiency\": \"expert\",\n  \"yearsExperience\": 6\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/skills/:id/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "skills", ":id", ""],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Skill ID"
+								}
+							]
+						},
+						"description": "Actualiza parcialmente una habilidad existente. Requiere autenticación de administrador."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Skill (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/skills/:id/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "skills", ":id", ""],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Skill ID"
+								}
+							]
+						},
+						"description": "Elimina una habilidad. Requiere autenticación de administrador."
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints para gestión de habilidades y tecnologías."
+		},
+		{
+			"name": "Skill Categories",
+			"item": [
+				{
+					"name": "List Skill Categories",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/skill-categories/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "skill-categories", ""]
+						},
+						"description": "Obtiene lista de todas las categorías de habilidades con sus skills asociadas."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Skill Category Detail",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/skill-categories/:id/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "skill-categories", ":id", ""],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Category ID"
+								}
+							]
+						},
+						"description": "Obtiene los detalles de una categoría específica con todas sus habilidades."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Skill Category (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"DevOps\",\n  \"description\": \"Herramientas de DevOps, CI/CD y automatización\",\n  \"order\": 5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/skill-categories/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "skill-categories", ""]
+						},
+						"description": "Crea una nueva categoría de habilidades. Requiere autenticación de administrador."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Skill Category (Admin)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Nueva descripción actualizada\",\n  \"order\": 3\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/skill-categories/:id/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "skill-categories", ":id", ""],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Category ID"
+								}
+							]
+						},
+						"description": "Actualiza parcialmente una categoría existente. Requiere autenticación de administrador."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Skill Category (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/skill-categories/:id/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "skill-categories", ":id", ""],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Category ID"
+								}
+							]
+						},
+						"description": "Elimina una categoría. Requiere autenticación de administrador."
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints para gestión de categorías de habilidades."
+		},
+		{
+			"name": "About",
+			"item": [
+				{
+					"name": "List About Profiles",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/about/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "about", ""]
+						},
+						"description": "Obtiene lista de todos los perfiles (normalmente solo debe haber uno activo)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get About Profile Detail",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/about/:id/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "about", ":id", ""],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Profile ID"
+								}
+							]
+						},
+						"description": "Obtiene los detalles completos de un perfil específico."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Active Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/about/active/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "about", "active", ""]
+						},
+						"description": "Obtiene el perfil activo actual (isActive: true). Retorna objeto vacío {} si no hay perfil activo."
+					},
+					"response": []
+				},
+				{
+					"name": "Create About Profile (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Juan Alberto Pérez\",\n  \"title\": \"Full Stack Developer\",\n  \"bio\": \"Desarrollador con 5+ años de experiencia en Django, React y arquitecturas cloud. Apasionado por crear soluciones escalables y eficientes.\",\n  \"email\": \"juan@example.com\",\n  \"phone\": \"+52 555 1234567\",\n  \"location\": \"Ciudad de México, México\",\n  \"linkedinUrl\": \"https://linkedin.com/in/juanperez\",\n  \"githubUrl\": \"https://github.com/juanperez\",\n  \"twitterUrl\": \"https://twitter.com/juanperez\",\n  \"websiteUrl\": \"https://juanperez.dev\",\n  \"isActive\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/about/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "about", ""]
+						},
+						"description": "Crea un nuevo perfil. Si isActive es true, desactiva automáticamente otros perfiles. Requiere autenticación de administrador."
+					},
+					"response": []
+				},
+				{
+					"name": "Update About Profile (Admin)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"bio\": \"Bio actualizada con nueva información\",\n  \"phone\": \"+52 555 9876543\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/about/:id/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "about", ":id", ""],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Profile ID"
+								}
+							]
+						},
+						"description": "Actualiza parcialmente un perfil existente. Requiere autenticación de administrador."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete About Profile (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/about/:id/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "about", ":id", ""],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Profile ID"
+								}
+							]
+						},
+						"description": "Elimina un perfil. Requiere autenticación de administrador."
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints para gestión de información personal del portafolio."
+		},
+		{
+			"name": "Contact",
+			"item": [
+				{
+					"name": "List Contact Messages (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/contact/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "contact", ""]
+						},
+						"description": "Obtiene lista de todos los mensajes de contacto. Requiere autenticación de administrador."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contact Message Detail (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/contact/:id/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "contact", ":id", ""],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Message ID"
+								}
+							]
+						},
+						"description": "Obtiene los detalles de un mensaje específico. Requiere autenticación de administrador."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Unread Messages (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/contact/unread/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "contact", "unread", ""]
+						},
+						"description": "Obtiene solo los mensajes no leídos (isRead: false). Requiere autenticación de administrador."
+					},
+					"response": []
+				},
+				{
+					"name": "Send Contact Message (Public)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Carlos Ramírez\",\n  \"email\": \"carlos@example.com\",\n  \"subject\": \"Consulta sobre servicios de desarrollo\",\n  \"message\": \"Hola, me interesa conocer más sobre tus servicios de desarrollo web. ¿Podrías enviarme información sobre tu disponibilidad y tarifas?\",\n  \"phone\": \"+52 555 1112233\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/contact/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "contact", ""]
+						},
+						"description": "Envía un nuevo mensaje de contacto. Este endpoint es público y no requiere autenticación."
+					},
+					"response": []
+				},
+				{
+					"name": "Mark Message as Read (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/contact/:id/mark_read/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "contact", ":id", "mark_read", ""],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Message ID"
+								}
+							]
+						},
+						"description": "Marca un mensaje como leído (isRead: true). Requiere autenticación de administrador."
+					},
+					"response": []
+				},
+				{
+					"name": "Mark Message as Replied (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/contact/:id/mark_replied/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "contact", ":id", "mark_replied", ""],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Message ID"
+								}
+							]
+						},
+						"description": "Marca un mensaje como respondido (isReplied: true). Requiere autenticación de administrador."
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints para gestión de mensajes de contacto."
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}
