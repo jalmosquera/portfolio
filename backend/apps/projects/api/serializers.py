@@ -1,6 +1,5 @@
 from rest_framework import serializers 
 
-
 class SerializerProject(serializers.ModelSerializer):
     class Meta:
         model = 
