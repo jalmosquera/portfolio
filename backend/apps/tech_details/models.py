@@ -1,3 +1,19 @@
 from django.db import models
 
-# Create your models here.
+
+class TechDetail(models.Model):
+    project = models.ForeignKey(
+        "projects.Project",
+        on_delete=models.CASCADE,
+        related_name="tech_details",
+    )
+
+    category = models.CharField(max_length=100)
+    text = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name = "Tech Detail"
+        verbose_name_plural = "Tech Details"
+
+    def __str__(self):
+        return f"{self.category}: {self.text}"
