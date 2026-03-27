@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import Projects
+from .models import Project
 
 
 
 
-@admin.register(Projects)
+@admin.register(Project)
 class ProjectsAdmin(admin.ModelAdmin):
     list_display = ['title']
     list_filter = ['title']
