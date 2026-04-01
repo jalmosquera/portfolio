@@ -14,7 +14,8 @@ services:
     build: .
     container_name: portfolio_backend
     restart: unless-stopped
-    command: python manage.py runserver 0.0.0.0:8000
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    working_dir: /apps
     volumes:
       - .:/apps
     ports:
@@ -25,6 +26,8 @@ services:
       DB_PASSWORD: 23051988joswel
       DB_HOST: db
       DB_PORT: 5432
+      PYTHONUNBUFFERED: 1
+      PYTHONDONTWRITEBYTECODE: 1
     depends_on:
       - db
 

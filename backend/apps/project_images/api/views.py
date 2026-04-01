@@ -1,6 +1,6 @@
-from rest_framework import viewset
+from rest_framework import viewsets
 from ..models import ProjectImage
-from .serializer import ProjectImageSerializer 
+from .serializers import ProjectImageSerializer
 
 
 class ProjectImageViewSet(viewsets.ModelViewSet):

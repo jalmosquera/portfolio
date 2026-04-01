@@ -1,8 +1,9 @@
-from rest_framework import serializers 
+from rest_framework import serializers
+from ..models import Project
+
 
 class SerializerProject(serializers.ModelSerializer):
     class Meta:
-        model = 
-        fields = ["__all__"]
+        model = Project
+        fields = "__all__"
         read_only_fields = ["created_at"]
-)
