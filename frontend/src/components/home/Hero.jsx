@@ -1,45 +1,53 @@
-import { Button } from '../ui/Button'
 import { Link } from 'react-router-dom'
 
 export function Hero({ technologies = [] }) {
   const mainTechs = technologies.slice(0, 4)
 
   return (
-    <section className="min-h-screen flex items-center pt-16">
-      <div className="max-w-6xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div className="space-y-6">
-          <h1 className="text-5xl lg:text-6xl font-bold leading-tight text-text">
-            Hi, I'm <span className="text-accent">Jalberth</span><br />
-            Mosquera.
+    <section className="relative min-h-screen flex items-center pt-14 overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0d0d0d] via-[#111111] to-[#0d0d0d]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_50%,rgba(249,115,22,0.05),transparent_60%)]" />
+
+      <div className="relative max-w-6xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center py-20">
+        {/* Text */}
+        <div className="space-y-5">
+          <h1 className="text-5xl lg:text-[3.5rem] font-bold leading-[1.15] text-white">
+            Hi, I'm <span className="text-accent">Jalberth Mosquera.</span><br />
+            I'm a Backend Developer.
           </h1>
-          <p className="text-xl text-muted font-medium">
-            Python · Django · Docker · Linux
+
+          <p className="text-[#9ca3af] text-base font-medium tracking-wide">
+            Python • Django • Docker • Linux
           </p>
-          <p className="text-muted leading-relaxed max-w-md">
-            Deploying self-hosted solutions that drive business growth.
+          <p className="text-[#6b7280] text-sm leading-relaxed max-w-sm">
+            Deploying self-hosted solutions that drive a business growth.
           </p>
 
-          <div className="flex flex-wrap items-center gap-4 pt-2">
+          <div className="flex flex-wrap items-center gap-3 pt-2">
             <Link
               to="/projects"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover transition-colors"
+              className="inline-flex items-center px-5 py-2.5 bg-accent text-white font-semibold text-sm rounded-md hover:bg-accent-hover transition-colors"
             >
               View Projects
             </Link>
-            <Button variant="outline" href="https://github.com/jalmosquera">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+            <a
+              href="/cv.pdf"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#1a1a1a] border border-[#2a2a2a] text-[#d1d5db] text-sm font-medium rounded-md hover:border-[#444] transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              GitHub
-            </Button>
+              Download CV
+            </a>
           </div>
 
           {mainTechs.length > 0 && (
-            <div className="flex flex-wrap gap-2 pt-2">
+            <div className="flex flex-wrap gap-2 pt-3">
               {mainTechs.map((tech) => (
                 <span
                   key={tech.id}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface border border-border rounded-full text-sm"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#1a1a1a] border border-[#2a2a2a] rounded-full text-xs font-medium"
                   style={{ color: tech.color || '#e5e5e5' }}
                 >
                   <span>{tech.icon}</span>
@@ -50,9 +58,15 @@ export function Hero({ technologies = [] }) {
           )}
         </div>
 
-        <div className="hidden lg:flex justify-center items-center">
-          <div className="w-80 h-80 rounded-2xl bg-surface border border-border flex items-center justify-center text-8xl">
-            👨‍💻
+        {/* Photo placeholder — replace src with your actual photo */}
+        <div className="hidden lg:flex justify-end items-center">
+          <div className="relative w-[420px] h-[520px] rounded-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-transparent to-transparent z-10" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0d0d0d] via-transparent to-transparent z-10" />
+            {/* Replace this div with an <img src="/your-photo.jpg"> */}
+            <div className="w-full h-full bg-[#1a1a1a] flex items-center justify-center">
+              <span className="text-[#333] text-sm">Tu foto va aquí → <code className="text-accent">/public/photo.jpg</code></span>
+            </div>
           </div>
         </div>
       </div>

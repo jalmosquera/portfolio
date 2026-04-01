@@ -4,24 +4,36 @@ export function Navbar() {
   const { pathname } = useLocation()
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-bg/90 backdrop-blur-sm border-b border-border">
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 font-bold text-lg">
-          <span className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center text-white font-black text-sm">M</span>
-          <span className="text-text">MosqueraSoft</span>
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0d0d0d]/95 backdrop-blur-sm border-b border-[#1f1f1f]">
+      <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-accent rounded-md flex items-center justify-center">
+            <span className="text-white font-black text-sm">M</span>
+          </div>
+          <span className="text-white font-semibold text-sm">MosqueraSoft</span>
         </Link>
 
-        <div className="flex items-center gap-6">
-          <Link to="/" className={`text-sm transition-colors ${pathname === '/' ? 'text-accent' : 'text-muted hover:text-text'}`}>
+        {/* Links */}
+        <div className="flex items-center gap-7">
+          <Link to="/" className={`text-sm transition-colors ${pathname === '/' ? 'text-white' : 'text-[#9ca3af] hover:text-white'}`}>
             Home
           </Link>
-          <Link to="/projects" className={`text-sm transition-colors ${pathname.startsWith('/projects') ? 'text-accent' : 'text-muted hover:text-text'}`}>
+          <Link to="/projects" className={`text-sm transition-colors flex items-center gap-1 ${pathname.startsWith('/projects') ? 'text-white' : 'text-[#9ca3af] hover:text-white'}`}>
             Projects
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
           </Link>
+          <a href="#about" className="text-sm text-[#9ca3af] hover:text-white transition-colors">About</a>
           <a
-            href="mailto:jalberth@example.com"
-            className="text-sm border border-accent text-accent px-4 py-1.5 rounded-lg hover:bg-accent hover:text-white transition-all"
+            href="mailto:jalberth@mosquera.dev"
+            className="flex items-center gap-1.5 text-sm border border-accent text-accent px-4 py-1.5 rounded-md hover:bg-accent hover:text-white transition-all font-medium"
           >
+            <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+            </svg>
             Contact
           </a>
         </div>
