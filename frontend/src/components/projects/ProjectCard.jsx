@@ -18,24 +18,25 @@ export function ProjectCard({ project }) {
             </svg>
           </div>
         )}
+        {/* Tech tags overlaid on image */}
+        {project.technologies?.length > 0 && (
+          <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+            {project.technologies.slice(0, 3).map((tech) => (
+              <span
+                key={tech.id}
+                className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#111]/80 border border-[#2a2a2a] rounded text-[11px] font-medium backdrop-blur-sm"
+                style={{ color: tech.color || '#9ca3af' }}
+              >
+                <span className="text-[10px]">{tech.icon}</span>
+                {tech.name}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Content */}
       <div className="p-4 flex flex-col flex-1 gap-3">
-        {/* Tech tags */}
-        <div className="flex flex-wrap gap-1.5">
-          {project.technologies?.slice(0, 3).map((tech) => (
-            <span
-              key={tech.id}
-              className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#1f1f1f] border border-[#2a2a2a] rounded text-[11px] font-medium"
-              style={{ color: tech.color || '#9ca3af' }}
-            >
-              <span className="text-[10px]">{tech.icon}</span>
-              {tech.name}
-            </span>
-          ))}
-        </div>
-
         {/* Title & description */}
         <div className="flex-1 space-y-1">
           <h3 className="font-bold text-white text-base leading-tight">{project.title}</h3>
