@@ -13,6 +13,16 @@ class TestTechDetailViewSet:
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 3
 
+    def test_filter_tech_details_by_project(self, api_client):
+        project = ProjectFactory()
+        expected = TechDetailFactory(project=project)
+        TechDetailFactory()
+
+        response = api_client.get(self.BASE_URL, {"project": project.id})
+
+        assert response.status_code == status.HTTP_200_OK
+        assert [detail["id"] for detail in response.data] == [expected.id]
+
     def test_create_tech_detail(self, api_client):
         project = ProjectFactory()
         data = {"project": project.id, "category": "Infrastructure", "text": "Docker"}

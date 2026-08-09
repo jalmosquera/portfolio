@@ -1,7 +1,9 @@
-const BASE_URL = import.meta.env.VITE_API_URL
+import axios from 'axios'
+import { API_BASE_URL } from '../config/routes'
 
-export async function apiFetch(path) {
-  const res = await fetch(`${BASE_URL}${path}`)
-  if (!res.ok) throw new Error(`API error ${res.status}: ${path}`)
-  return res.json()
-}
+const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+})
+
+export const apiFetch = (path) =>
+  apiClient.get(path).then(({ data }) => data)

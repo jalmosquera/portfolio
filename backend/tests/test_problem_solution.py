@@ -14,6 +14,16 @@ class TestProblemSolutionViewSet:
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 2
 
+    def test_filter_problem_solutions_by_project(self, api_client):
+        project = ProjectFactory()
+        expected = ProblemSolutionFactory(project=project)
+        ProblemSolutionFactory()
+
+        response = api_client.get(self.BASE_URL, {"project": project.id})
+
+        assert response.status_code == status.HTTP_200_OK
+        assert [item["id"] for item in response.data] == [expected.id]
+
     def test_create_problem_solution(self, api_client):
         project = ProjectFactory()
         data = {

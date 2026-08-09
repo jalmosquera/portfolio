@@ -13,6 +13,16 @@ class TestLessonViewSet:
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 3
 
+    def test_filter_lessons_by_project(self, api_client):
+        project = ProjectFactory()
+        expected = LessonFactory(project=project)
+        LessonFactory()
+
+        response = api_client.get(self.BASE_URL, {"project": project.id})
+
+        assert response.status_code == status.HTTP_200_OK
+        assert [lesson["id"] for lesson in response.data] == [expected.id]
+
     def test_create_lesson(self, api_client):
         project = ProjectFactory()
         data = {"project": project.id, "text": "Multi-tenant architecture is complex."}
