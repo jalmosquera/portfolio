@@ -22,7 +22,7 @@ export function ProjectsPage() {
 
   return (
     <main className="pb-20 pt-28">
-      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+      <div className="site-container">
         <SectionTitle subtitle="All the projects I've built and deployed.">
           All Projects
         </SectionTitle>
@@ -33,7 +33,7 @@ export function ProjectsPage() {
           </div>
         )}
         {!error && projects.length > 0 && (
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 2xl:gap-7 min-[2200px]:grid-cols-5 min-[3200px]:grid-cols-6">
             {projects.map((project) => <ProjectCard key={project.id} project={project} />)}
           </div>
         )}
