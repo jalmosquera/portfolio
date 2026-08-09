@@ -3,8 +3,8 @@ import stackIllustration from '../../assets/hero.png'
 export function TechStack({ technologies = [] }) {
   return (
     <section id="about" className="border-b border-border py-16 lg:py-20">
-      <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
-        <div className="relative grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.2fr_0.8fr]">
+      <div className="site-container relative">
+        <div className="relative grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.2fr_0.8fr] min-[2200px]:grid-cols-[1.35fr_0.65fr] min-[2200px]:gap-20">
           <div>
             <h2 className="mb-2 text-3xl font-bold text-text">My Tech Stack</h2>
             <p className="text-muted text-sm mb-8">Technologies I use to build and deploy applications, at scale.</p>
@@ -32,7 +32,7 @@ export function TechStack({ technologies = [] }) {
           </div>
 
           <div className="hidden justify-center lg:flex">
-            <img src={stackIllustration} alt="Self-hosted infrastructure stack" className="w-full max-w-sm opacity-90" />
+            <img src={stackIllustration} alt="Self-hosted infrastructure stack" className="w-full max-w-sm opacity-90 2xl:max-w-md min-[2200px]:max-w-lg" />
           </div>
         </div>
       </div>
