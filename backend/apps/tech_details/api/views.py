@@ -1,10 +1,12 @@
-from rest_framework import viewset
+from rest_framework import viewsets
+from django_filters.rest_framework import DjangoFilterBackend
 from ..models import TechDetail
-from .serializer import TechDetailSerializer
+from .serializers import TechDetailSerializer
 
 
 
 class TechDetailViewSet(viewsets.ModelViewSet):
     queryset = TechDetail.objects.all()
     serializer_class = TechDetailSerializer
-
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["project"]

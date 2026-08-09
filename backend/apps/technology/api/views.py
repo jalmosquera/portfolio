@@ -1,6 +1,6 @@
-from rest_framework import viewdet
+from rest_framework import viewsets
 from ..models import Technologies
-from .serializer import TechnologiesSerializer
+from .serializers import TechnologiesSerializer
 
 
 class TechnologiesViewSet(viewsets.ModelViewSet):

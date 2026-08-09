@@ -1,8 +1,7 @@
 from rest_framework.routers import DefaultRouter
-from .views import ProjectImage
+from .views import ProjectImageViewSet
 
 router = DefaultRouter()
-router.register(r"projectImage", ProjectImages, basename="projectImage")
+router.register(r"project-images", ProjectImageViewSet, basename="project-image")
 
 urlpatterns = router.urls
-
