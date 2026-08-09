@@ -31,7 +31,7 @@ export function HomePage() {
     <>
       <Hero technologies={technologies} />
       {error && (
-        <div className="mx-auto max-w-6xl px-5 pt-10 sm:px-8">
+        <div className="site-container pt-10">
           <p className="rounded-lg border border-accent/30 bg-accent-soft p-4 text-sm text-accent">{error}</p>
         </div>
       )}

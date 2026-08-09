@@ -6,17 +6,17 @@ export function Navbar() {
 
   return (
     <nav className="fixed inset-x-0 top-0 z-50 border-b border-border bg-bg/90 backdrop-blur-lg">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
+      <div className="site-container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link to={APP_ROUTES.home} className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-md bg-accent-soft text-accent ring-1 ring-accent/40">
             <span className="text-xl font-black">M.</span>
           </div>
-          <span className="text-sm font-semibold text-text sm:text-base">Mosquera<span className="text-accent">Soft</span></span>
+          <span className="hidden text-sm font-semibold text-text min-[420px]:inline sm:text-base">Mosquera<span className="text-accent">Soft</span></span>
         </Link>
 
         {/* Links */}
-        <div className="flex items-center gap-4 sm:gap-7">
+        <div className="flex items-center gap-2 min-[420px]:gap-4 sm:gap-7">
           <Link to={APP_ROUTES.home} className={`hidden text-sm transition-colors sm:block ${pathname === APP_ROUTES.home ? 'text-text' : 'text-muted hover:text-text'}`}>
             Home
           </Link>
@@ -35,7 +35,7 @@ export function Navbar() {
               <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
               <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
             </svg>
-            Contact
+            <span className="hidden min-[360px]:inline">Contact</span>
           </a>
         </div>
       </div>
