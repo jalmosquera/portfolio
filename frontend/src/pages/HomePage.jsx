@@ -3,21 +3,25 @@ import { Hero } from '../components/home/Hero'
 import { FeaturedProjects } from '../components/home/FeaturedProjects'
 import { TechStack } from '../components/home/TechStack'
 import { Contact } from '../components/home/Contact'
+import { AboutMe } from '../components/home/AboutMe'
 import { getFeaturedProjects } from '../lib/api/projects'
 import { getTechnologies } from '../lib/api/technology'
+import { getAbout } from '../lib/api/about'
 import { PageLoader } from '../components/ui/PageLoader'
 
 export function HomePage() {
   const [projects, setProjects] = useState([])
   const [technologies, setTechnologies] = useState([])
+  const [about, setAbout] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    Promise.all([getFeaturedProjects(), getTechnologies()])
-      .then(([p, t]) => {
+    Promise.all([getFeaturedProjects(), getTechnologies(), getAbout().catch(() => null)])
+      .then(([p, t, aboutData]) => {
         setProjects(p)
         setTechnologies(t)
+        setAbout(aboutData)
       })
       .catch(() => setError('Live portfolio data is temporarily unavailable.'))
       .finally(() => setLoading(false))
@@ -36,6 +40,7 @@ export function HomePage() {
         </div>
       )}
       <FeaturedProjects projects={projects} />
+      <AboutMe about={about} />
       <TechStack technologies={technologies} />
       <Contact />
     </>
