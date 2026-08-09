@@ -7,6 +7,7 @@ import { getTechDetails } from '../lib/api/techDetails'
 import { getLessons } from '../lib/api/lessons'
 import { getProblemSolution } from '../lib/api/problemSolution'
 import { APP_ROUTES, getMediaUrl } from '../lib/config/routes'
+import { PageLoader } from '../components/ui/PageLoader'
 
 export function ProjectDetailPage() {
   const { slug } = useParams()
@@ -43,11 +44,7 @@ export function ProjectDetailPage() {
   }, [slug])
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center pt-16">
-        <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
-      </div>
-    )
+    return <PageLoader />
   }
 
   if (error || !project) {
@@ -66,11 +63,11 @@ export function ProjectDetailPage() {
   }, {})
 
   return (
-    <main className="pt-24 pb-16">
-      <div className="max-w-6xl mx-auto px-6 space-y-16">
+    <main className="pb-20 pt-28">
+      <div className="mx-auto max-w-6xl space-y-12 px-5 sm:px-8">
 
         {/* Header */}
-        <div className="space-y-5 rounded-3xl border border-border bg-gradient-to-r from-[#111] via-[#0f0f0f] to-[#0c0c0c] p-8 shadow-[var(--shadow-soft)]">
+        <div className="space-y-5 border-b border-border pb-8">
           <Link to={APP_ROUTES.projects} className="inline-flex items-center gap-1 text-muted hover:text-accent text-sm transition-colors">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -80,7 +77,7 @@ export function ProjectDetailPage() {
 
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div className="space-y-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ffffff0d] border border-[#ffffff12] text-[11px] uppercase tracking-[0.15em] text-muted">
+              <div className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-muted">
                 {project.category || 'Case Study'}
               </div>
               <h1 className="text-4xl font-bold text-text">{project.title}</h1>
@@ -97,7 +94,7 @@ export function ProjectDetailPage() {
                   href={project.live_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent-hover transition-colors"
+                  className="inline-flex items-center gap-2 rounded-md border border-accent/60 bg-accent-soft px-4 py-2 text-sm font-medium text-accent transition-colors hover:bg-accent hover:text-bg"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -110,7 +107,7 @@ export function ProjectDetailPage() {
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 border border-border text-text text-sm font-medium rounded-lg hover:border-accent hover:text-accent transition-all"
+                  className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent"
                 >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
@@ -124,7 +121,7 @@ export function ProjectDetailPage() {
 
         {/* Hero image */}
         {project.image && (
-          <div className="rounded-2xl overflow-hidden border border-border shadow-[var(--shadow-soft)]">
+          <div className="overflow-hidden rounded-lg border border-border shadow-[var(--shadow-soft)]">
             <img
               src={getMediaUrl(project.image)}
               alt={project.title}
@@ -136,16 +133,16 @@ export function ProjectDetailPage() {
         {/* Problem & Solution */}
         {problemSolution && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-card border border-border rounded-xl p-6 space-y-3 shadow-[var(--shadow-soft)]">
+            <div className="space-y-3 rounded-lg border border-border bg-card p-6 shadow-[var(--shadow-soft)]">
               <div className="flex items-center gap-2">
                 <span className="w-1 h-5 bg-accent rounded-full" />
                 <h2 className="font-bold text-text">The Problem</h2>
               </div>
               <p className="text-muted text-sm leading-relaxed">{problemSolution.problem}</p>
             </div>
-            <div className="bg-card border border-border rounded-xl p-6 space-y-3 shadow-[var(--shadow-soft)]">
+            <div className="space-y-3 rounded-lg border border-border bg-card p-6 shadow-[var(--shadow-soft)]">
               <div className="flex items-center gap-2">
-                <span className="w-1 h-5 bg-green-500 rounded-full" />
+                <span className="h-5 w-1 rounded-full bg-accent" />
                 <h2 className="font-bold text-text">The Solution</h2>
               </div>
               <p className="text-muted text-sm leading-relaxed">{problemSolution.solution}</p>
@@ -162,7 +159,7 @@ export function ProjectDetailPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {images.map((img) => (
-                <div key={img.id} className="rounded-xl overflow-hidden border border-border bg-card shadow-[var(--shadow-soft)]">
+                <div key={img.id} className="overflow-hidden rounded-lg border border-border bg-card shadow-[var(--shadow-soft)]">
                   {img.image ? (
                     <img
                       src={getMediaUrl(img.image)}
@@ -182,7 +179,7 @@ export function ProjectDetailPage() {
         {/* Tech Details + Lessons */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {Object.keys(techByCategory).length > 0 && (
-            <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+            <div className="space-y-4 rounded-lg border border-border bg-card p-6">
               <div className="flex items-center gap-2">
                 <span className="w-1 h-5 bg-accent rounded-full" />
                 <h2 className="font-bold text-text">Tech Details</h2>
@@ -205,7 +202,7 @@ export function ProjectDetailPage() {
           )}
 
           {lessons.length > 0 && (
-            <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+            <div className="space-y-4 rounded-lg border border-border bg-card p-6">
               <div className="flex items-center gap-2">
                 <span className="w-1 h-5 bg-accent rounded-full" />
                 <h2 className="font-bold text-text">Lessons Learned</h2>
