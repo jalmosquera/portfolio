@@ -1,4 +1,5 @@
 import { apiFetch } from './client'
+import { API_ROUTES } from '../config/routes'
 
 export const getProblemSolution = (projectId) =>
-  apiFetch(`/problem-solutions/?project=${projectId}`).then((list) => list[0] ?? null)
+  apiFetch(API_ROUTES.problemSolutions.byProject(projectId)).then((list) => list[0] ?? null)

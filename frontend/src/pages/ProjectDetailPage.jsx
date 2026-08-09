@@ -6,6 +6,7 @@ import { getProjectImages } from '../lib/api/projectImages'
 import { getTechDetails } from '../lib/api/techDetails'
 import { getLessons } from '../lib/api/lessons'
 import { getProblemSolution } from '../lib/api/problemSolution'
+import { APP_ROUTES, getMediaUrl } from '../lib/config/routes'
 
 export function ProjectDetailPage() {
   const { slug } = useParams()
@@ -53,7 +54,7 @@ export function ProjectDetailPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center pt-16 gap-4">
         <p className="text-muted">{error || 'Project not found'}</p>
-        <Link to="/projects" className="text-accent hover:underline text-sm">← Back to Projects</Link>
+        <Link to={APP_ROUTES.projects} className="text-accent hover:underline text-sm">← Back to Projects</Link>
       </div>
     )
   }
@@ -66,11 +67,11 @@ export function ProjectDetailPage() {
 
   return (
     <main className="pt-24 pb-16">
-      <div className="max-w-5xl mx-auto px-6 space-y-16">
+      <div className="max-w-6xl mx-auto px-6 space-y-16">
 
         {/* Header */}
-        <div className="space-y-4">
-          <Link to="/projects" className="inline-flex items-center gap-1 text-muted hover:text-accent text-sm transition-colors">
+        <div className="space-y-5 rounded-3xl border border-border bg-gradient-to-r from-[#111] via-[#0f0f0f] to-[#0c0c0c] p-8 shadow-[var(--shadow-soft)]">
+          <Link to={APP_ROUTES.projects} className="inline-flex items-center gap-1 text-muted hover:text-accent text-sm transition-colors">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
@@ -79,8 +80,16 @@ export function ProjectDetailPage() {
 
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold text-text">{project.title}</h1>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ffffff0d] border border-[#ffffff12] text-[11px] uppercase tracking-[0.15em] text-muted">
+                {project.category || 'Case Study'}
+              </div>
+              <h1 className="text-4xl font-bold text-text">{project.title}</h1>
               <p className="text-muted">{project.short_description}</p>
+              <div className="flex flex-wrap gap-2">
+                {project.technologies?.map((tech) => (
+                  <TechBadge key={tech.id} tech={tech} />
+                ))}
+              </div>
             </div>
             <div className="flex gap-3 shrink-0">
               {project.live_url && (
@@ -111,21 +120,15 @@ export function ProjectDetailPage() {
               )}
             </div>
           </div>
-
-          <div className="flex flex-wrap gap-2">
-            {project.technologies?.map((tech) => (
-              <TechBadge key={tech.id} tech={tech} />
-            ))}
-          </div>
         </div>
 
         {/* Hero image */}
         {project.image && (
-          <div className="rounded-xl overflow-hidden border border-border">
+          <div className="rounded-2xl overflow-hidden border border-border shadow-[var(--shadow-soft)]">
             <img
-              src={`http://localhost:8000${project.image}`}
+              src={getMediaUrl(project.image)}
               alt={project.title}
-              className="w-full max-h-96 object-cover"
+              className="w-full max-h-[480px] object-cover"
             />
           </div>
         )}
@@ -133,14 +136,14 @@ export function ProjectDetailPage() {
         {/* Problem & Solution */}
         {problemSolution && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-card border border-border rounded-xl p-6 space-y-3">
+            <div className="bg-card border border-border rounded-xl p-6 space-y-3 shadow-[var(--shadow-soft)]">
               <div className="flex items-center gap-2">
-                <span className="w-1 h-5 bg-red-500 rounded-full" />
+                <span className="w-1 h-5 bg-accent rounded-full" />
                 <h2 className="font-bold text-text">The Problem</h2>
               </div>
               <p className="text-muted text-sm leading-relaxed">{problemSolution.problem}</p>
             </div>
-            <div className="bg-card border border-border rounded-xl p-6 space-y-3">
+            <div className="bg-card border border-border rounded-xl p-6 space-y-3 shadow-[var(--shadow-soft)]">
               <div className="flex items-center gap-2">
                 <span className="w-1 h-5 bg-green-500 rounded-full" />
                 <h2 className="font-bold text-text">The Solution</h2>
@@ -159,15 +162,15 @@ export function ProjectDetailPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {images.map((img) => (
-                <div key={img.id} className="rounded-xl overflow-hidden border border-border bg-card">
+                <div key={img.id} className="rounded-xl overflow-hidden border border-border bg-card shadow-[var(--shadow-soft)]">
                   {img.image ? (
                     <img
-                      src={`http://localhost:8000${img.image}`}
+                      src={getMediaUrl(img.image)}
                       alt={img.title}
-                      className="w-full h-40 object-cover"
+                      className="w-full h-44 object-cover"
                     />
                   ) : (
-                    <div className="w-full h-40 flex items-center justify-center text-muted text-3xl bg-surface">🖥️</div>
+                    <div className="w-full h-44 flex items-center justify-center text-muted text-3xl bg-surface">🖥️</div>
                   )}
                   <p className="text-xs text-muted px-3 py-2">{img.title}</p>
                 </div>

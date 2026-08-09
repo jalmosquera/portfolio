@@ -4,6 +4,7 @@ import { Footer } from './components/layout/Footer'
 import { HomePage } from './pages/HomePage'
 import { ProjectsPage } from './pages/ProjectsPage'
 import { ProjectDetailPage } from './pages/ProjectDetailPage'
+import { APP_ROUTES } from './lib/config/routes'
 
 function App() {
   return (
@@ -12,9 +13,9 @@ function App() {
         <Navbar />
         <main className="flex-1">
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/projects" element={<ProjectsPage />} />
-            <Route path="/projects/:slug" element={<ProjectDetailPage />} />
+            <Route path={APP_ROUTES.home} element={<HomePage />} />
+            <Route path={APP_ROUTES.projects} element={<ProjectsPage />} />
+            <Route path={APP_ROUTES.projectDetail} element={<ProjectDetailPage />} />
           </Routes>
         </main>
         <Footer />
