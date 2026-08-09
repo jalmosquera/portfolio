@@ -1,7 +1,7 @@
 export function Contact() {
   return (
     <section className="py-14">
-      <div className="max-w-6xl mx-auto px-6 text-center space-y-6">
+      <div className="site-container space-y-6 text-center">
         <h2 className="text-3xl font-bold text-text">Get In Touch</h2>
         <p className="text-muted text-sm max-w-md mx-auto">
           Feel free to reach out if you'd like to collaborate or need help with a backend project.

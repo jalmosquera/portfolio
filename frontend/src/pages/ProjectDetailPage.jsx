@@ -64,7 +64,7 @@ export function ProjectDetailPage() {
 
   return (
     <main className="pb-20 pt-28">
-      <div className="mx-auto max-w-6xl space-y-12 px-5 sm:px-8">
+      <div className="site-container space-y-12">
 
         {/* Header */}
         <div className="space-y-5 border-b border-border pb-8">
@@ -75,20 +75,20 @@ export function ProjectDetailPage() {
             Back
           </Link>
 
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between min-[2200px]:gap-12">
             <div className="space-y-2">
               <div className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-muted">
                 {project.category || 'Case Study'}
               </div>
-              <h1 className="text-4xl font-bold text-text">{project.title}</h1>
-              <p className="text-muted">{project.short_description}</p>
+              <h1 className="text-3xl font-bold text-text sm:text-4xl 2xl:text-5xl">{project.title}</h1>
+              <p className="max-w-3xl text-muted 2xl:text-lg">{project.short_description}</p>
               <div className="flex flex-wrap gap-2">
                 {project.technologies?.map((tech) => (
                   <TechBadge key={tech.id} tech={tech} />
                 ))}
               </div>
             </div>
-            <div className="flex gap-3 shrink-0">
+            <div className="flex shrink-0 flex-wrap gap-3">
               {project.live_url && (
                 <a
                   href={project.live_url}
@@ -125,14 +125,14 @@ export function ProjectDetailPage() {
             <img
               src={getMediaUrl(project.image)}
               alt={project.title}
-              className="w-full max-h-[480px] object-cover"
+              className="max-h-[480px] w-full object-cover 2xl:max-h-[620px] min-[2200px]:max-h-[760px]"
             />
           </div>
         )}
 
         {/* Problem & Solution */}
         {problemSolution && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 2xl:gap-8">
             <div className="space-y-3 rounded-lg border border-border bg-card p-6 shadow-[var(--shadow-soft)]">
               <div className="flex items-center gap-2">
                 <span className="w-1 h-5 bg-accent rounded-full" />
@@ -157,14 +157,14 @@ export function ProjectDetailPage() {
               <span className="w-1 h-5 bg-accent rounded-full" />
               <h2 className="font-bold text-text text-lg">Gallery</h2>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 min-[2200px]:grid-cols-5">
               {images.map((img) => (
                 <div key={img.id} className="overflow-hidden rounded-lg border border-border bg-card shadow-[var(--shadow-soft)]">
                   {img.image ? (
                     <img
                       src={getMediaUrl(img.image)}
                       alt={img.title}
-                      className="w-full h-44 object-cover"
+                      className="h-44 w-full object-cover 2xl:h-52"
                     />
                   ) : (
                     <div className="w-full h-44 flex items-center justify-center text-muted text-3xl bg-surface">🖥️</div>

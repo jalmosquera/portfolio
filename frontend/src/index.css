@@ -40,3 +40,49 @@ h1, h2, h3, h4 {
   background: rgba(216, 125, 85, 0.3);
   color: var(--color-text);
 }
+
+.site-container {
+  width: min(calc(100% - 2.5rem), 72rem);
+  margin-inline: auto;
+}
+
+.hero-portrait {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 18%,
+    #000 82%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 18%,
+    #000 82%,
+    transparent 100%
+  );
+}
+
+@media (min-width: 640px) {
+  .site-container {
+    width: min(calc(100% - 4rem), 72rem);
+  }
+}
+
+@media (min-width: 1536px) {
+  .site-container {
+    width: min(calc(100% - 6rem), 90rem);
+  }
+}
+
+@media (min-width: 2200px) {
+  .site-container {
+    width: min(calc(100% - 10rem), 112rem);
+  }
+}
+
+@media (min-width: 3200px) {
+  .site-container {
+    width: min(calc(100% - 14rem), 144rem);
+  }
+}
