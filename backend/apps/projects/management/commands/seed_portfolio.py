@@ -15,72 +15,98 @@ from apps.technology.models import Technologies
 TECHNOLOGIES = {
     "Python": {"icon": "🐍", "color": "#f2c94c"},
     "Django": {"icon": "◩", "color": "#69b88d"},
+    "Django REST Framework": {"icon": "◆", "color": "#d06b6b"},
+    "React": {"icon": "⚛", "color": "#61dafb"},
+    "Vite": {"icon": "ϟ", "color": "#a78bfa"},
+    "Tailwind CSS": {"icon": "≈", "color": "#38bdf8"},
+    "Zustand": {"icon": "◫", "color": "#d6a56f"},
+    "JWT": {"icon": "🔐", "color": "#d8d8d8"},
     "Docker": {"icon": "🐳", "color": "#68a9e8"},
-    "Linux": {"icon": "♟", "color": "#f1f1f1"},
-    "Nginx": {"icon": "⬡", "color": "#68bd82"},
     "PostgreSQL": {"icon": "🐘", "color": "#7ba5d6"},
-    "Raspberry Pi": {"icon": "◉", "color": "#d2768c"},
+    "Redis": {"icon": "◇", "color": "#dc5b54"},
+    "WebSockets": {"icon": "↯", "color": "#d7b56d"},
+    "Cloudinary": {"icon": "☁", "color": "#5f8ff7"},
+    "AWS S3": {"icon": "▰", "color": "#f39b3d"},
+    "Google Calendar": {"icon": "▣", "color": "#74a1f7"},
+    "Railway": {"icon": "◒", "color": "#c8b8ff"},
+    "Vercel": {"icon": "▲", "color": "#f1f1f1"},
 }
+
+LEGACY_PROJECT_SLUGS = ("alternativa-kiosk", "abogado-crm")
+LEGACY_TECHNOLOGIES = ("Linux", "Nginx", "Raspberry Pi")
 
 PROJECTS = (
     {
         "title": "Alternativa 2.0",
         "slug": "alternativa-2-0",
-        "short_description": "Restaurant SaaS platform for digital menus and online ordering.",
-        "description": "A self-hosted platform that helps restaurants manage menus, QR access, orders and daily operations from one dashboard.",
-        "github": "https://github.com/jalmosquera",
+        "short_description": "Restaurant SaaS for multilingual menus, ordering and real-time operations.",
+        "description": "A full-stack restaurant platform covering multilingual catalogs, guest checkout, ingredient customization, role-based administration, promotions and real-time order notifications.",
+        "github": "https://github.com/jalmosquera/saasAlternativa2.0",
         "live_url": "",
-        "technologies": ("Python", "Django", "Docker", "Nginx", "PostgreSQL"),
+        "technologies": (
+            "Python", "Django", "Django REST Framework", "React", "Vite",
+            "Tailwind CSS", "JWT", "PostgreSQL", "Redis", "WebSockets", "Cloudinary",
+        ),
         "accent": "#d7794f",
-        "problem": "Restaurants needed an affordable way to digitize menus and centralize orders without depending on multiple services.",
-        "solution": "A modular Django platform with QR menus, role-based management and a Dockerized self-hosted deployment.",
+        "problem": "Restaurants need more than a static QR menu: products, ingredients, availability, permissions and orders must stay synchronized across customers and staff.",
+        "solution": "A modular Django and React SaaS with guest checkout, granular roles, atomic order operations, WebSocket notifications and cloud media storage.",
         "details": {
-            "Backend": ("Django REST Framework", "PostgreSQL"),
-            "Infrastructure": ("Docker Compose", "Nginx"),
+            "Domain": ("Products, options and ingredients", "Orders, promotions and company settings"),
+            "Realtime": ("Django Channels", "Redis-backed WebSockets"),
+            "Delivery": ("PostgreSQL", "Cloudinary media storage"),
         },
         "lessons": (
-            "Design domain boundaries before adding restaurant-specific features.",
-            "Keep deployment reproducible from the first production iteration.",
+            "Model product customization explicitly so pricing and stock remain consistent.",
+            "Treat guest checkout and authenticated ordering as one domain with different permissions.",
         ),
     },
     {
-        "title": "Alternativa Kiosk",
-        "slug": "alternativa-kiosk",
-        "short_description": "Tablet kiosk application designed for restaurant self-service.",
-        "description": "A focused kiosk interface connected to the restaurant platform, optimized for touch devices and constrained hardware.",
-        "github": "https://github.com/jalmosquera",
-        "live_url": "",
-        "technologies": ("Python", "Django", "Nginx", "Raspberry Pi"),
-        "accent": "#b86447",
-        "problem": "Small restaurants needed self-service ordering without purchasing expensive proprietary kiosk hardware.",
-        "solution": "A lightweight web kiosk deployed on Raspberry Pi devices and synchronized with the main restaurant backend.",
+        "title": "Eduardo Bernal Abogado",
+        "slug": "eduardo-bernal-abogado",
+        "short_description": "Production legal platform for appointments, clients and secure documents.",
+        "description": "A client-facing legal website backed by private staff workflows, appointment availability, a protected client portal and auditable delivery of sensitive documents.",
+        "github": "https://github.com/jalmosquera/landingLawyer",
+        "live_url": "https://www.eduardobernalabogado.es/",
+        "technologies": (
+            "Python", "Django", "Django REST Framework", "React", "Vite",
+            "Tailwind CSS", "Zustand", "JWT", "PostgreSQL", "AWS S3",
+            "Google Calendar", "Railway", "Vercel",
+        ),
+        "accent": "#c8a860",
+        "problem": "The law firm needed to attract clients, coordinate appointments and exchange sensitive case documents without scattering operations across informal channels.",
+        "solution": "A production full-stack platform with public lead capture, staff and client roles, calendar synchronization, expiring download tokens and an access audit trail.",
         "details": {
-            "Device": ("Raspberry Pi", "Touch display"),
-            "Delivery": ("Nginx", "Local network mode"),
+            "Legal operations": ("Clients and case records", "Appointments and availability"),
+            "Security": ("Expiring one-time download tokens", "Document access audit logs"),
+            "Integrations": ("Google Calendar and Meet", "S3-ready document storage"),
         },
         "lessons": (
-            "Touch interfaces require different spacing and feedback than desktop dashboards.",
-            "Offline-friendly behavior matters on unreliable restaurant networks.",
+            "Sensitive documents require server-enforced ownership, expiry and traceability.",
+            "Public scheduling must respect private availability without exposing internal calendars.",
         ),
     },
     {
-        "title": "Abogado CRM",
-        "slug": "abogado-crm",
-        "short_description": "Client and case management platform for independent law firms.",
-        "description": "A secure CRM for organizing clients, matters, deadlines and documents with a deployment model suitable for small firms.",
-        "github": "https://github.com/jalmosquera",
-        "live_url": "",
-        "technologies": ("Python", "Django", "Docker", "Linux", "PostgreSQL"),
-        "accent": "#8f513e",
-        "problem": "Independent lawyers were tracking clients, cases and deadlines across spreadsheets and disconnected tools.",
-        "solution": "A centralized Django CRM with structured case records, deadline tracking and controlled access to sensitive information.",
+        "title": "Equus Pub Digital Menu",
+        "slug": "equus-pub-digital-menu",
+        "short_description": "Live bilingual digital menu and ordering experience for Equus Pub.",
+        "description": "A production system for a hospitality client with a multilingual catalog, ingredient customization, persistent cart, WhatsApp ordering and protected content management.",
+        "github": "https://github.com/jalmosquera/digitalLetterFront",
+        "live_url": "https://equuspub.vercel.app/",
+        "technologies": (
+            "Python", "Django", "Django REST Framework", "React", "Vite",
+            "Tailwind CSS", "JWT", "PostgreSQL", "Railway", "Vercel",
+        ),
+        "accent": "#d38a4c",
+        "problem": "A working restaurant needed a menu it could maintain without reprinting, while customers needed a fast bilingual flow for browsing and placing customized orders.",
+        "solution": "A deployed Django REST and React application with translated content, role-based administration, ingredient-level customization and direct WhatsApp checkout.",
         "details": {
-            "Backend": ("Django", "PostgreSQL"),
-            "Operations": ("Docker", "Linux"),
+            "Customer experience": ("Spanish and English catalog", "Persistent customizable cart"),
+            "Administration": ("JWT role-based access", "Product, category and ingredient CRUD"),
+            "Production": ("Django API on Railway", "React frontend on Vercel"),
         },
         "lessons": (
-            "Sensitive domains need explicit access rules instead of UI-only restrictions.",
-            "Auditability should be considered alongside the initial data model.",
+            "A restaurant menu needs operational editing workflows, not only a polished public catalog.",
+            "Translation and ingredient customization belong in the data model from the beginning.",
         ),
     },
 )
@@ -126,6 +152,8 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **options):
+        Project.objects.filter(slug__in=LEGACY_PROJECT_SLUGS).delete()
+
         technologies = {}
         for name, defaults in TECHNOLOGIES.items():
             technology, _ = Technologies.objects.update_or_create(name=name, defaults=defaults)
@@ -145,7 +173,9 @@ class Command(BaseCommand):
             )
             project.technologies.set(technologies[name] for name in data["technologies"])
 
-            if not project.image:
+            if not project.image or project.image.name.startswith("projects/seed/"):
+                if project.image:
+                    project.image.storage.delete(project.image.name)
                 thumbnail = build_thumbnail(project.title, project.short_description, data["accent"])
                 project.image.save(f"seed/{project.slug}.svg", ContentFile(thumbnail.encode()), save=True)
 
@@ -169,5 +199,10 @@ class Command(BaseCommand):
                 title="Dashboard overview",
                 defaults={"image": project.image.name, "order": order},
             )
+
+        Technologies.objects.filter(
+            name__in=LEGACY_TECHNOLOGIES,
+            projects__isnull=True,
+        ).delete()
 
         self.stdout.write(self.style.SUCCESS("Portfolio demo data is ready."))
