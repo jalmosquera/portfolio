@@ -5,8 +5,8 @@ import { APP_ROUTES } from '../../lib/config/routes'
 export function FeaturedProjects({ projects = [] }) {
   return (
     <section className="relative border-b border-border py-16 lg:py-20">
-      <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
-        <div className="flex items-center justify-between mb-10">
+      <div className="site-container relative">
+        <div className="mb-10 flex items-start justify-between gap-6 sm:items-center">
           <div>
             <h2 className="mb-1 text-3xl font-bold text-text">Featured Projects</h2>
             <p className="text-muted text-sm">Some of the real-world applications I've built and deployed.</p>
@@ -23,7 +23,7 @@ export function FeaturedProjects({ projects = [] }) {
         </div>
 
         {projects.length > 0 ? (
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mx-auto grid max-w-[90rem] grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:gap-7">
             {projects.map((project) => <ProjectCard key={project.id} project={project} />)}
           </div>
         ) : (
