@@ -1,22 +1,29 @@
+import stackIllustration from '../../assets/hero.png'
+
 export function TechStack({ technologies = [] }) {
   return (
-    <section className="py-20 border-t border-[#1a1a1a]">
-      <div className="max-w-6xl mx-auto px-6 relative">
-        <div className="absolute -top-10 right-10 w-32 h-32 rounded-full blur-3xl bg-accent/10 pointer-events-none" />
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative">
+    <section id="about" className="border-b border-border py-16 lg:py-20">
+      <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
+        <div className="relative grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.2fr_0.8fr]">
           <div>
-            <h2 className="text-3xl font-bold text-white mb-2">My Tech Stack</h2>
+            <h2 className="mb-2 text-3xl font-bold text-text">My Tech Stack</h2>
             <p className="text-muted text-sm mb-8">Technologies I use to build and deploy applications, at scale.</p>
 
             <div className="flex flex-wrap gap-2.5">
-              {technologies.map((tech) => (
+              {(technologies.length > 0 ? technologies : [
+                { id: 'python', name: 'Python', icon: '🐍' },
+                { id: 'django', name: 'Django', icon: '◩' },
+                { id: 'docker', name: 'Docker', icon: '🐳' },
+                { id: 'linux', name: 'Linux', icon: '♟' },
+                { id: 'nginx', name: 'Nginx', icon: '⬡' },
+                { id: 'cicd', name: 'CI/CD Tools', icon: '❖' },
+              ]).map((tech) => (
                 <div
                   key={tech.id}
-                  className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-lg hover:border-accent/60 hover:-translate-y-0.5 transition-all"
+                  className="flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2 transition-colors hover:border-accent/60"
                 >
                   <span className="text-base">{tech.icon}</span>
-                  <span className="text-sm font-medium" style={{ color: tech.color || '#d1d5db' }}>
+                  <span className="text-sm font-medium text-text">
                     {tech.name}
                   </span>
                 </div>
@@ -24,25 +31,8 @@ export function TechStack({ technologies = [] }) {
             </div>
           </div>
 
-          {/* Visual side — 3D server illustration placeholder */}
-          <div className="hidden lg:flex justify-center items-center">
-            <div className="relative w-72 h-56 flex items-end justify-center gap-4">
-              {/* Simulated server stack */}
-              {['Docker', 'Nginx', 'PostgreSQL'].map((label, i) => (
-                <div
-                  key={label}
-                  className="flex flex-col items-center gap-1"
-                  style={{ transform: `translateY(${i * 8}px)` }}
-                >
-                  <div className="w-20 h-12 bg-card border border-border rounded-lg flex items-center justify-center shadow-[0_12px_26px_rgba(0,0,0,0.45)]">
-                    <span className="text-xl">
-                      {label === 'Docker' ? '🐳' : label === 'Nginx' ? '🌐' : '🐘'}
-                    </span>
-                  </div>
-                  <span className="text-[10px] text-muted">{label}</span>
-                </div>
-              ))}
-            </div>
+          <div className="hidden justify-center lg:flex">
+            <img src={stackIllustration} alt="Self-hosted infrastructure stack" className="w-full max-w-sm opacity-90" />
           </div>
         </div>
       </div>

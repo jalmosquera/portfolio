@@ -2,36 +2,41 @@ import { useEffect, useState } from 'react'
 import { SectionTitle } from '../components/ui/SectionTitle'
 import { ProjectCard } from '../components/projects/ProjectCard'
 import { getProjects } from '../lib/api/projects'
+import { PageLoader } from '../components/ui/PageLoader'
 
 export function ProjectsPage() {
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     getProjects()
       .then(setProjects)
+      .catch(() => setError('Projects could not be loaded. Please try again later.'))
       .finally(() => setLoading(false))
   }, [])
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center pt-16">
-        <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
-      </div>
-    )
+    return <PageLoader />
   }
 
   return (
-    <main className="pt-24 pb-16">
-      <div className="max-w-6xl mx-auto px-6">
+    <main className="pb-20 pt-28">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <SectionTitle subtitle="All the projects I've built and deployed.">
           All Projects
         </SectionTitle>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </div>
+        {error && <div className="rounded-lg border border-accent/30 bg-accent-soft p-6 text-sm text-accent">{error}</div>}
+        {!error && projects.length === 0 && (
+          <div className="rounded-lg border border-dashed border-border bg-card/50 px-6 py-16 text-center text-sm text-muted">
+            New case studies are being prepared.
+          </div>
+        )}
+        {!error && projects.length > 0 && (
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {projects.map((project) => <ProjectCard key={project.id} project={project} />)}
+          </div>
+        )}
       </div>
     </main>
   )
