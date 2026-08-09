@@ -5,31 +5,31 @@ export function Navbar() {
   const { pathname } = useLocation()
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0b0b0b]/85 backdrop-blur-lg border-b border-border">
-      <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+    <nav className="fixed inset-x-0 top-0 z-50 border-b border-border bg-bg/90 backdrop-blur-lg">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
         {/* Logo */}
         <Link to={APP_ROUTES.home} className="flex items-center gap-2">
-          <div className="w-9 h-9 bg-accent rounded-lg flex items-center justify-center shadow-[0_10px_20px_rgba(215,121,44,0.35)]">
-            <span className="text-white font-black text-sm">M</span>
+          <div className="flex h-9 w-9 items-center justify-center rounded-md bg-accent-soft text-accent ring-1 ring-accent/40">
+            <span className="text-xl font-black">M.</span>
           </div>
-          <span className="text-white font-semibold text-sm">MosqueraSoft</span>
+          <span className="text-sm font-semibold text-text sm:text-base">Mosquera<span className="text-accent">Soft</span></span>
         </Link>
 
         {/* Links */}
-        <div className="flex items-center gap-7">
-          <Link to={APP_ROUTES.home} className={`text-sm transition-colors ${pathname === APP_ROUTES.home ? 'text-white' : 'text-[#9ca3af] hover:text-white'}`}>
+        <div className="flex items-center gap-4 sm:gap-7">
+          <Link to={APP_ROUTES.home} className={`hidden text-sm transition-colors sm:block ${pathname === APP_ROUTES.home ? 'text-text' : 'text-muted hover:text-text'}`}>
             Home
           </Link>
-          <Link to={APP_ROUTES.projects} className={`text-sm transition-colors flex items-center gap-1 ${pathname.startsWith(APP_ROUTES.projects) ? 'text-white' : 'text-[#9ca3af] hover:text-white'}`}>
+          <Link to={APP_ROUTES.projects} className={`flex items-center gap-1 text-sm transition-colors ${pathname.startsWith(APP_ROUTES.projects) ? 'text-text' : 'text-muted hover:text-text'}`}>
             Projects
             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
           </Link>
-          <a href="#about" className="text-sm text-[#9ca3af] hover:text-white transition-colors">About</a>
+          <a href="#about" className="hidden text-sm text-muted transition-colors hover:text-text sm:block">About</a>
           <a
             href="mailto:jalberth@mosquera.dev"
-            className="flex items-center gap-1.5 text-sm border border-accent text-accent px-4 py-1.5 rounded-md hover:bg-accent hover:text-white transition-all font-medium shadow-[0_10px_24px_rgba(215,121,44,0.25)]"
+            className="flex items-center gap-1.5 rounded-md border border-accent/50 bg-accent-soft px-3 py-1.5 text-sm font-medium text-accent transition-colors hover:border-accent hover:bg-accent hover:text-bg sm:px-4"
           >
             <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
               <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />

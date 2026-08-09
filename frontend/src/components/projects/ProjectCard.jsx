@@ -3,9 +3,9 @@ import { APP_ROUTES, getMediaUrl } from '../../lib/config/routes'
 
 export function ProjectCard({ project }) {
   return (
-    <div className="bg-card border border-border rounded-2xl overflow-hidden hover:border-accent/60 transition-all duration-300 group flex flex-col shadow-[var(--shadow-soft)]">
+    <article className="group flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-[var(--shadow-soft)] transition-colors hover:border-accent/50">
       {/* Image */}
-      <div className="h-48 bg-[#111] overflow-hidden relative">
+      <div className="relative h-48 overflow-hidden bg-surface">
         {project.image ? (
           <img
             src={getMediaUrl(project.image)}
@@ -13,8 +13,8 @@ export function ProjectCard({ project }) {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-[#0f0f0f]">
-            <svg className="w-12 h-12 text-[#2a2a2a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex h-full w-full items-center justify-center bg-surface">
+            <svg className="h-12 w-12 text-subtle" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
@@ -25,7 +25,7 @@ export function ProjectCard({ project }) {
             {project.technologies.slice(0, 3).map((tech) => (
               <span
                 key={tech.id}
-                className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#0d0d0d]/80 border border-[#2a2a2a] rounded text-[11px] font-medium backdrop-blur-sm shadow-sm"
+                className="inline-flex items-center gap-1 rounded border border-border bg-bg/80 px-2 py-0.5 text-[11px] font-medium text-text backdrop-blur-sm"
                 style={{ color: tech.color || '#9ca3af' }}
               >
                 <span className="text-[10px]">{tech.icon}</span>
@@ -37,27 +37,27 @@ export function ProjectCard({ project }) {
       </div>
 
       {/* Content */}
-      <div className="p-5 flex flex-col flex-1 gap-4">
+      <div className="flex flex-1 flex-col gap-4 p-4">
         {/* Title & description */}
         <div className="flex-1 space-y-1">
-          <h3 className="font-bold text-white text-lg leading-tight">{project.title}</h3>
+          <h3 className="text-lg font-semibold leading-tight text-text">{project.title}</h3>
           <p className="text-muted text-sm leading-relaxed line-clamp-2">{project.short_description}</p>
         </div>
 
         {/* CTA */}
         <Link
           to={APP_ROUTES.project(project.slug)}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-[#1b1b1b] border border-border rounded-lg text-sm text-text hover:border-accent hover:text-accent transition-all group/btn"
+          className="group/btn inline-flex items-center gap-2 rounded-md border border-border bg-surface px-4 py-2 text-sm text-text transition-colors hover:border-accent hover:text-accent"
         >
           <svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
           </svg>
           Case Study
-          <svg className="w-3.5 h-3.5 ml-auto text-[#444] group-hover/btn:text-accent transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="ml-auto h-3.5 w-3.5 text-subtle transition-colors group-hover/btn:text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </Link>
       </div>
-    </div>
+    </article>
   )
 }
