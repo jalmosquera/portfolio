@@ -1,8 +1,8 @@
-from rest_framework import serializer   
-from ..models import ProjectImage   
+from rest_framework import serializers
+from ..models import ProjectImage
 
-class  ProjectImageSerializer(serializers.ModelSerializer):
+
+class ProjectImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectImage
-        fields = ["__all__"]
-
+        fields = "__all__"

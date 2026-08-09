@@ -12,7 +12,7 @@ class Project(models.Model):
     is_featured = models.BooleanField(default=False)
 
     technologies = models.ManyToManyField(
-        "technology.Technology",
+        "technology.Technologies",
         related_name="projects",
         blank=True,
     )

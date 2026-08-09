@@ -1,8 +1,8 @@
 from rest_framework.routers import DefaultRouter
-from .views import ProblemSolution
+from .views import ProblemSolutionViewSet
 
 router = DefaultRouter()
-router.register(r"problemSolution", ProblemSolution, basename="problemSolution")
+router.register(r"problem-solutions", ProblemSolutionViewSet, basename="problem-solution")
 
 urlpatterns = router.urls
 
