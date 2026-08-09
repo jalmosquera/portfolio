@@ -1,12 +1,12 @@
 export function Footer() {
   return (
-    <footer className="py-10 border-t border-[#1a1a1a]">
+    <footer className="border-t border-border py-6">
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-center">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 bg-accent rounded flex items-center justify-center shadow-[0_8px_20px_rgba(215,121,44,0.28)]">
-            <span className="text-white font-black text-xs">M</span>
+          <div className="flex h-7 w-7 items-center justify-center rounded bg-accent-soft text-accent ring-1 ring-accent/40">
+            <span className="text-xs font-black">M.</span>
           </div>
-          <span className="text-white font-semibold text-sm">MosqueraSoft</span>
+          <span className="text-sm font-semibold text-text">Mosquera<span className="text-accent">Soft</span></span>
         </div>
       </div>
     </footer>
