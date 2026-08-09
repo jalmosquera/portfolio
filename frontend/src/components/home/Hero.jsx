@@ -8,15 +8,15 @@ export function Hero({ technologies = [] }) {
   return (
     <section className="relative border-b border-border pt-16">
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-bg via-transparent to-accent-soft/30" />
-      <div className="relative mx-auto grid min-h-[560px] max-w-6xl grid-cols-1 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr]">
+      <div className="site-container relative grid min-h-[560px] grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] 2xl:min-h-[640px] min-[2200px]:min-h-[720px] min-[2200px]:grid-cols-[1fr_0.9fr]">
         {/* Left: text */}
-        <div className="z-20 flex flex-col justify-center gap-7 py-16 lg:py-20">
+        <div className="z-20 flex flex-col justify-center gap-7 py-12 sm:py-16 lg:py-20 min-[2200px]:gap-9">
           <div className="space-y-4">
-            <h1 className="max-w-2xl text-4xl font-bold leading-tight text-text sm:text-5xl">
+            <h1 className="max-w-2xl text-3xl font-bold leading-tight text-text min-[420px]:text-4xl sm:text-5xl 2xl:text-6xl min-[2200px]:max-w-4xl min-[2200px]:text-7xl">
               Hi, I'm <span className="text-accent">Jalberth Mosquera.</span><br />
               I'm a Backend Developer.
             </h1>
-            <div className="space-y-2 text-sm sm:text-base">
+            <div className="space-y-2 text-sm sm:text-base min-[2200px]:text-lg">
               <p className="font-medium text-text">Python · Django · Docker · Linux</p>
               <p className="max-w-xl text-muted">Deploying self-hosted solutions that drive a business' growth.</p>
             </div>
@@ -66,13 +66,12 @@ export function Hero({ technologies = [] }) {
         </div>
 
         {/* Right: portrait */}
-        <div className="relative min-h-[420px] overflow-hidden lg:min-h-0">
-          <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-r from-bg via-transparent to-transparent" />
+        <div className="relative min-h-[340px] overflow-hidden min-[420px]:min-h-[420px] lg:min-h-0">
           <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-40 bg-gradient-to-t from-bg to-transparent" />
           <img
             src={heroImg}
             alt="Jalberth Mosquera"
-            className="absolute inset-0 h-full w-full object-cover object-top grayscale-[15%]"
+            className="hero-portrait absolute left-1/2 top-0 h-[118%] w-auto max-w-none -translate-x-1/2 object-contain object-top grayscale-[15%]"
           />
         </div>
       </div>
