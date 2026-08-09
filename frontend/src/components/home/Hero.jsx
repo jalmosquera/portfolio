@@ -1,45 +1,37 @@
 import { Link } from "react-router-dom";
 import heroImg from "../../assets/jal.jpeg";
+import { APP_ROUTES } from "../../lib/config/routes";
 
 export function Hero({ technologies = [] }) {
   const mainTechs = technologies.slice(0, 4);
 
   return (
-    <section className="relative mt-14 overflow-hidden rounded-3xl border border-border/70 bg-gradient-to-r from-[#0d0d0d] via-[#111]/90 to-[#0f0f0f] shadow-[var(--shadow-strong)]">
-      {/* Glow + vignette */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(215,121,44,0.15),transparent_35%)]" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0c0c0c] via-transparent to-[#0c0c0c]" />
-      </div>
-
-      {/* Content */}
-      <div className="relative grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr]">
+    <section className="relative border-b border-border pt-16">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-bg via-transparent to-accent-soft/30" />
+      <div className="relative mx-auto grid min-h-[560px] max-w-6xl grid-cols-1 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr]">
         {/* Left: text */}
-        <div className="px-10 lg:px-16 py-16 flex flex-col gap-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ffffff0d] border border-[#ffffff12] text-[11px] uppercase tracking-[0.15em] text-muted w-fit">
-            Backend Developer · Self-hosted
-          </div>
-
-          <div className="space-y-2">
-            <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight">
-              Hi, I'm <span className="text-accent">Jalberth Mosquera</span>.
+        <div className="z-20 flex flex-col justify-center gap-7 py-16 lg:py-20">
+          <div className="space-y-4">
+            <h1 className="max-w-2xl text-4xl font-bold leading-tight text-text sm:text-5xl">
+              Hi, I'm <span className="text-accent">Jalberth Mosquera.</span><br />
+              I'm a Backend Developer.
             </h1>
-            <p className="text-lg text-muted max-w-xl">
-              Python · Django · Docker · Linux — deploying self-hosted solutions
-              that drive a business' growth.
-            </p>
+            <div className="space-y-2 text-sm sm:text-base">
+              <p className="font-medium text-text">Python · Django · Docker · Linux</p>
+              <p className="max-w-xl text-muted">Deploying self-hosted solutions that drive a business' growth.</p>
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
             <Link
-              to="/projects"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-white font-semibold text-sm rounded-xl shadow-[0_18px_40px_rgba(215,121,44,0.35)] hover:bg-accent-hover transition-all"
+              to={APP_ROUTES.projects}
+              className="inline-flex items-center gap-2 rounded-md border border-accent/60 bg-accent-soft px-5 py-2.5 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-bg"
             >
               View Projects
             </Link>
             <a
               href="/cv.pdf"
-              className="inline-flex items-center gap-2 px-6 py-3 border border-border-strong text-text text-sm font-semibold rounded-xl hover:border-accent hover:text-accent transition-all"
+              className="inline-flex items-center gap-2 rounded-md border border-border-strong bg-card/70 px-5 py-2.5 text-sm font-semibold text-text transition-colors hover:border-accent hover:text-accent"
             >
               <svg
                 className="w-4 h-4"
@@ -58,32 +50,12 @@ export function Hero({ technologies = [] }) {
             </a>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            {[
-              { label: "Python", value: "Django · FastAPI · DRF" },
-              { label: "Platform", value: "Docker · Nginx · Linux" },
-              { label: "Data", value: "PostgreSQL · Redis" },
-              { label: "Reliability", value: "CI/CD · Observability" },
-            ].map((item) => (
-              <div
-                key={item.label}
-                className="bg-card/70 border border-border rounded-xl px-4 py-3"
-              >
-                <p className="text-[11px] uppercase tracking-[0.12em] text-muted">
-                  {item.label}
-                </p>
-                <p className="text-sm text-text mt-1">{item.value}</p>
-              </div>
-            ))}
-          </div>
-
           {mainTechs.length > 0 && (
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 pt-4">
               {mainTechs.map((tech) => (
                 <span
                   key={tech.id}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#ffffff10] border border-[#ffffff15] rounded-full text-xs font-medium backdrop-blur-sm"
-                  style={{ color: tech.color || "#d1d5db" }}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card/80 px-3 py-1.5 text-xs font-medium text-text backdrop-blur-sm"
                 >
                   <span>{tech.icon}</span>
                   <span>{tech.name}</span>
@@ -94,12 +66,13 @@ export function Hero({ technologies = [] }) {
         </div>
 
         {/* Right: portrait */}
-        <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-l from-[#0b0b0b] via-transparent to-transparent" />
+        <div className="relative min-h-[420px] overflow-hidden lg:min-h-0">
+          <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-r from-bg via-transparent to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-40 bg-gradient-to-t from-bg to-transparent" />
           <img
             src={heroImg}
             alt="Jalberth Mosquera"
-            className="w-full h-full object-cover object-top mix-blend-lighten"
+            className="absolute inset-0 h-full w-full object-cover object-top grayscale-[15%]"
           />
         </div>
       </div>

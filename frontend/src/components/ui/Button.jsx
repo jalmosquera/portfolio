@@ -1,8 +1,8 @@
 export function Button({ children, variant = 'primary', href, onClick, className = '' }) {
-  const base = 'inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 cursor-pointer'
+  const base = 'inline-flex cursor-pointer items-center gap-2 rounded-md px-5 py-2.5 text-sm font-medium transition-colors duration-200'
   const variants = {
-    primary: 'bg-accent text-white hover:bg-accent-hover',
-    outline: 'border border-accent text-accent hover:bg-accent hover:text-white',
+    primary: 'border border-accent/60 bg-accent-soft text-accent hover:bg-accent hover:text-bg',
+    outline: 'border border-border bg-card text-text hover:border-accent hover:text-accent',
     ghost: 'text-muted hover:text-text',
   }
 
