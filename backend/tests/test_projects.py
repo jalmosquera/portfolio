@@ -54,6 +54,22 @@ class TestProjectsViewSet:
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 2
 
+    def test_hidden_projects_are_not_listed(self, api_client):
+        visible_project = ProjectFactory(visible=True)
+        ProjectFactory(visible=False)
+
+        response = api_client.get(self.BASE_URL)
+
+        assert response.status_code == status.HTTP_200_OK
+        assert [project["id"] for project in response.data] == [visible_project.id]
+
+    def test_hidden_project_cannot_be_retrieved_directly(self, api_client):
+        hidden_project = ProjectFactory(visible=False)
+
+        response = api_client.get(f"{self.BASE_URL}{hidden_project.id}/")
+
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
     def test_project_technology_relationship(self, api_client):
         project = ProjectFactory()
         tech = TechnologiesFactory()

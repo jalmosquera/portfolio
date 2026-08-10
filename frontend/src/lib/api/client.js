@@ -12,3 +12,8 @@ export const apiFetch = (path, language) =>
 
 export const apiPost = (path, payload, language) =>
   apiClient.post(path, payload, languageOptions(language)).then(({ data }) => data)
+
+export const apiDownload = (path, language) => apiClient.get(path, {
+  ...languageOptions(language),
+  responseType: 'blob',
+})
