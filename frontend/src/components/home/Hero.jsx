@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import heroImg from "../../assets/jal.jpeg";
+import heroImgWebp from "../../assets/jal.webp";
 import { APP_ROUTES } from "../../lib/config/routes";
 import { useLanguage } from '../../context/useLanguage'
 import { useState } from 'react'
@@ -64,7 +65,7 @@ export function Hero({ technologies = [] }) {
                   key={tech.id}
                   className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card/80 px-3 py-1.5 text-xs font-medium text-text backdrop-blur-sm"
                 >
-                  {technologyIcon(tech.name) ? <img src={technologyIcon(tech.name)} alt="" className="size-4 object-contain" /> : <span>{tech.icon}</span>}
+                  {technologyIcon(tech.name) ? <img src={technologyIcon(tech.name)} alt="" width="16" height="16" decoding="async" className="size-4 object-contain" /> : <span>{tech.icon}</span>}
                   <span>{tech.name}</span>
                 </span>
               ))}
@@ -79,20 +80,28 @@ export function Hero({ technologies = [] }) {
   {/* Fade inferior */}
   <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-40 bg-gradient-to-t from-bg to-transparent" />
 
-  <img
-    src={heroImg}
-    alt="Jalberth Mosquera"
-    className="
-      hero-portrait
-      absolute left-1/2 top-0
-      h-[118%] w-auto max-w-none
-      -translate-x-1/2
-      object-contain object-top
-      grayscale-[15%]
-      [mask-image:linear-gradient(to_right,black_0%,black_72%,transparent_100%)]
-      [-webkit-mask-image:linear-gradient(to_right,black_0%,black_72%,transparent_100%)]
-    "
-  />
+  <picture>
+    <source srcSet={heroImgWebp} type="image/webp" />
+    <img
+      src={heroImg}
+      alt="Jalberth Mosquera"
+      width="1122"
+      height="1402"
+      loading="eager"
+      fetchPriority="high"
+      decoding="async"
+      className="
+        hero-portrait
+        absolute left-1/2 top-0
+        h-[118%] w-auto max-w-none
+        -translate-x-1/2
+        object-contain object-top
+        grayscale-[15%]
+        [mask-image:linear-gradient(to_right,black_0%,black_72%,transparent_100%)]
+        [-webkit-mask-image:linear-gradient(to_right,black_0%,black_72%,transparent_100%)]
+      "
+    />
+  </picture>
 </div>
       </div>
       <ResumeFormatModal open={resumeModalOpen} onClose={() => setResumeModalOpen(false)} />
