@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'apps.problem_solution',
     'apps.project_images',
     'apps.projects',
+    'apps.resume',
     'apps.tech_details',
     'apps.technology',
     'drf_spectacular',
@@ -178,3 +179,5 @@ if os.getenv('CORS_ALLOWED_ORIGINS'):
     CORS_ALLOWED_ORIGINS = [o.strip() for o in os.getenv('CORS_ALLOWED_ORIGINS').split(',') if o.strip()]
 else:
     CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_EXPOSE_HEADERS = ['Content-Disposition']

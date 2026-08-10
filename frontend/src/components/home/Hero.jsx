@@ -2,14 +2,34 @@ import { Link } from "react-router-dom";
 import heroImg from "../../assets/jal.jpeg";
 import { APP_ROUTES } from "../../lib/config/routes";
 import { useLanguage } from '../../context/useLanguage'
+import { useState } from 'react'
+import { sileo } from 'sileo'
+import { downloadResume } from '../../lib/api/resume'
 
 export function Hero({ technologies = [] }) {
   const mainTechs = technologies.slice(0, 4);
-  const { t } = useLanguage()
+  const { language, t } = useLanguage()
+  const [downloading, setDownloading] = useState(false)
+
+  const handleResumeDownload = async () => {
+    if (downloading) return
+    setDownloading(true)
+    try {
+      await sileo.promise(() => downloadResume(language), {
+        loading: { title: t('cvDownloading') },
+        success: { title: t('cvDownloaded') },
+        error: { title: t('cvDownloadError') },
+      })
+    } catch {
+      // Sileo already communicates the failed request to the user.
+    } finally {
+      setDownloading(false)
+    }
+  }
 
   return (
     <section className="relative border-b border-border pt-16">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-bg via-transparent to-accent-soft/30" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-bg via-transparent to-black" />
       <div className="site-container relative grid min-h-[560px] grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] 2xl:min-h-[640px] min-[2200px]:min-h-[720px] min-[2200px]:grid-cols-[1fr_0.9fr]">
         {/* Left: text */}
         <div className="z-20 flex flex-col justify-center gap-7 py-12 sm:py-16 lg:py-20 min-[2200px]:gap-9">
@@ -31,9 +51,11 @@ export function Hero({ technologies = [] }) {
             >
               {t('viewProjects')}
             </Link>
-            <a
-              href="/cv.pdf"
-              className="inline-flex items-center gap-2 rounded-md border border-border-strong bg-card/70 px-5 py-2.5 text-sm font-semibold text-text transition-colors hover:border-accent hover:text-accent"
+            <button
+              type="button"
+              onClick={handleResumeDownload}
+              disabled={downloading}
+              className="inline-flex items-center gap-2 rounded-md border border-border-strong bg-card/70 px-5 py-2.5 text-sm font-semibold text-text transition-colors hover:border-accent hover:text-accent disabled:cursor-wait disabled:opacity-60"
             >
               <svg
                 className="w-4 h-4"
@@ -49,7 +71,7 @@ export function Hero({ technologies = [] }) {
                 />
               </svg>
               {t('downloadCv')}
-            </a>
+            </button>
           </div>
 
           {mainTechs.length > 0 && (
@@ -68,14 +90,27 @@ export function Hero({ technologies = [] }) {
         </div>
 
         {/* Right: portrait */}
-        <div className="relative min-h-[340px] overflow-hidden min-[420px]:min-h-[420px] lg:min-h-0">
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-40 bg-gradient-to-t from-bg to-transparent" />
-          <img
-            src={heroImg}
-            alt="Jalberth Mosquera"
-            className="hero-portrait absolute left-1/2 top-0 h-[118%] w-auto max-w-none -translate-x-1/2 object-contain object-top grayscale-[15%]"
-          />
-        </div>
+        {/* Right: portrait */}
+<div className="relative min-h-[340px] overflow-hidden min-[420px]:min-h-[420px] lg:min-h-0">
+
+  {/* Fade inferior */}
+  <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-40 bg-gradient-to-t from-bg to-transparent" />
+
+  <img
+    src={heroImg}
+    alt="Jalberth Mosquera"
+    className="
+      hero-portrait
+      absolute left-1/2 top-0
+      h-[118%] w-auto max-w-none
+      -translate-x-1/2
+      object-contain object-top
+      grayscale-[15%]
+      [mask-image:linear-gradient(to_right,black_0%,black_72%,transparent_100%)]
+      [-webkit-mask-image:linear-gradient(to_right,black_0%,black_72%,transparent_100%)]
+    "
+  />
+</div>
       </div>
     </section>
   );
