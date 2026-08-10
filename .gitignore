@@ -17,6 +17,8 @@ dist/
 .env
 .env.local
 .env.*.local
+.env.production
+.deploy/
 
 # IDE
 .idea/
@@ -27,3 +29,12 @@ dist/
 # OS
 .DS_Store
 Thumbs.db
+
+# Django runtime data
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# Server-only persistent bind mounts, if introduced later
+data/
