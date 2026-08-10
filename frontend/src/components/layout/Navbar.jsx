@@ -15,6 +15,10 @@ export function Navbar() {
           <img
             src={logoMark}
             alt=""
+            width="40"
+            height="40"
+            loading="eager"
+            decoding="async"
             className="h-10 w-10 rounded-md object-cover ring-1 ring-accent/40"
           />
           <span className="hidden text-sm font-semibold text-text min-[420px]:inline sm:text-base">Jalberth<span className="text-accent"> Mosquera</span></span>
@@ -25,11 +29,8 @@ export function Navbar() {
           <Link to={APP_ROUTES.home} className={`hidden text-sm transition-colors sm:block ${pathname === APP_ROUTES.home ? 'text-text' : 'text-muted hover:text-text'}`}>
             {t('navHome')}
           </Link>
-          <Link to={APP_ROUTES.projects} className={`flex items-center gap-1 text-sm transition-colors ${pathname.startsWith(APP_ROUTES.projects) ? 'text-text' : 'text-muted hover:text-text'}`}>
+          <Link to={APP_ROUTES.projects} className={`text-sm transition-colors ${pathname.startsWith(APP_ROUTES.projects) ? 'text-text' : 'text-muted hover:text-text'}`}>
             {t('navProjects')}
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
           </Link>
           <a href="/#about" className="hidden text-sm text-muted transition-colors hover:text-text sm:block">{t('navAbout')}</a>
           <div className="flex rounded-md border border-border bg-card p-0.5" aria-label={t('languageSelector')}>
