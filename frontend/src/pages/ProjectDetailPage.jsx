@@ -128,7 +128,7 @@ export function ProjectDetailPage() {
             <img
               src={getMediaUrl(project.image)}
               alt={project.title}
-              className="max-h-[480px] w-full object-cover 2xl:max-h-[620px] min-[2200px]:max-h-[760px]"
+              className="block h-auto w-full"
             />
           </div>
         )}
@@ -167,7 +167,7 @@ export function ProjectDetailPage() {
                     <img
                       src={getMediaUrl(img.image)}
                       alt={img.title}
-                      className="h-44 w-full object-cover 2xl:h-52"
+                      className="block h-auto w-full"
                     />
                   ) : (
                     <div className="w-full h-44 flex items-center justify-center text-muted text-3xl bg-surface">🖥️</div>

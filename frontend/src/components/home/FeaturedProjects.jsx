@@ -37,7 +37,7 @@ export function FeaturedProjects({ projects = [] }) {
         <div className="mt-10 flex justify-center">
           <Link
             to={APP_ROUTES.projects}
-            className="inline-flex items-center gap-2 px-6 py-2.5 border border-accent text-accent text-sm font-medium rounded-md hover:bg-accent hover:text-white transition-all"
+            className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-accent px-6 py-2.5 text-sm font-medium text-accent transition-all hover:bg-accent hover:text-white"
           >
             {t('viewAllProjects')}
           </Link>
