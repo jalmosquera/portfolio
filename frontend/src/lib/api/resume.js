@@ -9,8 +9,9 @@ function responseFilename(headers) {
   return encodedFilename ? decodeURIComponent(encodedFilename) : 'Jalberth_Mosquera_CV.pdf'
 }
 
-export async function downloadResume(language) {
-  const response = await apiDownload(API_ROUTES.resume.download, language)
+export async function downloadResume(language, format) {
+  const path = `${API_ROUTES.resume.download}?${new URLSearchParams({ variant: format })}`
+  const response = await apiDownload(path, language)
   const objectUrl = URL.createObjectURL(response.data)
   const link = document.createElement('a')
   link.href = objectUrl
