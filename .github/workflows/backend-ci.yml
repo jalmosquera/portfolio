@@ -37,4 +37,5 @@ jobs:
       - name: Run tests
         run: pytest tests/ -v
         env:
+          DEBUG: "true"
           DB_NAME: ""
