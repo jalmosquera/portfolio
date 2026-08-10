@@ -1,6 +1,6 @@
-from django.core.exceptions import ValidationError
-from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.core.exceptions import ValidationError
+from parler.models import TranslatableModel, TranslatedFields
 
 
 MAX_RESUME_SIZE = 10 * 1024 * 1024
@@ -23,38 +23,101 @@ def validate_pdf_signature(file):
 
 class Resume(models.Model):
     singleton = models.BooleanField(default=True, unique=True, editable=False)
-    file = models.FileField(
-        upload_to="resumes/%Y/%m/",
-        validators=[
-            FileExtensionValidator(allowed_extensions=["pdf"]),
-            validate_resume_size,
-            validate_pdf_signature,
-        ],
-    )
+    name = models.CharField(max_length=160, default="Jalberth Mosquera")
+    email = models.EmailField(default="Jmosquera2305@gmail.com")
+    phone = models.CharField(max_length=40, blank=True)
+    linkedin_url = models.URLField(max_length=300, blank=True)
+    github_url = models.URLField(max_length=300, blank=True)
+    portrait = models.ImageField(upload_to="resumes/portrait/", blank=True)
     public_filename = models.CharField(max_length=160, default="Jalberth_Mosquera_CV.pdf")
     download_count = models.PositiveIntegerField(default=0, editable=False)
+    is_active = models.BooleanField(default=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = "CV"
-        verbose_name_plural = "CV"
+        verbose_name = "Dynamic CV"
+        verbose_name_plural = "Dynamic CV"
 
     def __str__(self):
-        return self.public_filename
+        return self.name
 
-    def save(self, *args, **kwargs):
-        previous_file = None
-        if self.pk:
-            previous_file = type(self).objects.filter(pk=self.pk).values_list("file", flat=True).first()
-        super().save(*args, **kwargs)
-        if previous_file and previous_file != self.file.name:
-            self.file.storage.delete(previous_file)
 
-    def delete(self, *args, **kwargs):
-        storage = self.file.storage
-        filename = self.file.name
-        result = super().delete(*args, **kwargs)
-        if filename:
-            storage.delete(filename)
-        return result
+class ResumeContent(TranslatableModel):
+    resume = models.OneToOneField(Resume, on_delete=models.CASCADE, related_name="content")
+    translations = TranslatedFields(
+        headline=models.CharField(max_length=220),
+        location=models.CharField(max_length=160, blank=True),
+        profile=models.TextField(),
+    )
+
+    def __str__(self):
+        return self.safe_translation_getter("headline", any_language=True) or self.resume.name
+
+
+class OrderedResumeItem(models.Model):
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+    order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        abstract = True
+        ordering = ["order", "pk"]
+
+
+class ResumeHighlight(TranslatableModel, OrderedResumeItem):
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name="highlights")
+    translations = TranslatedFields(text=models.CharField(max_length=240))
+
+    def __str__(self):
+        return self.safe_translation_getter("text", any_language=True) or "Highlight"
+
+
+class ResumeSkill(OrderedResumeItem):
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name="skills")
+    name = models.CharField(max_length=120)
+    category = models.CharField(max_length=80, default="Core skills")
+    icon_name = models.CharField(max_length=80, blank=True, help_text="SVG filename without path")
+
+    def __str__(self):
+        return self.name
+
+
+class ResumeExperience(TranslatableModel, OrderedResumeItem):
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name="experiences")
+    company = models.CharField(max_length=160)
+    period = models.CharField(max_length=120)
+    translations = TranslatedFields(
+        role=models.CharField(max_length=180),
+        location=models.CharField(max_length=160, blank=True),
+        summary=models.TextField(blank=True),
+    )
+
+    def __str__(self):
+        role = self.safe_translation_getter("role", any_language=True) or "Experience"
+        return f"{self.company} - {role}"
+
+
+class ResumeExperienceBullet(TranslatableModel, OrderedResumeItem):
+    experience = models.ForeignKey(
+        ResumeExperience,
+        on_delete=models.CASCADE,
+        related_name="bullets",
+    )
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name="experience_bullets")
+    translations = TranslatedFields(text=models.CharField(max_length=300))
+
+    def __str__(self):
+        return self.safe_translation_getter("text", any_language=True) or "Experience detail"
+
+
+class ResumeEducation(TranslatableModel, OrderedResumeItem):
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name="education")
+    period = models.CharField(max_length=100, blank=True)
+    translations = TranslatedFields(
+        institution=models.CharField(max_length=180),
+        qualification=models.CharField(max_length=220),
+        location=models.CharField(max_length=160, blank=True),
+    )
+
+    def __str__(self):
+        return self.safe_translation_getter("institution", any_language=True) or "Education"
