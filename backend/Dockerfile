@@ -20,4 +20,6 @@ USER app
 
 EXPOSE 8000
 
+ENTRYPOINT ["/app/docker/entrypoint.sh"]
+
 CMD ["sh", "-c", "exec gunicorn core.wsgi:application --bind 0.0.0.0:8000 --workers ${GUNICORN_WORKERS:-3} --threads ${GUNICORN_THREADS:-2} --timeout ${GUNICORN_TIMEOUT:-60} --control-socket ${GUNICORN_CONTROL_SOCKET:-/tmp/gunicorn.ctl} --access-logfile - --error-logfile -"]
