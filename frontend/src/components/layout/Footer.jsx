@@ -8,6 +8,10 @@ export function Footer() {
           <img
             src={logoMark}
             alt=""
+            width="32"
+            height="32"
+            loading="lazy"
+            decoding="async"
             className="h-8 w-8 rounded object-cover ring-1 ring-accent/40"
           />
           <span className="text-sm font-semibold text-text">Jalberth<span className="text-accent"> Mosquera</span></span>

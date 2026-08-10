@@ -128,6 +128,10 @@ export function ProjectDetailPage() {
             <img
               src={getMediaUrl(project.image)}
               alt={project.title}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              sizes="(min-width: 2200px) 1536px, (min-width: 1280px) 1280px, 100vw"
               className="block h-auto w-full"
             />
           </div>
@@ -167,6 +171,10 @@ export function ProjectDetailPage() {
                     <img
                       src={getMediaUrl(img.image)}
                       alt={img.title}
+                      loading="lazy"
+                      decoding="async"
+                      fetchPriority="low"
+                      sizes="(min-width: 2200px) 20vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                       className="block h-auto w-full"
                     />
                   ) : (

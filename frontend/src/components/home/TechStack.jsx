@@ -25,7 +25,7 @@ export function TechStack({ technologies = [] }) {
                   key={tech.id}
                   className="flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2 transition-colors hover:border-accent/60"
                 >
-                  {technologyIcon(tech.name) ? <img src={technologyIcon(tech.name)} alt="" className="size-5 object-contain" /> : <span className="text-base">{tech.icon}</span>}
+                  {technologyIcon(tech.name) ? <img src={technologyIcon(tech.name)} alt="" width="20" height="20" loading="lazy" decoding="async" className="size-5 object-contain" /> : <span className="text-base">{tech.icon}</span>}
                   <span className="text-sm font-medium text-text">
                     {tech.name}
                   </span>
@@ -35,7 +35,7 @@ export function TechStack({ technologies = [] }) {
           </div>
 
           <div className="hidden justify-center lg:flex">
-            <img src={stackIllustration} alt={t('techAlt')} className="w-full max-w-sm opacity-90 2xl:max-w-md min-[2200px]:max-w-lg" />
+            <img src={stackIllustration} alt={t('techAlt')} width="343" height="361" loading="lazy" decoding="async" fetchPriority="low" className="w-full max-w-sm opacity-90 2xl:max-w-md min-[2200px]:max-w-lg" />
           </div>
         </div>
       </div>
