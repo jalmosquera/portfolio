@@ -1,0 +1,99 @@
+name: Deploy production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Production operation
+        required: true
+        default: deploy
+        type: choice
+        options:
+          - deploy
+          - rollback
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portfolio-production
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate revision
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate deployment scripts
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes shellcheck
+          shellcheck scripts/deploy.sh scripts/rollback.sh
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: pip install -r requirements.txt
+
+      - name: Run backend checks and tests
+        working-directory: backend
+        env:
+          DEBUG: "true"
+          DB_NAME: ""
+        run: |
+          python manage.py check
+          python manage.py makemigrations --check --dry-run
+          pytest -q
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Lint frontend
+        working-directory: frontend
+        run: npm run lint
+
+  deploy:
+    name: Deploy on self-hosted server
+    needs: validate
+    runs-on: [self-hosted, linux, x64]
+    environment: production
+    env:
+      PRODUCTION_ENV_FILE: ${{ vars.PRODUCTION_ENV_FILE }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify runner configuration
+        run: |
+          test -n "$PRODUCTION_ENV_FILE" || {
+            echo "Configure the PRODUCTION_ENV_FILE repository or environment variable." >&2
+            exit 1
+          }
+          test -r "$PRODUCTION_ENV_FILE"
+          docker version
+          docker compose version
+
+      - name: Deploy exact GitHub revision
+        if: github.event_name == 'push' || inputs.operation == 'deploy'
+        run: ./scripts/deploy.sh "${{ github.event.before }}" "${{ github.sha }}"
+
+      - name: Roll back to previous application images
+        if: github.event_name == 'workflow_dispatch' && inputs.operation == 'rollback'
+        run: ./scripts/rollback.sh

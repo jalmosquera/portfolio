@@ -9,11 +9,16 @@ export function ProjectCard({ project }) {
       {/* Image */}
       <div className="relative h-48 overflow-hidden bg-surface">
         {project.image ? (
-          <img
-            src={getMediaUrl(project.image)}
-            alt={project.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
+          <Link
+            to={APP_ROUTES.project(project.slug)}
+            className="block h-full w-full"
+          >
+            <img
+              src={getMediaUrl(project.image)}
+              alt={project.title}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </Link>
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-surface">
             <svg className="h-12 w-12 text-subtle" fill="none" stroke="currentColor" viewBox="0 0 24 24">

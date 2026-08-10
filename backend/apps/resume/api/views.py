@@ -9,6 +9,8 @@ from .serializers import ResumeSerializer
 
 
 class ResumeDetailView(APIView):
+    serializer_class = ResumeSerializer
+
     def get(self, request):
         resume = Resume.objects.first()
         if not resume or not resume.file:
@@ -17,6 +19,8 @@ class ResumeDetailView(APIView):
 
 
 class ResumeDownloadView(APIView):
+    serializer_class = ResumeSerializer
+
     def get(self, request):
         resume = Resume.objects.first()
         if not resume or not resume.file:
