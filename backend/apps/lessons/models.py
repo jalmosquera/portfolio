@@ -1,4 +1,5 @@
 from django.db import models
+from parler.models import TranslatableModel, TranslatedFields
 
 
 class Lesson(models.Model):
@@ -15,3 +16,8 @@ class Lesson(models.Model):
 
     def __str__(self):
         return self.text[:50]  
+
+
+class LessonContent(TranslatableModel):
+    lesson = models.OneToOneField(Lesson, on_delete=models.CASCADE, related_name="localized_content")
+    translations = TranslatedFields(text=models.TextField(blank=True))
