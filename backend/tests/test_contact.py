@@ -1,6 +1,8 @@
 import pytest
+from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from rest_framework import status
+from rest_framework.test import APIClient
 
 from apps.contact.models import ContactInquiry
 
@@ -25,6 +27,20 @@ def test_contact_api_creates_inquiry(api_client):
     assert response.status_code == status.HTTP_201_CREATED
     assert ContactInquiry.objects.count() == 1
     assert response.data["status"] == ContactInquiry.Status.NEW
+
+
+@pytest.mark.django_db
+def test_contact_api_does_not_require_csrf_for_admin_session():
+    user = get_user_model().objects.create_user(
+        username="portfolio-admin",
+        password="test-password",
+    )
+    client = APIClient(enforce_csrf_checks=True)
+    client.force_login(user)
+
+    response = client.post("/api/contact/", VALID_PAYLOAD, format="json")
+
+    assert response.status_code == status.HTTP_201_CREATED
 
 
 @pytest.mark.django_db
