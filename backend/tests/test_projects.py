@@ -1,6 +1,7 @@
 import pytest
 from rest_framework import status
 from .conftest import ProjectFactory, TechnologiesFactory
+from apps.projects.models import ProjectContent
 
 
 @pytest.mark.django_db
@@ -72,3 +73,25 @@ class TestProjectsViewSet:
     def test_project_str(self):
         project = ProjectFactory.build(title="My Project")
         assert str(project) == "My Project"
+
+    def test_returns_project_in_requested_language(self, api_client):
+        project = ProjectFactory(title="English title")
+        content = ProjectContent.objects.create(project=project)
+        content.set_current_language("en")
+        content.title = "English title"
+        content.save()
+        content.set_current_language("es")
+        content.title = "Título en español"
+        content.save()
+
+        response = api_client.get(f"{self.BASE_URL}{project.id}/", HTTP_ACCEPT_LANGUAGE="es")
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["title"] == "Título en español"
+
+    def test_falls_back_to_original_fields_without_localized_content(self, api_client):
+        project = ProjectFactory(title="Legacy project")
+
+        response = api_client.get(f"{self.BASE_URL}{project.id}/", HTTP_ACCEPT_LANGUAGE="es")
+
+        assert response.data["title"] == "Legacy project"

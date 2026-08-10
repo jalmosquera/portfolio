@@ -1,6 +1,9 @@
+import { useLanguage } from '../../context/useLanguage'
+
 export function PageLoader() {
+  const { t } = useLanguage()
   return (
-    <div className="site-container min-h-screen pb-20 pt-28" aria-label="Loading content">
+    <div className="site-container min-h-screen pb-20 pt-28" aria-label={t('loading')}>
       <div className="animate-pulse space-y-6">
         <div className="h-3 w-24 rounded bg-border" />
         <div className="h-10 w-full max-w-xl rounded bg-card" />

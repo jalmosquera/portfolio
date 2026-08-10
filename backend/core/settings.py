@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'parler',
     'apps.about',
+    'apps.contact',
     'apps.lessons',
     'apps.problem_solution',
     'apps.project_images',
@@ -160,8 +161,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    # YOUR SETTINGS
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_THROTTLE_RATES': {
+        'contact': '5/hour',
+    },
 }
 
 SPECTACULAR_SETTINGS = {
