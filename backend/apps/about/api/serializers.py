@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 
 from ..models import About, AboutTranslation
 
@@ -17,7 +19,8 @@ class AboutSerializer(serializers.ModelSerializer):
         model = About
         fields = ["id", "translations", "updated_at"]
 
-    def get_translations(self, obj):
+    @extend_schema_field(OpenApiTypes.OBJECT)
+    def get_translations(self, obj) -> dict:
         translations = {}
         for translation_object in AboutTranslation.objects.filter(master_id=obj.pk):
             translation = {
