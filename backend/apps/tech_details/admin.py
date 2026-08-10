@@ -1,6 +1,8 @@
 from django.contrib import admin
-from .models import TechDetail 
+from parler.admin import TranslatableAdmin
+from .models import TechDetail, TechDetailContent
 
 
 
 admin.site.register(TechDetail)
+admin.site.register(TechDetailContent, TranslatableAdmin)

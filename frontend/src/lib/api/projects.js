@@ -1,9 +1,9 @@
 import { apiFetch } from './client'
 import { API_ROUTES } from '../config/routes'
 
-export const getProjects = () => apiFetch(API_ROUTES.projects.list)
+export const getProjects = (language) => apiFetch(API_ROUTES.projects.list, language)
 
-export const getFeaturedProjects = () => apiFetch(API_ROUTES.projects.featured)
+export const getFeaturedProjects = (language) => apiFetch(API_ROUTES.projects.featured, language)
 
-export const getProjectBySlug = (slug) =>
-  apiFetch(API_ROUTES.projects.bySlug(slug)).then((list) => list[0] ?? null)
+export const getProjectBySlug = (slug, language) =>
+  apiFetch(API_ROUTES.projects.bySlug(slug), language).then((list) => list[0] ?? null)
