@@ -73,8 +73,6 @@ jobs:
     needs: validate
     runs-on: [self-hosted, linux, x64]
     environment: production
-    env:
-      PRODUCTION_ENV_FILE: ${{ vars.PRODUCTION_ENV_FILE }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -82,11 +80,6 @@ jobs:
 
       - name: Verify runner configuration
         run: |
-          test -n "$PRODUCTION_ENV_FILE" || {
-            echo "Configure the PRODUCTION_ENV_FILE repository or environment variable." >&2
-            exit 1
-          }
-          test -r "$PRODUCTION_ENV_FILE"
           docker version
           docker compose version
 

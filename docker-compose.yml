@@ -1,45 +1,138 @@
+name: portfolio
+
 services:
+  secrets-init:
+    image: python:3.11-alpine
+    restart: "no"
+    command:
+      - python
+      - -c
+      - |
+        import secrets
+        from pathlib import Path
+
+        directory = Path("/run/portfolio-secrets")
+        directory.mkdir(parents=True, exist_ok=True)
+        for filename in ("django_secret_key", "db_password"):
+            path = directory / filename
+            if not path.exists():
+                path.write_text(secrets.token_urlsafe(64))
+            path.chmod(0o444)
+    volumes:
+      - secrets_data:/run/portfolio-secrets
+    networks:
+      - internal
+
   db:
     image: postgres:17-alpine
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_NAME:-portfolio}
       POSTGRES_USER: ${DB_USER:-portfolio}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-portfolio}
+      POSTGRES_PASSWORD_FILE: /run/portfolio-secrets/db_password
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - secrets_data:/run/portfolio-secrets:ro
+    depends_on:
+      secrets-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - internal
 
   backend:
-    build: ./backend
-    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-    working_dir: /app
+    image: portfolio-backend:current
+    pull_policy: build
+    build:
+      context: ./backend
+    restart: unless-stopped
     environment:
+      DEBUG: "false"
+      SECRET_KEY_FILE: /run/portfolio-secrets/django_secret_key
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-portfolio.mosquerasoft.com,localhost,127.0.0.1}
+      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS:-https://portfolio.mosquerasoft.com}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-}
+      SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-true}
+      SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-true}
+      CSRF_COOKIE_SECURE: ${CSRF_COOKIE_SECURE:-true}
+      SECURE_HSTS_SECONDS: ${SECURE_HSTS_SECONDS:-31536000}
+      SECURE_HSTS_INCLUDE_SUBDOMAINS: ${SECURE_HSTS_INCLUDE_SUBDOMAINS:-false}
+      SECURE_HSTS_PRELOAD: ${SECURE_HSTS_PRELOAD:-false}
+      DJANGO_LOG_LEVEL: ${DJANGO_LOG_LEVEL:-INFO}
+      GUNICORN_WORKERS: ${GUNICORN_WORKERS:-3}
+      GUNICORN_THREADS: ${GUNICORN_THREADS:-2}
+      GUNICORN_TIMEOUT: ${GUNICORN_TIMEOUT:-60}
       DB_NAME: ${DB_NAME:-portfolio}
       DB_USER: ${DB_USER:-portfolio}
-      DB_PASSWORD: ${DB_PASSWORD:-portfolio}
+      DB_PASSWORD_FILE: /run/portfolio-secrets/db_password
       DB_HOST: db
       DB_PORT: 5432
-      SECRET_KEY: ${SECRET_KEY:-dev-secret}
-      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,backend}
-      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:4173,http://localhost}
-      PYTHONUNBUFFERED: 1
-      PYTHONDONTWRITEBYTECODE: 1
     volumes:
-      - ./backend:/app
+      - media_data:/app/media
+      - static_data:/app/staticfiles
+      - secrets_data:/run/portfolio-secrets:ro
     depends_on:
-      - db
-    ports:
-      - "8000:8000"
+      secrets-init:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; request=urllib.request.Request('http://127.0.0.1:8000/api/health/', headers={'X-Forwarded-Proto':'https'}); urllib.request.urlopen(request, timeout=5)"]
+      interval: 15s
+      timeout: 8s
+      retries: 10
+      start_period: 30s
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - internal
 
   frontend:
+    image: portfolio-frontend:current
+    pull_policy: build
     build:
       context: ./frontend
       args:
-        VITE_API_URL: ${VITE_API_URL:-/api}
+        VITE_API_URL: /api
+    restart: unless-stopped
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     ports:
-      - "4173:80"
+      - "127.0.0.1:${PUBLIC_PORT:-2323}:80"
+    volumes:
+      - media_data:/var/www/media:ro
+      - static_data:/var/www/static:ro
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1/healthz"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - internal
+
+networks:
+  internal:
 
 volumes:
+  secrets_data:
   postgres_data:
+  media_data:
+  static_data:

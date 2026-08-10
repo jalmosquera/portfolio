@@ -4,14 +4,8 @@ set -Eeuo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-: "${PRODUCTION_ENV_FILE:?Set PRODUCTION_ENV_FILE to the server-only environment file path}"
-if [[ ! -r "$PRODUCTION_ENV_FILE" ]]; then
-  echo "Production environment file is not readable: $PRODUCTION_ENV_FILE" >&2
-  exit 1
-fi
-
-COMPOSE=(docker compose --project-name portfolio --env-file "$PRODUCTION_ENV_FILE" -f docker-compose.prod.yml)
-STATE_DIR="$(dirname "$PRODUCTION_ENV_FILE")/.portfolio-deploy"
+COMPOSE=(docker compose --project-name portfolio)
+STATE_DIR="$ROOT_DIR/.deploy"
 BEFORE_SHA="${1:-}"
 CURRENT_SHA="${2:-$(git rev-parse HEAD)}"
 mkdir -p "$STATE_DIR"
@@ -42,7 +36,7 @@ restore_images() {
 
   if [[ "$restored" == true ]]; then
     echo "Restoring the previously tagged application images..."
-    "${COMPOSE[@]}" up -d --remove-orphans --wait
+    "${COMPOSE[@]}" up -d --no-build --remove-orphans --wait
   else
     echo "No previous application images exist; automatic rollback is unavailable on the first deploy." >&2
   fi
@@ -73,10 +67,10 @@ if [[ -z "$BEFORE_SHA" || "$BEFORE_SHA" =~ ^0+$ ]] || ! git cat-file -e "${BEFOR
   BUILD_FRONTEND=true
 else
   CHANGED_FILES="$(git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA")"
-  if grep -Eq '^(backend/|docker-compose\.prod\.yml$)' <<<"$CHANGED_FILES"; then
+  if grep -Eq '^(backend/|docker-compose\.yml$)' <<<"$CHANGED_FILES"; then
     BUILD_BACKEND=true
   fi
-  if grep -Eq '^(frontend/|docker-compose\.prod\.yml$)' <<<"$CHANGED_FILES"; then
+  if grep -Eq '^(frontend/|docker-compose\.yml$)' <<<"$CHANGED_FILES"; then
     BUILD_FRONTEND=true
   fi
 fi
@@ -94,10 +88,7 @@ else
   echo "No application image rebuild is required for this revision."
 fi
 
-"${COMPOSE[@]}" up -d --wait db
-"${COMPOSE[@]}" run --rm backend python manage.py migrate --noinput
-"${COMPOSE[@]}" run --rm backend python manage.py collectstatic --noinput
-"${COMPOSE[@]}" up -d --remove-orphans --wait
+"${COMPOSE[@]}" up -d --no-build --remove-orphans --wait
 "${COMPOSE[@]}" ps
 
 if [[ -f "$STATE_DIR/current-sha" ]]; then
