@@ -5,7 +5,7 @@ from .serializers import SerializerProject
 
 
 class ProjectsViewSet(viewsets.ModelViewSet):
-    queryset = Project.objects.all()
+    queryset = Project.objects.filter(visible=True)
     serializer_class = SerializerProject
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['is_featured', 'slug']

@@ -11,6 +11,7 @@ class Project(models.Model):
     github = models.URLField(max_length=200, blank=True)
     live_url = models.URLField(max_length=200, blank=True)
     is_featured = models.BooleanField(default=False)
+    visible = models.BooleanField(default=True)
 
     technologies = models.ManyToManyField(
         "technology.Technologies",
