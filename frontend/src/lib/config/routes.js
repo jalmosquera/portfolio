@@ -6,6 +6,9 @@ const withProjectQuery = (path, projectId) =>
   `${path}?${new URLSearchParams({ project: projectId })}`
 
 export const API_ROUTES = {
+  analytics: {
+    visit: '/visits/',
+  },
   about: {
     detail: '/about/',
   },
