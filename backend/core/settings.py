@@ -17,8 +17,21 @@ def env_list(name, default=''):
     return [value.strip() for value in os.getenv(name, default).split(',') if value.strip()]
 
 
+def env_or_file(name, default=None):
+    value = os.getenv(name)
+    file_path = os.getenv(f'{name}_FILE')
+    if value and file_path:
+        raise ImproperlyConfigured(f'Set either {name} or {name}_FILE, not both.')
+    if file_path:
+        try:
+            return Path(file_path).read_text().strip()
+        except OSError as exc:
+            raise ImproperlyConfigured(f'Unable to read {name}_FILE: {file_path}') from exc
+    return value if value is not None else default
+
+
 DEBUG = env_bool('DEBUG', True)
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = env_or_file('SECRET_KEY')
 if not SECRET_KEY:
     if DEBUG:
         SECRET_KEY = 'django-insecure-local-development-only'
@@ -95,7 +108,7 @@ if os.getenv('DB_NAME'):
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': os.getenv('DB_NAME'),
             'USER': os.getenv('DB_USER'),
-            'PASSWORD': os.getenv('DB_PASSWORD'),
+            'PASSWORD': env_or_file('DB_PASSWORD'),
             'HOST': os.getenv('DB_HOST', 'localhost'),
             'PORT': os.getenv('DB_PORT', '5432'),
         }
