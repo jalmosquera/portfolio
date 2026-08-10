@@ -19,6 +19,9 @@ class ContactInquiry(models.Model):
     email = models.EmailField()
     description = models.TextField()
     status = models.CharField(max_length=16, choices=Status.choices, default=Status.NEW)
+    notification_sent_at = models.DateTimeField(null=True, blank=True)
+    confirmation_sent_at = models.DateTimeField(null=True, blank=True)
+    email_error = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
