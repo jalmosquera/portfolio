@@ -3,29 +3,13 @@ import heroImg from "../../assets/jal.jpeg";
 import { APP_ROUTES } from "../../lib/config/routes";
 import { useLanguage } from '../../context/useLanguage'
 import { useState } from 'react'
-import { sileo } from 'sileo'
-import { downloadResume } from '../../lib/api/resume'
+import { ResumeFormatModal } from '../resume/ResumeFormatModal'
+import { technologyIcon } from '../../lib/technology-icons'
 
 export function Hero({ technologies = [] }) {
   const mainTechs = technologies.slice(0, 4);
-  const { language, t } = useLanguage()
-  const [downloading, setDownloading] = useState(false)
-
-  const handleResumeDownload = async () => {
-    if (downloading) return
-    setDownloading(true)
-    try {
-      await sileo.promise(() => downloadResume(language), {
-        loading: { title: t('cvDownloading') },
-        success: { title: t('cvDownloaded') },
-        error: { title: t('cvDownloadError') },
-      })
-    } catch {
-      // Sileo already communicates the failed request to the user.
-    } finally {
-      setDownloading(false)
-    }
-  }
+  const { t } = useLanguage()
+  const [resumeModalOpen, setResumeModalOpen] = useState(false)
 
   return (
     <section className="relative border-b border-border pt-16">
@@ -53,9 +37,8 @@ export function Hero({ technologies = [] }) {
             </Link>
             <button
               type="button"
-              onClick={handleResumeDownload}
-              disabled={downloading}
-              className="inline-flex items-center gap-2 rounded-md border border-border-strong bg-card/70 px-5 py-2.5 text-sm font-semibold text-text transition-colors hover:border-accent hover:text-accent disabled:cursor-wait disabled:opacity-60"
+              onClick={() => setResumeModalOpen(true)}
+              className="inline-flex items-center gap-2 rounded-md border border-border-strong bg-card/70 px-5 py-2.5 text-sm font-semibold text-text transition-colors hover:border-accent hover:text-accent"
             >
               <svg
                 className="w-4 h-4"
@@ -81,7 +64,7 @@ export function Hero({ technologies = [] }) {
                   key={tech.id}
                   className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card/80 px-3 py-1.5 text-xs font-medium text-text backdrop-blur-sm"
                 >
-                  <span>{tech.icon}</span>
+                  {technologyIcon(tech.name) ? <img src={technologyIcon(tech.name)} alt="" className="size-4 object-contain" /> : <span>{tech.icon}</span>}
                   <span>{tech.name}</span>
                 </span>
               ))}
@@ -112,6 +95,7 @@ export function Hero({ technologies = [] }) {
   />
 </div>
       </div>
+      <ResumeFormatModal open={resumeModalOpen} onClose={() => setResumeModalOpen(false)} />
     </section>
   );
 }

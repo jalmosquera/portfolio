@@ -1,5 +1,6 @@
 import stackIllustration from '../../assets/hero.png'
 import { useLanguage } from '../../context/useLanguage'
+import { technologyIcon } from '../../lib/technology-icons'
 
 export function TechStack({ technologies = [] }) {
   const { t } = useLanguage()
@@ -24,7 +25,7 @@ export function TechStack({ technologies = [] }) {
                   key={tech.id}
                   className="flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2 transition-colors hover:border-accent/60"
                 >
-                  <span className="text-base">{tech.icon}</span>
+                  {technologyIcon(tech.name) ? <img src={technologyIcon(tech.name)} alt="" className="size-5 object-contain" /> : <span className="text-base">{tech.icon}</span>}
                   <span className="text-sm font-medium text-text">
                     {tech.name}
                   </span>
