@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import { APP_ROUTES } from '../../lib/config/routes'
 import { useLanguage } from '../../context/useLanguage'
+import logoMark from '../../assets/logo-mark.jpeg'
 
 export function Navbar() {
   const { pathname } = useLocation()
@@ -11,10 +12,12 @@ export function Navbar() {
       <div className="site-container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link to={APP_ROUTES.home} className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-md bg-accent-soft text-accent ring-1 ring-accent/40">
-            <span className="text-xl font-black">M.</span>
-          </div>
-          <span className="hidden text-sm font-semibold text-text min-[420px]:inline sm:text-base">Mosquera<span className="text-accent">Soft</span></span>
+          <img
+            src={logoMark}
+            alt=""
+            className="h-10 w-10 rounded-md object-cover ring-1 ring-accent/40"
+          />
+          <span className="hidden text-sm font-semibold text-text min-[420px]:inline sm:text-base">Jalberth<span className="text-accent"> Mosquera</span></span>
         </Link>
 
         {/* Links */}
