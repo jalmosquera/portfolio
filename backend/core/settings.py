@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'parler',
+    'apps.analytics',
     'apps.about',
     'apps.contact',
     'apps.lessons',
@@ -189,6 +190,7 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_THROTTLE_RATES': {
         'contact': '5/hour',
+        'visits': '120/hour',
     },
 }
 
