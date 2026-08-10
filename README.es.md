@@ -3,7 +3,7 @@
 [![English documentation](https://img.shields.io/badge/README-English-F17D34?style=for-the-badge)](README.md)
 
 > [!IMPORTANT]
-> **Este portfolio está desplegado en un homelab privado.** El tráfico de producción llega mediante Cloudflare Tunnel a un contenedor Nginx enlazado exclusivamente a `127.0.0.1:2323`. PostgreSQL y Django nunca se exponen directamente a Internet.
+> **Este portfolio está desplegado en un homelab privado.** El tráfico de producción llega mediante Cloudflare Tunnel a un contenedor de Nginx enlazado a un ip especifica. PostgreSQL y Django nunca se exponen directamente a Internet.
 
 Portfolio bilingüe y administrado desde base de datos para presentar proyectos reales, generar CV dinámicos y recibir consultas de contacto. Combina un frontend React, una API Django REST y una infraestructura Docker Compose preparada para autoalojamiento.
 
