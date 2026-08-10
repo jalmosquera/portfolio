@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "email:export": "email export --dir emails --outDir ../backend/apps/contact/templates/contact",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -26,6 +27,7 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
+    "react-email": "^6.9.2",
     "tailwindcss": "^4.2.2",
     "vite": "^8.2.1"
   }
