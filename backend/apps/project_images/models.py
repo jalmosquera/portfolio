@@ -1,4 +1,5 @@
 from django.db import models
+from parler.models import TranslatableModel, TranslatedFields
 
 
 class ProjectImage(models.Model):
@@ -18,3 +19,8 @@ class ProjectImage(models.Model):
 
     def __str__(self):
         return f"{self.project.title} - {self.title or 'Image'}"
+
+
+class ProjectImageContent(TranslatableModel):
+    project_image = models.OneToOneField(ProjectImage, on_delete=models.CASCADE, related_name="localized_content")
+    translations = TranslatedFields(title=models.CharField(max_length=255, blank=True))

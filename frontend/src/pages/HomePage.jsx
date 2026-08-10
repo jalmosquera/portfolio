@@ -8,8 +8,10 @@ import { getFeaturedProjects } from '../lib/api/projects'
 import { getTechnologies } from '../lib/api/technology'
 import { getAbout } from '../lib/api/about'
 import { PageLoader } from '../components/ui/PageLoader'
+import { useLanguage } from '../context/useLanguage'
 
 export function HomePage() {
+  const { language, t } = useLanguage()
   const [projects, setProjects] = useState([])
   const [technologies, setTechnologies] = useState([])
   const [about, setAbout] = useState(null)
@@ -17,15 +19,16 @@ export function HomePage() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    Promise.all([getFeaturedProjects(), getTechnologies(), getAbout().catch(() => null)])
+    Promise.all([getFeaturedProjects(language), getTechnologies(), getAbout().catch(() => null)])
       .then(([p, t, aboutData]) => {
         setProjects(p)
         setTechnologies(t)
         setAbout(aboutData)
+        setError(null)
       })
-      .catch(() => setError('Live portfolio data is temporarily unavailable.'))
+      .catch(() => setError(t('dataError')))
       .finally(() => setLoading(false))
-  }, [])
+  }, [language, t])
 
   if (loading) {
     return <PageLoader />

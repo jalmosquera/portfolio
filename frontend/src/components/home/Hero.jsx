@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import heroImg from "../../assets/jal.jpeg";
 import { APP_ROUTES } from "../../lib/config/routes";
+import { useLanguage } from '../../context/useLanguage'
 
 export function Hero({ technologies = [] }) {
   const mainTechs = technologies.slice(0, 4);
+  const { t } = useLanguage()
 
   return (
     <section className="relative border-b border-border pt-16">
@@ -13,12 +15,12 @@ export function Hero({ technologies = [] }) {
         <div className="z-20 flex flex-col justify-center gap-7 py-12 sm:py-16 lg:py-20 min-[2200px]:gap-9">
           <div className="space-y-4">
             <h1 className="max-w-2xl text-3xl font-bold leading-tight text-text min-[420px]:text-4xl sm:text-5xl 2xl:text-6xl min-[2200px]:max-w-4xl min-[2200px]:text-7xl">
-              Hi, I'm <span className="text-accent">Jalberth Mosquera.</span><br />
-              I'm a Backend Developer.
+              {t('heroGreeting')} <span className="text-accent">Jalberth Mosquera.</span><br />
+              {t('heroRole')}
             </h1>
             <div className="space-y-2 text-sm sm:text-base min-[2200px]:text-lg">
               <p className="font-medium text-text">Python · Django · Docker · Linux</p>
-              <p className="max-w-xl text-muted">Deploying self-hosted solutions that drive a business' growth.</p>
+              <p className="max-w-xl text-muted">{t('heroDescription')}</p>
             </div>
           </div>
 
@@ -27,7 +29,7 @@ export function Hero({ technologies = [] }) {
               to={APP_ROUTES.projects}
               className="inline-flex items-center gap-2 rounded-md border border-accent/60 bg-accent-soft px-5 py-2.5 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-bg"
             >
-              View Projects
+              {t('viewProjects')}
             </Link>
             <a
               href="/cv.pdf"
@@ -46,7 +48,7 @@ export function Hero({ technologies = [] }) {
                   d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-              Download CV
+              {t('downloadCv')}
             </a>
           </div>
 

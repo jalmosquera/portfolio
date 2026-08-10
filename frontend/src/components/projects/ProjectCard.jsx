@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom'
 import { APP_ROUTES, getMediaUrl } from '../../lib/config/routes'
+import { useLanguage } from '../../context/useLanguage'
 
 export function ProjectCard({ project }) {
+  const { t } = useLanguage()
   return (
     <article className="group flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-[var(--shadow-soft)] transition-colors hover:border-accent/50">
       {/* Image */}
@@ -52,7 +54,7 @@ export function ProjectCard({ project }) {
           <svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
           </svg>
-          Case Study
+          {t('caseStudy')}
           <svg className="ml-auto h-3.5 w-3.5 text-subtle transition-colors group-hover/btn:text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
