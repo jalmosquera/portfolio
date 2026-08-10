@@ -4,11 +4,11 @@ from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from apps.lessons.models import Lesson
-from apps.problem_solution.models import ProblemSolution
-from apps.project_images.models import ProjectImage
-from apps.projects.models import Project
-from apps.tech_details.models import TechDetail
+from apps.lessons.models import Lesson, LessonContent
+from apps.problem_solution.models import ProblemSolution, ProblemSolutionContent
+from apps.project_images.models import ProjectImage, ProjectImageContent
+from apps.projects.models import Project, ProjectContent
+from apps.tech_details.models import TechDetail, TechDetailContent
 from apps.technology.models import Technologies
 
 
@@ -111,6 +111,41 @@ PROJECTS = (
     },
 )
 
+SPANISH = {
+    "alternativa-2-0": {
+        "short_description": "SaaS para restaurantes con menús multilingües, pedidos y operaciones en tiempo real.",
+        "description": "Una plataforma integral para restaurantes con catálogos multilingües, pedidos como invitado, personalización de ingredientes, administración por roles, promociones y notificaciones de pedidos en tiempo real.",
+        "problem": "Los restaurantes necesitan más que un menú QR estático: productos, ingredientes, disponibilidad, permisos y pedidos deben mantenerse sincronizados entre clientes y personal.",
+        "solution": "Un SaaS modular con Django y React, pedidos como invitado, roles granulares, operaciones atómicas, notificaciones WebSocket y almacenamiento multimedia en la nube.",
+        "details": (("Dominio", "Productos, opciones e ingredientes"), ("Dominio", "Pedidos, promociones y configuración de empresa"), ("Tiempo real", "Django Channels"), ("Tiempo real", "WebSockets respaldados por Redis"), ("Infraestructura", "PostgreSQL"), ("Infraestructura", "Almacenamiento multimedia en Cloudinary")),
+        "lessons": ("Modelar explícitamente la personalización mantiene consistentes los precios y el stock.", "Los pedidos como invitado y autenticados deben compartir dominio y diferenciarse mediante permisos."),
+    },
+    "eduardo-bernal-abogado": {
+        "short_description": "Plataforma legal en producción para citas, clientes y documentos seguros.",
+        "description": "Sitio legal para clientes respaldado por flujos privados para el personal, disponibilidad de citas, portal protegido y entrega auditable de documentos sensibles.",
+        "problem": "El despacho necesitaba captar clientes, coordinar citas e intercambiar documentos sensibles sin dispersar la operación entre canales informales.",
+        "solution": "Una plataforma full-stack en producción con captación pública, roles de personal y clientes, sincronización de calendario, descargas con caducidad y trazabilidad de acceso.",
+        "details": (("Operaciones legales", "Clientes y expedientes"), ("Operaciones legales", "Citas y disponibilidad"), ("Seguridad", "Tokens de descarga únicos con caducidad"), ("Seguridad", "Registro de acceso a documentos"), ("Integraciones", "Google Calendar y Meet"), ("Integraciones", "Almacenamiento de documentos compatible con S3")),
+        "lessons": ("Los documentos sensibles requieren propiedad, caducidad y trazabilidad impuestas por el servidor.", "La agenda pública debe respetar la disponibilidad privada sin exponer calendarios internos."),
+    },
+    "equus-pub-digital-menu": {
+        "title": "Menú digital de Equus Pub",
+        "short_description": "Menú digital bilingüe y experiencia de pedidos en producción para Equus Pub.",
+        "description": "Sistema en producción para hostelería con catálogo multilingüe, personalización de ingredientes, carrito persistente, pedidos por WhatsApp y gestión de contenido protegida.",
+        "problem": "Un restaurante en funcionamiento necesitaba actualizar el menú sin reimprimirlo y ofrecer a sus clientes una experiencia bilingüe rápida para explorar y personalizar pedidos.",
+        "solution": "Aplicación desplegada con Django REST y React, contenido traducido, administración por roles, personalización por ingrediente y pedidos directos por WhatsApp.",
+        "details": (("Experiencia del cliente", "Catálogo en español e inglés"), ("Experiencia del cliente", "Carrito persistente y personalizable"), ("Administración", "Acceso por roles con JWT"), ("Administración", "CRUD de productos, categorías e ingredientes"), ("Producción", "API Django en Railway"), ("Producción", "Frontend React en Vercel")),
+        "lessons": ("Un menú de restaurante necesita flujos operativos de edición, no solo un catálogo público atractivo.", "La traducción y la personalización de ingredientes deben formar parte del modelo de datos desde el inicio."),
+    },
+}
+
+
+def translate(content, language, **fields):
+    content.set_current_language(language)
+    for field, value in fields.items():
+        setattr(content, field, value)
+    content.save()
+
 
 def build_thumbnail(title, subtitle, accent):
     safe_title = escape(title)
@@ -160,6 +195,7 @@ class Command(BaseCommand):
             technologies[name] = technology
 
         for order, data in enumerate(PROJECTS):
+            spanish = SPANISH[data["slug"]]
             project, _ = Project.objects.update_or_create(
                 slug=data["slug"],
                 defaults={
@@ -172,6 +208,9 @@ class Command(BaseCommand):
                 },
             )
             project.technologies.set(technologies[name] for name in data["technologies"])
+            project_content, _ = ProjectContent.objects.get_or_create(project=project)
+            translate(project_content, "en", title=data["title"], short_description=data["short_description"], description=data["description"])
+            translate(project_content, "es", title=spanish.get("title", data["title"]), short_description=spanish["short_description"], description=spanish["description"])
 
             if not project.image or project.image.name.startswith("projects/seed/"):
                 if project.image:
@@ -179,26 +218,37 @@ class Command(BaseCommand):
                 thumbnail = build_thumbnail(project.title, project.short_description, data["accent"])
                 project.image.save(f"seed/{project.slug}.svg", ContentFile(thumbnail.encode()), save=True)
 
-            ProblemSolution.objects.update_or_create(
+            problem_solution, _ = ProblemSolution.objects.update_or_create(
                 project=project,
                 defaults={"problem": data["problem"], "solution": data["solution"]},
             )
+            problem_content, _ = ProblemSolutionContent.objects.get_or_create(problem_solution=problem_solution)
+            translate(problem_content, "en", problem=data["problem"], solution=data["solution"])
+            translate(problem_content, "es", problem=spanish["problem"], solution=spanish["solution"])
 
             TechDetail.objects.filter(project=project).delete()
-            TechDetail.objects.bulk_create(
-                TechDetail(project=project, category=category, text=text)
-                for category, items in data["details"].items()
-                for text in items
-            )
+            english_details = [(category, text) for category, items in data["details"].items() for text in items]
+            for (category, text), (es_category, es_text) in zip(english_details, spanish["details"]):
+                detail = TechDetail.objects.create(project=project, category=category, text=text)
+                detail_content = TechDetailContent.objects.create(tech_detail=detail)
+                translate(detail_content, "en", category=category, text=text)
+                translate(detail_content, "es", category=es_category, text=es_text)
 
             Lesson.objects.filter(project=project).delete()
-            Lesson.objects.bulk_create(Lesson(project=project, text=text) for text in data["lessons"])
+            for text, es_text in zip(data["lessons"], spanish["lessons"]):
+                lesson = Lesson.objects.create(project=project, text=text)
+                lesson_content = LessonContent.objects.create(lesson=lesson)
+                translate(lesson_content, "en", text=text)
+                translate(lesson_content, "es", text=es_text)
 
-            ProjectImage.objects.update_or_create(
+            project_image, _ = ProjectImage.objects.update_or_create(
                 project=project,
                 title="Dashboard overview",
                 defaults={"image": project.image.name, "order": order},
             )
+            image_content, _ = ProjectImageContent.objects.get_or_create(project_image=project_image)
+            translate(image_content, "en", title="Dashboard overview")
+            translate(image_content, "es", title="Vista general")
 
         Technologies.objects.filter(
             name__in=LEGACY_TECHNOLOGIES,

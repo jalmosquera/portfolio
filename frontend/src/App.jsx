@@ -5,10 +5,11 @@ import { HomePage } from './pages/HomePage'
 import { ProjectsPage } from './pages/ProjectsPage'
 import { ProjectDetailPage } from './pages/ProjectDetailPage'
 import { APP_ROUTES } from './lib/config/routes'
+import { LanguageProvider } from './context/LanguageContext'
 
 function App() {
   return (
-    <BrowserRouter>
+    <LanguageProvider><BrowserRouter>
       <div className="min-h-screen bg-bg flex flex-col">
         <Navbar />
         <main className="flex-1">
@@ -20,7 +21,7 @@ function App() {
         </main>
         <Footer />
       </div>
-    </BrowserRouter>
+    </BrowserRouter></LanguageProvider>
   )
 }
 

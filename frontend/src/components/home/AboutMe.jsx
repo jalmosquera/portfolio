@@ -1,9 +1,4 @@
-import { useState } from 'react'
-
-const LANGUAGE_LABELS = {
-  en: 'EN',
-  es: 'ES',
-}
+import { useLanguage } from '../../context/useLanguage'
 
 function renderInlineFormatting(text) {
   return text.split(/(\*\*.*?\*\*)/g).filter(Boolean).map((part, index) => {
@@ -40,13 +35,8 @@ function AboutBody({ body }) {
 }
 
 export function AboutMe({ about }) {
-  const availableLanguages = Object.keys(about?.translations ?? {})
-  const preferredLanguage = navigator.language.toLowerCase().startsWith('es') ? 'es' : 'en'
-  const initialLanguage = availableLanguages.includes(preferredLanguage)
-    ? preferredLanguage
-    : availableLanguages[0]
-  const [language, setLanguage] = useState(initialLanguage)
-  const content = about?.translations?.[language]
+  const { language, t } = useLanguage()
+  const content = about?.translations?.[language] ?? about?.translations?.en ?? Object.values(about?.translations ?? {})[0]
 
   if (!content) return null
 
@@ -54,23 +44,10 @@ export function AboutMe({ about }) {
     <section id="about" className="border-b border-border py-16 lg:py-20">
       <div className="site-container">
         <div className="grid gap-8 lg:grid-cols-[0.45fr_1fr] lg:gap-16 min-[2200px]:gap-24">
-          <div className="flex items-start justify-between gap-4 lg:block">
+          <div>
             <div>
-              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent">{language === 'es' ? 'Perfil' : 'Profile'}</p>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent">{t('profile')}</p>
               <h2 className="text-3xl font-bold text-text">{content.title}</h2>
-            </div>
-            <div className="flex rounded-md border border-border bg-card p-1 lg:mt-6 lg:w-fit" aria-label="About me language">
-              {availableLanguages.map((languageCode) => (
-                <button
-                  key={languageCode}
-                  type="button"
-                  onClick={() => setLanguage(languageCode)}
-                  className={`rounded px-3 py-1.5 text-xs font-semibold transition-colors ${languageCode === language ? 'bg-accent text-bg' : 'text-muted hover:text-text'}`}
-                  aria-pressed={languageCode === language}
-                >
-                  {LANGUAGE_LABELS[languageCode] ?? languageCode.toUpperCase()}
-                </button>
-              ))}
             </div>
           </div>
 

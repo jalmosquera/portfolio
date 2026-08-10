@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Project
+from parler.admin import TranslatableAdmin
+from .models import Project, ProjectContent
 
 
 
@@ -10,5 +11,9 @@ class ProjectsAdmin(admin.ModelAdmin):
     list_filter = ['title']
     search_fields = ['title']
 
+
+@admin.register(ProjectContent)
+class ProjectContentAdmin(TranslatableAdmin):
+    list_display = ['project']
 
 
