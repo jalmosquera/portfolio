@@ -9,6 +9,9 @@ export const API_ROUTES = {
   about: {
     detail: '/about/',
   },
+  contact: {
+    create: '/contact/',
+  },
   projects: {
     list: '/projects/',
     featured: '/projects/?is_featured=true',
@@ -36,6 +39,11 @@ export const APP_ROUTES = {
   projects: '/projects',
   projectDetail: '/projects/:slug',
   project: (slug) => `/projects/${slug}`,
+}
+
+export const SOCIAL_LINKS = {
+  github: 'https://github.com/jalmosquera',
+  linkedin: 'https://www.linkedin.com/in/jalberth-mosquera-077975387/',
 }
 
 export function getMediaUrl(path) {

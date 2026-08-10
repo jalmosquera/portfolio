@@ -1,47 +1,160 @@
-export function Contact() {
-  return (
-    <section className="py-14">
-      <div className="site-container space-y-6 text-center">
-        <h2 className="text-3xl font-bold text-text">Get In Touch</h2>
-        <p className="text-muted text-sm max-w-md mx-auto">
-          Feel free to reach out if you'd like to collaborate or need help with a backend project.
-        </p>
+import { useState } from 'react'
+import { createContactInquiry } from '../../lib/api/contact'
+import { SOCIAL_LINKS } from '../../lib/config/routes'
+import { useLanguage } from '../../context/useLanguage'
 
-        <div className="flex flex-wrap justify-center gap-3">
-          <a
-            href="mailto:jalberth@mosquera.dev"
-            className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-6 py-2.5 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-            Email
-          </a>
-          <a
-            href="https://linkedin.com/in/jalmosquera"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-2.5 bg-card border border-border rounded-lg text-text text-sm font-medium hover:border-accent hover:text-accent transition-colors"
-          >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-            </svg>
-            Linkedin
-          </a>
-          <a
-            href="https://github.com/jalmosquera"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-2.5 bg-card border border-border rounded-lg text-text text-sm font-medium hover:border-accent hover:text-accent transition-colors"
-          >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-            </svg>
-            GitHub
-            <svg className="h-3.5 w-3.5 text-subtle" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </a>
+const INITIAL_FORM = {
+  company_or_recruiter: '',
+  phone: '',
+  email: '',
+  description: '',
+}
+
+const fieldClassName = 'w-full rounded-md border border-border bg-surface px-4 py-3 text-sm text-text outline-none transition-colors placeholder:text-subtle focus:border-accent'
+
+function getErrorMessage(error, t) {
+  const responseData = error.response?.data
+  if (!responseData || typeof responseData !== 'object') {
+    return t('sendError')
+  }
+
+  const firstError = Object.values(responseData).flat()[0]
+  return typeof firstError === 'string' ? firstError : t('formError')
+}
+
+export function Contact() {
+  const { language, t } = useLanguage()
+  const [form, setForm] = useState(INITIAL_FORM)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
+  const [sent, setSent] = useState(false)
+
+  const handleChange = ({ target }) => {
+    setForm((current) => ({ ...current, [target.name]: target.value }))
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    setSubmitting(true)
+    setError('')
+
+    try {
+      await createContactInquiry(form, language)
+      setForm(INITIAL_FORM)
+      setSent(true)
+    } catch (requestError) {
+      setSent(false)
+      setError(getErrorMessage(requestError, t))
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <section id="contact" className="py-16 lg:py-20">
+      <div className="site-container">
+        <div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16 min-[2200px]:gap-24">
+          <div>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent">{t('contactEyebrow')}</p>
+            <h2 className="text-3xl font-bold text-text">{t('contactTitle')}</h2>
+            <p className="mt-4 max-w-lg text-sm leading-7 text-muted sm:text-base">
+              {t('contactIntro')}
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href={SOCIAL_LINKS.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2.5 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent"
+              >
+                LinkedIn
+              </a>
+              <a
+                href={SOCIAL_LINKS.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2.5 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent"
+              >
+                GitHub
+              </a>
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit} className="grid gap-5 rounded-lg border border-border bg-card p-5 shadow-soft sm:grid-cols-2 sm:p-7">
+            <label className="space-y-2">
+              <span className="text-sm font-medium text-text">{t('company')}</span>
+              <input
+                name="company_or_recruiter"
+                value={form.company_or_recruiter}
+                onChange={handleChange}
+                required
+                minLength={2}
+                maxLength={160}
+                autoComplete="organization"
+                className={fieldClassName}
+                placeholder={t('companyPlaceholder')}
+              />
+            </label>
+
+            <label className="space-y-2">
+              <span className="text-sm font-medium text-text">Email</span>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+                autoComplete="email"
+                className={fieldClassName}
+                placeholder="name@company.com"
+              />
+            </label>
+
+            <label className="space-y-2 sm:col-span-2">
+              <span className="text-sm font-medium text-text">{t('phone')}</span>
+              <input
+                type="tel"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                required
+                minLength={7}
+                maxLength={32}
+                autoComplete="tel"
+                className={fieldClassName}
+                placeholder="+34 600 000 000"
+              />
+            </label>
+
+            <label className="space-y-2 sm:col-span-2">
+              <span className="text-sm font-medium text-text">{t('description')}</span>
+              <textarea
+                name="description"
+                value={form.description}
+                onChange={handleChange}
+                required
+                minLength={20}
+                rows={6}
+                className={`${fieldClassName} resize-y`}
+                placeholder={t('descriptionPlaceholder')}
+              />
+            </label>
+
+            <div className="flex flex-col gap-3 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
+              <div aria-live="polite">
+                {sent && <p className="text-sm text-accent">{t('sent')}</p>}
+                {error && <p className="text-sm text-accent">{error}</p>}
+              </div>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="inline-flex min-w-36 items-center justify-center rounded-md border border-accent/60 bg-accent-soft px-5 py-3 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-bg disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {submitting ? t('sending') : t('send')}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </section>

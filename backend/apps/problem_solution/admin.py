@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import ProblemSolution 
+from parler.admin import TranslatableAdmin
+from .models import ProblemSolution, ProblemSolutionContent
 
 
 admin.site.register(ProblemSolution)
+admin.site.register(ProblemSolutionContent, TranslatableAdmin)
