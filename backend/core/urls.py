@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/', include('apps.contact.api.routes')),
     path('api/', include('apps.technology.api.routes')),
     path('api/', include('apps.projects.api.routes')),
+    path('api/', include('apps.resume.api.routes')),
     path('api/', include('apps.project_images.api.routes')),
     path('api/', include('apps.tech_details.api.routes')),
     path('api/', include('apps.lessons.api.routes')),

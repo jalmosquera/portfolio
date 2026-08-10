@@ -6,10 +6,13 @@ import { ProjectsPage } from './pages/ProjectsPage'
 import { ProjectDetailPage } from './pages/ProjectDetailPage'
 import { APP_ROUTES } from './lib/config/routes'
 import { LanguageProvider } from './context/LanguageContext'
+import { Toaster } from 'sileo'
+import 'sileo/styles.css'
 
 function App() {
   return (
     <LanguageProvider><BrowserRouter>
+      <Toaster position="top-right" offset={{ top: 80, right: 20 }} theme="dark" />
       <div className="min-h-screen bg-bg flex flex-col">
         <Navbar />
         <main className="flex-1">

@@ -12,6 +12,10 @@ export const API_ROUTES = {
   contact: {
     create: '/contact/',
   },
+  resume: {
+    detail: '/cv/',
+    download: '/cv/download/',
+  },
   projects: {
     list: '/projects/',
     featured: '/projects/?is_featured=true',
