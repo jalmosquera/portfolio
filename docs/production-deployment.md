@@ -1,6 +1,11 @@
-# Portfolio production deployment
+# 🏠 Portfolio production deployment
 
-## Architecture
+[← Back to documentation index](../README.md)
+
+> [!IMPORTANT]
+> This is a **homelab deployment**. Cloudflare Tunnel is the public edge; the application itself only listens on the server's loopback interface.
+
+## 🏗️ Architecture
 
 ```text
 Internet -> Cloudflare Tunnel -> 127.0.0.1:2323 -> Nginx
@@ -14,7 +19,7 @@ Internet -> Cloudflare Tunnel -> 127.0.0.1:2323 -> Nginx
 
 Only Nginx publishes a host port, bound to loopback. PostgreSQL and Gunicorn stay inside the Docker network.
 
-## First installation
+## 🚀 First installation
 
 Requirements: Git, Docker Engine and Docker Compose v2.
 
@@ -30,7 +35,7 @@ No `.env` file is required. A short-lived `secrets-init` container generates a p
 
 The backend entrypoint waits for PostgreSQL through Compose dependencies, applies migrations, collects static files and then starts Gunicorn.
 
-## Verification
+## ❤️ Verification
 
 ```bash
 curl --fail http://127.0.0.1:2323/healthz
@@ -45,7 +50,7 @@ docker compose logs --tail=200 frontend backend db
 
 Backend, frontend and db must report `healthy`. `secrets-init` must report `Exited (0)`.
 
-## Cloudflare Tunnel
+## ☁️ Cloudflare Tunnel
 
 Create the published hostname:
 
@@ -57,19 +62,33 @@ Service URL:     http://127.0.0.1:2323
 
 No router ports need to be opened. Protecting `/admin/` with Cloudflare Access remains recommended.
 
-## Updates
+## 🔄 Updates
 
-Manual update:
+### Automated delivery
+
+Every push to `main` starts `.github/workflows/deploy-production.yml`. After validation succeeds, the self-hosted homelab runner executes `scripts/deploy.sh` with the exact previous and current Git revisions.
+
+The script:
+
+- validates the Compose configuration;
+- tags the current application images for rollback;
+- rebuilds only the backend and/or frontend affected by the revision;
+- waits for healthy containers;
+- restores the previous images automatically if deployment fails.
+
+When the GitHub Actions run is green, no manual server update is required.
+
+### Manual recovery/update
+
+If the runner is unavailable and a manual update is intentionally required:
 
 ```bash
 cd ~/projects/portfolio
 git pull --ff-only origin main
-docker compose up -d --remove-orphans --wait
+docker compose up -d --build --remove-orphans --wait
 ```
 
-GitHub Actions remains optional. A dedicated self-hosted runner can execute `scripts/deploy.sh`; it requires Docker access but no server-side environment file or GitHub secret.
-
-## Optional overrides
+## ⚙️ Optional overrides
 
 The defaults already target `portfolio.mosquerasoft.com` and port `2323`. To customize them:
 
@@ -81,7 +100,7 @@ docker compose up -d
 
 `.env` is ignored by Git. Application secrets are still generated inside the persistent secrets volume.
 
-## Persistent data
+## 💾 Persistent data
 
 Named volumes:
 
@@ -101,7 +120,7 @@ Never use `docker compose down -v` in production unless you intentionally want t
 
 The PostgreSQL and secrets volumes form one recovery set. Never delete only `portfolio_secrets_data` while preserving `portfolio_postgres_data`, because the regenerated database password would no longer match the existing database.
 
-## Logs
+## 🪵 Logs
 
 ```bash
 docker compose ps
@@ -109,7 +128,7 @@ docker compose logs --tail=200 frontend backend db
 docker compose logs --follow backend frontend
 ```
 
-## Rollback
+## ↩️ Rollback
 
 GitHub Actions tags the prior backend/frontend images as `rollback`. Restore them with:
 
@@ -119,7 +138,7 @@ GitHub Actions tags the prior backend/frontend images as `rollback`. Restore the
 
 Rollback restores application images but does not reverse database migrations.
 
-## Backups
+## 🛟 Backups
 
 Back up:
 
@@ -129,6 +148,8 @@ Back up:
 
 Static files and application images are reproducible and do not require backup.
 
-## Local development without Docker
+## 💻 Local development without Docker
 
 Docker Compose now represents production. For local development, run Django and Vite directly in their respective directories using their development commands; when `DB_NAME` is absent Django continues using SQLite.
+
+See [💻 Local development](development.md) for the complete setup.
