@@ -8,6 +8,7 @@ const withProjectQuery = (path, projectId) =>
 export const API_ROUTES = {
   analytics: {
     visit: '/visits/',
+    summary: '/analytics/summary/',
   },
   about: {
     detail: '/about/',
@@ -46,6 +47,11 @@ export const APP_ROUTES = {
   projects: '/projects',
   projectDetail: '/projects/:slug',
   project: (slug) => `/projects/${slug}`,
+  analytics: '/analytics',
+}
+
+export function getBackendUrl(path) {
+  return `${BACKEND_BASE_URL.replace(/\/$/, '')}/${path.replace(/^\//, '')}`
 }
 
 export const SOCIAL_LINKS = {
