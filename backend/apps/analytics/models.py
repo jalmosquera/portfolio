@@ -1,6 +1,13 @@
+from zoneinfo import ZoneInfo
+
+from django.conf import settings
 from django.db import models, transaction
 from django.db.models import F
 from django.utils import timezone
+
+
+def analytics_today():
+    return timezone.localdate(timezone=ZoneInfo(settings.ANALYTICS_TIME_ZONE))
 
 
 class SiteVisitCounter(models.Model):
@@ -18,6 +25,7 @@ class SiteVisitCounter(models.Model):
     @classmethod
     def record_visit(cls):
         now = timezone.now()
+        visit_date = analytics_today()
         with transaction.atomic():
             counter, created = cls.objects.select_for_update().get_or_create(
                 pk=1,
@@ -33,4 +41,24 @@ class SiteVisitCounter(models.Model):
                     last_visit_at=now,
                 )
                 counter.refresh_from_db()
+
+            daily_counter, daily_created = DailySiteVisit.objects.select_for_update().get_or_create(
+                date=visit_date,
+                defaults={"visits": 1},
+            )
+            if not daily_created:
+                DailySiteVisit.objects.filter(pk=daily_counter.pk).update(visits=F("visits") + 1)
         return counter
+
+
+class DailySiteVisit(models.Model):
+    date = models.DateField(unique=True)
+    visits = models.PositiveBigIntegerField(default=0)
+
+    class Meta:
+        ordering = ["-date"]
+        verbose_name = "daily site visits"
+        verbose_name_plural = "daily site visits"
+
+    def __str__(self):
+        return f"{self.date}: {self.visits} visits"
