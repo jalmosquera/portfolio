@@ -33,7 +33,7 @@ Each Django application owns one business capability:
 | App | Responsibility |
 | --- | --- |
 | `about` | Bilingual About Me singleton |
-| `analytics` | Private all-time counter, daily aggregates and superuser dashboard API |
+| `analytics` | Anonymous first-party sessions/events, aggregated reporting and superuser dashboard API |
 | `contact` | Public inquiries and email delivery status |
 | `projects` | Project identity, visibility, featured state and technologies |
 | `project_images` | Ordered project galleries |
