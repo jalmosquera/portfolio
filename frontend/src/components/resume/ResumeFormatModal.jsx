@@ -3,6 +3,7 @@ import { sileo } from 'sileo'
 
 import { useLanguage } from '../../context/useLanguage'
 import { downloadResume } from '../../lib/api/resume'
+import { trackEvent } from '../../lib/analytics/tracker'
 
 const FORMATS = [
   { id: 'concise', titleKey: 'cvConciseTitle', descriptionKey: 'cvConciseDescription', icon: '▤' },
@@ -24,6 +25,7 @@ export function ResumeFormatModal({ open, onClose }) {
         success: { title: t('cvDownloaded') },
         error: { title: t('cvDownloadError') },
       })
+      trackEvent('cv_download', { target: `${language}:${format}` })
       onClose()
     } catch {
       // Sileo communicates the failed request.

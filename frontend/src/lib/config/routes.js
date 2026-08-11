@@ -8,6 +8,8 @@ const withProjectQuery = (path, projectId) =>
 export const API_ROUTES = {
   analytics: {
     visit: '/visits/',
+    sessions: '/analytics/sessions/',
+    events: '/analytics/events/',
     summary: '/analytics/summary/',
   },
   about: {

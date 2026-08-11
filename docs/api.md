@@ -55,10 +55,14 @@ The download endpoint supports the application's compact/visual format and activ
 | `POST` | `/api/contact/` | Store an inquiry and trigger email delivery | `5/hour` |
 | `POST` | `/api/visits/` | Atomically record a site visit | `120/hour` |
 | `GET` | `/api/analytics/summary/` | Daily, weekly and monthly private analytics | Superuser session required |
+| `POST` | `/api/analytics/sessions/` | Create or refresh an anonymous first-party session | Public, throttled |
+| `POST` | `/api/analytics/events/` | Record an allow-listed analytics event | Public, throttled |
 
 Contact delivery failures do not discard a valid inquiry. The inquiry remains available in Django Admin with the notification timestamps or recorded email error.
 
-The analytics summary is never public: Django validates the active session and `is_superuser` on every request. Responses use `Cache-Control: private, no-store`.
+The analytics summary is never public: Django validates the active session and `is_superuser` on every request. Responses use `Cache-Control: private, no-store`. The ingestion API stores a random visitor UUID, session metadata and allow-listed events; it never stores IP addresses or uses fingerprinting. Country is accepted only from Cloudflare's `CF-IPCountry` request header and remains empty when that trusted infrastructure signal is unavailable.
+
+Supported events are `page_view`, `project_view`, `contact_click`, `github_click`, `linkedin_click` and `cv_download`. Apply Django migrations after deployment with `python manage.py migrate` (the production container entrypoint already performs this step).
 
 ## 🌍 Language negotiation
 
