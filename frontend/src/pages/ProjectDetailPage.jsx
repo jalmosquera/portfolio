@@ -9,6 +9,7 @@ import { getProblemSolution } from '../lib/api/problemSolution'
 import { APP_ROUTES, getMediaUrl } from '../lib/config/routes'
 import { PageLoader } from '../components/ui/PageLoader'
 import { useLanguage } from '../context/useLanguage'
+import { ProjectGallery } from '../components/project-detail/ProjectGallery'
 
 export function ProjectDetailPage() {
   const { language, t } = useLanguage()
@@ -164,26 +165,7 @@ export function ProjectDetailPage() {
               <span className="w-1 h-5 bg-accent rounded-full" />
               <h2 className="font-bold text-text text-lg">{t('gallery')}</h2>
             </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 min-[2200px]:grid-cols-5">
-              {images.map((img) => (
-                <div key={img.id} className="overflow-hidden rounded-lg border border-border bg-card shadow-[var(--shadow-soft)]">
-                  {img.image ? (
-                    <img
-                      src={getMediaUrl(img.image)}
-                      alt={img.title}
-                      loading="lazy"
-                      decoding="async"
-                      fetchPriority="low"
-                      sizes="(min-width: 2200px) 20vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                      className="block h-auto w-full"
-                    />
-                  ) : (
-                    <div className="w-full h-44 flex items-center justify-center text-muted text-3xl bg-surface">🖥️</div>
-                  )}
-                  <p className="text-xs text-muted px-3 py-2">{img.title}</p>
-                </div>
-              ))}
-            </div>
+            <ProjectGallery images={images} />
           </div>
         )}
 
