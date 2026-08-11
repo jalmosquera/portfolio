@@ -209,6 +209,8 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'contact': '5/hour',
         'visits': '120/hour',
+        'analytics_sessions': '60/hour',
+        'analytics_events': '300/hour',
     },
 }
 

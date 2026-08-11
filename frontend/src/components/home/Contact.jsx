@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { createContactInquiry } from '../../lib/api/contact'
 import { SOCIAL_LINKS } from '../../lib/config/routes'
 import { useLanguage } from '../../context/useLanguage'
+import { trackEvent } from '../../lib/analytics/tracker'
 
 const INITIAL_FORM = {
   company_or_recruiter: '',
@@ -40,6 +41,7 @@ export function Contact() {
 
     try {
       await createContactInquiry(form, language)
+      trackEvent('contact_click', { target: 'form_submit' })
       setForm(INITIAL_FORM)
       setSent(true)
     } catch (requestError) {
@@ -66,6 +68,7 @@ export function Contact() {
                 href={SOCIAL_LINKS.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent('linkedin_click', { target: SOCIAL_LINKS.linkedin })}
                 className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2.5 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent"
               >
                 LinkedIn
@@ -74,6 +77,7 @@ export function Contact() {
                 href={SOCIAL_LINKS.github}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent('github_click', { target: SOCIAL_LINKS.github })}
                 className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2.5 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent"
               >
                 GitHub
