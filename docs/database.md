@@ -39,7 +39,7 @@ erDiagram
 | About | `About` | Singleton bilingual About Me section |
 | CV | `Resume` and ordered resume item models | Database-driven visual and compact PDF generation |
 | Contact | `ContactInquiry` | Recruiter/company messages, workflow status and email delivery audit |
-| Analytics | `SiteVisitCounter` | Atomic private visit count displayed in Django Admin |
+| Analytics | `SiteVisitCounter`, `DailySiteVisit` | Atomic all-time total and privacy-safe daily buckets for the private dashboard |
 
 ## 🌍 Translation model
 
