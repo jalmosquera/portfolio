@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { APP_ROUTES } from '../../lib/config/routes'
 import { useLanguage } from '../../context/useLanguage'
 import logoMark from '../../assets/logo-mark.jpeg'
+import { trackEvent } from '../../lib/analytics/tracker'
 
 export function Navbar() {
   const { pathname } = useLocation()
@@ -42,6 +43,7 @@ export function Navbar() {
           </div>
           <a
             href="/#contact"
+            onClick={() => trackEvent('contact_click', { target: 'navbar' })}
             className="flex items-center gap-1.5 rounded-md border border-accent/50 bg-accent-soft px-3 py-1.5 text-sm font-medium text-accent transition-colors hover:border-accent hover:bg-accent hover:text-bg sm:px-4"
           >
             <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">

@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Navbar } from './components/layout/Navbar'
 import { Footer } from './components/layout/Footer'
@@ -10,26 +9,12 @@ import { APP_ROUTES } from './lib/config/routes'
 import { LanguageProvider } from './context/LanguageContext'
 import { Toaster } from 'sileo'
 import 'sileo/styles.css'
-import { recordVisit } from './lib/api/analytics'
-
-const VISIT_SESSION_KEY = 'portfolio_visit_recorded'
+import { AnalyticsTracker } from './components/analytics/AnalyticsTracker'
 
 function App() {
-  useEffect(() => {
-    if (window.location.pathname === APP_ROUTES.analytics) return
-
-    try {
-      if (sessionStorage.getItem(VISIT_SESSION_KEY)) return
-
-      sessionStorage.setItem(VISIT_SESSION_KEY, 'true')
-      recordVisit().catch(() => sessionStorage.removeItem(VISIT_SESSION_KEY))
-    } catch {
-      recordVisit().catch(() => {})
-    }
-  }, [])
-
   return (
     <LanguageProvider><BrowserRouter>
+      <AnalyticsTracker />
       <Toaster position="top-right" offset={{ top: 80, right: 20 }} theme="dark" />
       <div className="min-h-screen bg-bg flex flex-col">
         <Navbar />
