@@ -3,6 +3,7 @@ import { API_BASE_URL } from '../config/routes'
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
+  withCredentials: true,
 })
 
 const languageOptions = (language) => language ? { headers: { 'Accept-Language': language } } : {}
