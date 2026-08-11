@@ -56,6 +56,8 @@ The frontend uses relative `/api` URLs. Browser traffic therefore remains same-o
 
 The Django project follows domain-oriented apps such as `projects`, `resume`, `contact` and `analytics`. Each public domain exposes DRF routes under `apps/<domain>/api/`, while Django Admin remains the private content-management interface.
 
+The analytics domain uses first-party anonymous visitor UUIDs, 30-minute sessions and allow-listed events. PostgreSQL performs the dashboard aggregations, while the React dashboard renders the protected summary with Recharts. The legacy visit counters remain active so historical totals survive the migration to session-based analytics.
+
 Translated data uses Django Parler. Project-related translations live in localized content models, allowing the same domain object to serve English and Spanish representations.
 
 ## 🔐 Trust boundaries

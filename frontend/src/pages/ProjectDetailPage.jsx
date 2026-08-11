@@ -10,6 +10,7 @@ import { APP_ROUTES, getMediaUrl } from '../lib/config/routes'
 import { PageLoader } from '../components/ui/PageLoader'
 import { useLanguage } from '../context/useLanguage'
 import { ProjectGallery } from '../components/project-detail/ProjectGallery'
+import { trackEvent } from '../lib/analytics/tracker'
 
 export function ProjectDetailPage() {
   const { language, t } = useLanguage()
@@ -46,6 +47,10 @@ export function ProjectDetailPage() {
       .catch(() => setError(t('projectLoadError')))
       .finally(() => setLoading(false))
   }, [slug, language, t])
+
+  useEffect(() => {
+    if (project?.slug) trackEvent('project_view', { target: project.slug })
+  }, [project?.slug])
 
   if (loading) {
     return <PageLoader />
@@ -111,6 +116,7 @@ export function ProjectDetailPage() {
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackEvent('github_click', { target: project.github })}
                   className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent"
                 >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
