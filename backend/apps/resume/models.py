@@ -28,6 +28,11 @@ class Resume(models.Model):
     phone = models.CharField(max_length=40, blank=True)
     linkedin_url = models.URLField(max_length=300, blank=True)
     github_url = models.URLField(max_length=300, blank=True)
+    portfolio_url = models.URLField(
+        max_length=300,
+        blank=True,
+        default="https://portfolio.mosquerasoft.com/",
+    )
     portrait = models.ImageField(upload_to="resumes/portrait/", blank=True)
     public_filename = models.CharField(max_length=160, default="Jalberth_Mosquera_CV.pdf")
     download_count = models.PositiveIntegerField(default=0, editable=False)
