@@ -18,7 +18,7 @@ export function Hero({ technologies = [] }) {
       <div className="site-container relative grid min-h-[560px] grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] 2xl:min-h-[640px] min-[2200px]:min-h-[720px] min-[2200px]:grid-cols-[1fr_0.9fr]">
         {/* Left: text */}
         <div className="z-20 flex flex-col justify-center gap-7 py-12 sm:py-16 lg:py-20 min-[2200px]:gap-9">
-          <div className="space-y-4">
+          <div className="hero-enter space-y-4" style={{ '--hero-delay': '100ms' }}>
             <h1 className="max-w-2xl text-3xl font-bold leading-tight text-text min-[420px]:text-4xl sm:text-5xl 2xl:text-6xl min-[2200px]:max-w-4xl min-[2200px]:text-7xl">
               {t('heroGreeting')} <span className="text-accent">Jalberth Mosquera.</span><br />
               {t('heroRole')}
@@ -29,17 +29,17 @@ export function Hero({ technologies = [] }) {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="hero-enter flex flex-wrap items-center gap-3" style={{ '--hero-delay': '260ms' }}>
             <Link
               to={APP_ROUTES.projects}
-              className="inline-flex items-center gap-2 rounded-md border border-accent/60 bg-accent-soft px-5 py-2.5 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-bg"
+              className="interactive-lift inline-flex items-center gap-2 rounded-md border border-accent/60 bg-accent-soft px-5 py-2.5 text-sm font-semibold text-accent hover:bg-accent hover:text-bg"
             >
               {t('viewProjects')}
             </Link>
             <button
               type="button"
               onClick={() => setResumeModalOpen(true)}
-              className="inline-flex items-center gap-2 rounded-md border border-border-strong bg-card/70 px-5 py-2.5 text-sm font-semibold text-text transition-colors hover:border-accent hover:text-accent"
+              className="interactive-lift inline-flex items-center gap-2 rounded-md border border-border-strong bg-card/70 px-5 py-2.5 text-sm font-semibold text-text hover:border-accent hover:text-accent"
             >
               <svg
                 className="w-4 h-4"
@@ -59,11 +59,11 @@ export function Hero({ technologies = [] }) {
           </div>
 
           {mainTechs.length > 0 && (
-            <div className="flex flex-wrap gap-2 pt-4">
+            <div className="hero-enter flex flex-wrap gap-2 pt-4" style={{ '--hero-delay': '420ms' }}>
               {mainTechs.map((tech) => (
                 <span
                   key={tech.id}
-                  className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card/80 px-3 py-1.5 text-xs font-medium text-text backdrop-blur-sm"
+                  className="interactive-lift inline-flex items-center gap-1.5 rounded-md border border-border bg-card/80 px-3 py-1.5 text-xs font-medium text-text backdrop-blur-sm"
                 >
                   {technologyIcon(tech.name) ? <img src={technologyIcon(tech.name)} alt="" width="16" height="16" decoding="async" className="size-4 object-contain" /> : <span>{tech.icon}</span>}
                   <span>{tech.name}</span>
@@ -80,7 +80,7 @@ export function Hero({ technologies = [] }) {
   {/* Fade inferior */}
   <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-40 bg-gradient-to-t from-bg to-transparent" />
 
-  <picture>
+  <picture className="hero-image-enter absolute inset-0">
     <source srcSet={heroImgWebp} type="image/webp" />
     <img
       src={heroImg}

@@ -1,4 +1,5 @@
 import { useLanguage } from '../../context/useLanguage'
+import { Reveal } from '../ui/Reveal'
 
 function renderInlineFormatting(text) {
   return text.split(/(\*\*.*?\*\*)/g).filter(Boolean).map((part, index) => {
@@ -44,14 +45,14 @@ export function AboutMe({ about }) {
     <section id="about" className="border-b border-border py-16 lg:py-20">
       <div className="site-container">
         <div className="grid gap-8 lg:grid-cols-[0.45fr_1fr] lg:gap-16 min-[2200px]:gap-24">
-          <div>
+          <Reveal>
             <div>
               <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent">{t('profile')}</p>
               <h2 className="text-3xl font-bold text-text">{content.title}</h2>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="max-w-4xl space-y-6">
+          <Reveal className="max-w-4xl space-y-6" delay={120} distance="lg">
             <div className="space-y-5 text-base leading-8 text-muted sm:text-lg">
               <AboutBody body={content.body} />
             </div>
@@ -59,7 +60,7 @@ export function AboutMe({ about }) {
               {content.location && <span className="rounded-md border border-border bg-card px-3 py-2 text-text">⌖ {content.location}</span>}
               {content.availability && <span className="rounded-md border border-accent/30 bg-accent-soft px-3 py-2 text-accent">● {content.availability}</span>}
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>
