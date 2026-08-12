@@ -7,6 +7,8 @@
 
 A bilingual, database-driven portfolio for showcasing real client projects, generating dynamic CVs and receiving contact inquiries. It combines a React frontend with a Django REST API and a production-ready Docker Compose stack designed for self-hosting.
 
+![Self-hosted portfolio architecture](frontend/public/Arquitectura_de_Portafolio_Web_Autohospedado.png)
+
 ## 📚 Documentation index
 
 Use this README as the starting point. Each topic links to a focused document with the implementation details.

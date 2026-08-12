@@ -121,8 +121,15 @@ def build_resume_pdf(resume, variant, language):
         canvas.rect(0, 0, A4[0], A4[1], stroke=0, fill=1)
         canvas.restoreState()
 
-    contact = [resume.email, resume.phone, resume.linkedin_url, resume.github_url]
-    contact_html = "<br/>".join(item for item in contact if item)
+    contact = [resume.email, resume.phone, resume.linkedin_url, resume.github_url, resume.portfolio_url]
+    link_color = "#35A9D3" if visual else "#171717"
+    contact_html = "<br/>".join(
+        f'<link href="{item}" color="{link_color}">{item}</link>'
+        if item.startswith(("http://", "https://"))
+        else item
+        for item in contact
+        if item
+    )
     header_text = [
         Paragraph(resume.name, styles["name"]),
         Paragraph(translated(content, "headline", language), styles["headline"]),
