@@ -5,7 +5,7 @@ import { useLanguage } from '../../context/useLanguage'
 export function ProjectCard({ project }) {
   const { t } = useLanguage()
   return (
-    <article className="group flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-[var(--shadow-soft)] transition-colors hover:border-accent/50">
+    <article className="interactive-lift group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card shadow-[var(--shadow-soft)] hover:border-accent/50">
       {/* Image */}
       <div className="relative h-48 overflow-hidden bg-surface">
         {project.image ? (
