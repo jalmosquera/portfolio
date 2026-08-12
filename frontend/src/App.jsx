@@ -5,6 +5,7 @@ import { HomePage } from './pages/HomePage'
 import { ProjectsPage } from './pages/ProjectsPage'
 import { ProjectDetailPage } from './pages/ProjectDetailPage'
 import { AnalyticsPage } from './pages/AnalyticsPage'
+import { NotFoundPage } from './pages/NotFoundPage'
 import { APP_ROUTES } from './lib/config/routes'
 import { LanguageProvider } from './context/LanguageContext'
 import { Toaster } from 'sileo'
@@ -24,6 +25,7 @@ function App() {
             <Route path={APP_ROUTES.projects} element={<ProjectsPage />} />
             <Route path={APP_ROUTES.projectDetail} element={<ProjectDetailPage />} />
             <Route path={APP_ROUTES.analytics} element={<AnalyticsPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
         <Footer />
