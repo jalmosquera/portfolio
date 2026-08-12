@@ -19,6 +19,7 @@ class TestResumeApi:
         assert detail.status_code == status.HTTP_200_OK
         assert detail.data["name"] == "Jalberth Mosquera"
         assert [item["id"] for item in detail.data["formats"]] == ["concise", "visual"]
+        assert Resume.objects.get(singleton=True).portfolio_url == "https://portfolio.mosquerasoft.com/"
 
     @pytest.mark.parametrize("variant", ["concise", "visual"])
     def test_generates_each_pdf_format_from_database(self, api_client, variant):
