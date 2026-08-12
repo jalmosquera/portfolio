@@ -3,6 +3,7 @@ import { createContactInquiry } from '../../lib/api/contact'
 import { SOCIAL_LINKS } from '../../lib/config/routes'
 import { useLanguage } from '../../context/useLanguage'
 import { trackEvent } from '../../lib/analytics/tracker'
+import { Reveal } from '../ui/Reveal'
 
 const INITIAL_FORM = {
   company_or_recruiter: '',
@@ -56,7 +57,7 @@ export function Contact() {
     <section id="contact" className="py-16 lg:py-20">
       <div className="site-container">
         <div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16 min-[2200px]:gap-24">
-          <div>
+          <Reveal>
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent">{t('contactEyebrow')}</p>
             <h2 className="text-3xl font-bold text-text">{t('contactTitle')}</h2>
             <p className="mt-4 max-w-lg text-sm leading-7 text-muted sm:text-base">
@@ -83,9 +84,9 @@ export function Contact() {
                 GitHub
               </a>
             </div>
-          </div>
+          </Reveal>
 
-          <form onSubmit={handleSubmit} className="grid gap-5 rounded-lg border border-border bg-card p-5 shadow-soft sm:grid-cols-2 sm:p-7">
+          <Reveal as="form" onSubmit={handleSubmit} className="grid gap-5 rounded-lg border border-border bg-card p-5 shadow-soft sm:grid-cols-2 sm:p-7" delay={140} distance="lg">
             <label className="space-y-2">
               <span className="text-sm font-medium text-text">{t('company')}</span>
               <input
@@ -158,7 +159,7 @@ export function Contact() {
                 {submitting ? t('sending') : t('send')}
               </button>
             </div>
-          </form>
+          </Reveal>
         </div>
       </div>
     </section>
