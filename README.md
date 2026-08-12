@@ -1,75 +1,86 @@
-# 🚀 Jalberth Mosquera — Self-Hosted Portfolio
+# 🚀 Jalberth Mosquera — Portfolio profesional autoalojado
 
-[![Spanish documentation](https://img.shields.io/badge/README-Español-F17D34?style=for-the-badge)](README.es.md)
+[![English documentation](https://img.shields.io/badge/README-English-F17D34?style=for-the-badge)](README.en.md)
 
 > [!IMPORTANT]
-> **This portfolio is deployed in a private homelab**. Production traffic arrives via Cloudflare Tunnel to an Nginx container bound to a specific IP address. PostgreSQL and Django are never directly exposed to the internet.
+> **Este portfolio está desplegado en un homelab privado.** El tráfico de producción llega mediante Cloudflare Tunnel al punto de entrada de la aplicación. Django y PostgreSQL permanecen aislados dentro de la red privada de Docker.
 
-A bilingual, database-driven portfolio for showcasing real client projects, generating dynamic CVs and receiving contact inquiries. It combines a React frontend with a Django REST API and a production-ready Docker Compose stack designed for self-hosting.
+Portfolio bilingüe y administrado desde base de datos para presentar proyectos reales, generar CV dinámicos y recibir consultas de contacto. Combina un frontend React, una API Django REST y una infraestructura Docker Compose preparada para autoalojamiento.
 
-![Self-hosted portfolio architecture](frontend/public/Arquitectura_de_Portafolio_Web_Autohospedado.png)
+![Arquitectura general del portfolio autoalojado](docs/assets/architecture/es/overview.png)
 
-## 📚 Documentation index
+## 📚 Índice de documentación
 
-Use this README as the starting point. Each topic links to a focused document with the implementation details.
-
-| Topic | What you will find |
+| Tema | Contenido |
 | --- | --- |
-| [🏗️ Architecture](docs/architecture.md) | Request flow, containers, security boundaries and major design decisions |
-| [🗄️ Database](docs/database.md) | PostgreSQL/SQLite strategy, domain models, relationships, persistence and backups |
-| [📁 Project structure](docs/project-structure.md) | Repository map and responsibilities of the main folders |
-| [🔌 API](docs/api.md) | Public endpoints, language negotiation, admin and API documentation |
-| [💻 Local development](docs/development.md) | Python and Node setup, migrations, tests, linting and email templates |
-| [🏠 Homelab deployment](docs/production-deployment.md) | Cloudflare Tunnel, Docker Compose, health checks, updates, rollback and backups |
+| [🏗️ Arquitectura](docs/architecture.md) | Flujo de peticiones, contenedores, límites de seguridad y decisiones principales |
+| [🗄️ Base de datos](docs/database.md) | PostgreSQL/SQLite, modelos, relaciones, persistencia y copias de seguridad |
+| [📁 Estructura del proyecto](docs/project-structure.md) | Mapa del repositorio y responsabilidad de cada carpeta |
+| [🔌 API](docs/api.md) | Endpoints públicos, idiomas, administración y documentación OpenAPI |
+| [💻 Desarrollo local](docs/development.md) | Python, Node, migraciones, pruebas, lint y plantillas de correo |
+| [🏠 Despliegue en homelab](docs/production-deployment.md) | Cloudflare Tunnel, Docker Compose, healthchecks, actualizaciones y rollback |
 
-## ✨ Highlights
+> [!NOTE]
+> Los documentos técnicos especializados se mantienen en inglés como fuente única de verdad. Este README es la entrada principal en español.
 
-- 🌍 Complete English and Spanish experience with Django Parler and frontend translations.
-- 🧩 Portfolio content managed from Django Admin instead of hardcoded pages.
-- 🖼️ Featured projects, galleries, technology details, lessons learned and case studies.
-- 📄 Dynamic compact and visual CV generation from database content.
-- ✉️ Gmail SMTP notifications and bilingual contact confirmations styled with React Email.
-- 📊 Private visit counter visible from Django Admin.
-- 🐳 One-command production startup with Docker Compose.
-- 🏠 Automated deployment to a self-hosted homelab through a GitHub Actions runner.
-- ↩️ Application-image rollback without exposing the database or Gunicorn publicly.
+## 🏗️ Arquitectura del sistema
 
-## 🧰 Technology stack
+La solución separa presentación, lógica de negocio, persistencia y entrega. Nginx sirve la SPA de React y enruta las solicitudes del backend; Gunicorn ejecuta Django; PostgreSQL conserva los datos y los volúmenes de Docker protegen los archivos y secretos persistentes.
 
-| Layer | Technologies |
+![Arquitectura de un portfolio self-hosted](docs/assets/architecture/es/architecture.jpeg)
+
+### Más que un sitio estático
+
+El contenido se administra desde Django Admin, la experiencia completa funciona en español e inglés, los CV se generan desde la base de datos y la analítica privada evita depender de plataformas externas.
+
+![Plataforma dinámica y bilingüe](docs/assets/architecture/es/dynamic-platform.jpeg)
+
+## ✨ Características principales
+
+- 🌍 Experiencia completa en español e inglés mediante Django Parler y traducciones del frontend.
+- 🧩 Contenido administrable desde Django Admin en lugar de páginas hardcodeadas.
+- 🖼️ Proyectos destacados, galerías, tecnologías y casos de estudio.
+- 📄 CV dinámico en formato profesional o visual generado desde la base de datos.
+- ✉️ Notificaciones SMTP y confirmaciones bilingües diseñadas con React Email.
+- 📊 Analítica first-party privada y protegida.
+- 🐳 Inicio de producción con Docker Compose.
+- 🏠 Despliegue automatizado mediante GitHub Actions y un runner autoalojado.
+- ↩️ Recuperación de imágenes de aplicación anteriores cuando un despliegue falla.
+
+## 🧰 Stack tecnológico
+
+| Capa | Tecnologías |
 | --- | --- |
 | Frontend | React 19, Vite 8, Tailwind CSS 4, Axios, React Router, Sileo |
 | Backend | Python 3.11, Django 5.2, Django REST Framework, Django Parler |
-| Data | PostgreSQL 17 in production, SQLite fallback for local development |
-| Documents & email | ReportLab, React Email, Gmail SMTP |
-| Edge & runtime | Nginx, Gunicorn, Docker Compose, Cloudflare Tunnel |
-| Quality & delivery | Pytest, ESLint, GitHub Actions, self-hosted runner |
+| Datos | PostgreSQL 17 en producción y SQLite para desarrollo local |
+| Documentos y correo | ReportLab, React Email, Gmail SMTP |
+| Ejecución | Nginx, Gunicorn, Docker Compose, Cloudflare Tunnel |
+| Calidad y entrega | Pytest, ESLint, GitHub Actions, runner autoalojado |
 
-## 🧭 Production request flow
+![Capas del stack tecnológico](docs/assets/architecture/es/technology-stack.jpeg)
 
-```text
-Internet
-   │
-   ▼
-Cloudflare Tunnel
-   │
-   ▼
-127.0.0.1:2323 ──► Nginx
-                      ├── /              React SPA
-                      ├── /api/*         Django + Gunicorn
-                      ├── /admin/*       Django Admin
-                      ├── /media/*       Persistent uploads
-                      └── /static/*      Collected Django assets
-                                            │
-                                            ▼
-                                      PostgreSQL 17
-```
+## ⚙️ Contenido dinámico
 
-Only Nginx publishes a host port, and that port listens on loopback. See [🏗️ Architecture](docs/architecture.md) for the complete container and trust-boundary explanation.
+Django Admin es la fuente de datos. Django Parler resuelve las traducciones, ReportLab construye los dos formatos de CV y React Email prepara las notificaciones y confirmaciones bilingües.
 
-## ⚡ Run the production stack
+![Motor de contenido dinámico](docs/assets/architecture/es/content-engine.jpeg)
 
-Requirements: Git, Docker Engine and Docker Compose v2.
+## 🧭 Flujo de producción
+
+El tráfico atraviesa Cloudflare Tunnel y llega al único punto de entrada de la aplicación. Desde allí se sirve React, se enrutan las solicitudes hacia Django y se entregan los archivos persistentes. La base de datos permanece en la red interna.
+
+![Flujo de peticiones en producción](docs/assets/architecture/es/request-flow.png)
+
+### Desarrollo local frente a producción
+
+El entorno local prioriza rapidez y depuración; producción utiliza contenedores, servicios aislados, PostgreSQL y un proxy inverso.
+
+![Comparación entre desarrollo local y producción](docs/assets/architecture/es/environments.png)
+
+## ⚡ Iniciar producción
+
+Requisitos: Git, Docker Engine y Docker Compose v2.
 
 ```bash
 git clone https://github.com/jalmosquera/portfolio.git
@@ -77,30 +88,26 @@ cd portfolio
 docker compose up -d
 ```
 
-The first startup automatically:
+El primer inicio:
 
-1. 🔐 Generates persistent Django and PostgreSQL secrets.
-2. 🗄️ Creates the PostgreSQL, media, static and secrets volumes.
-3. 🔄 Applies Django migrations and collects static files.
-4. 🦄 Starts Django through Gunicorn.
-5. 🌐 Starts Nginx with the compiled React application.
-6. ❤️ Waits for PostgreSQL, backend and frontend health checks.
+1. 🔐 Genera secretos persistentes.
+2. 🗄️ Crea volúmenes aislados para datos y archivos.
+3. 🔄 Aplica las migraciones y recopila los estáticos.
+4. 🦄 Inicia Django mediante Gunicorn.
+5. 🌐 Inicia Nginx con la aplicación React compilada.
+6. ❤️ Espera a que los servicios estén saludables.
 
-Verify it:
+![Arranque orquestado con Docker Compose](docs/assets/architecture/es/startup.png)
+
+Verificá el estado con:
 
 ```bash
 docker compose ps
-curl --fail http://127.0.0.1:2323/healthz
 ```
 
-> [!NOTE]
-> Gmail delivery requires an App Password in the server's ignored `.env` file. The application and database secrets are generated automatically inside a persistent Docker volume.
+La configuración completa se encuentra en [🏠 Despliegue en homelab](docs/production-deployment.md).
 
-For the complete installation and Cloudflare configuration, continue with [🏠 Homelab deployment](docs/production-deployment.md).
-
-## 🧑‍💻 Local development
-
-The development workflow runs Django and Vite directly. Docker Compose represents the production topology.
+## 🧑‍💻 Desarrollo local
 
 ```bash
 # Terminal 1 — backend
@@ -114,26 +121,30 @@ npm install
 npm run dev
 ```
 
-Read [💻 Local development](docs/development.md) before configuring SMTP, regenerating email templates or running the test suite.
+Consultá [💻 Desarrollo local](docs/development.md) para configurar el correo, ejecutar las pruebas y regenerar las plantillas.
 
-## 🚢 Delivery workflow
+## 🚢 Flujo de entrega
 
 ```text
-feature branch → dev → pull request → main → GitHub Actions → homelab
+rama de feature → dev → pull request → main → GitHub Actions → homelab
 ```
 
-Every push to `main` validates the backend, frontend and deployment scripts before the self-hosted runner invokes `scripts/deploy.sh`. The deploy script rebuilds only affected application images, waits for healthy containers and restores the previous images if deployment fails.
+Cuando `main` recibe cambios, GitHub Actions valida el proyecto y el runner del homelab ejecuta el despliegue. Solo se reconstruyen las imágenes afectadas; si el proceso falla, se restauran las imágenes anteriores sin revertir automáticamente la base de datos.
 
-Manual rollback is available through GitHub Actions and `scripts/rollback.sh`. Database migrations are deliberately **not** reversed automatically.
+![Pipeline y resiliencia del despliegue](docs/assets/architecture/es/delivery.jpeg)
 
-## 🔐 Security notes
+![Anatomía de una entrega confiable](docs/assets/architecture/es/reliable-delivery.jpeg)
 
-- Never commit `.env`, Gmail App Passwords or generated secrets.
-- The public container binds to `127.0.0.1`, not `0.0.0.0`.
-- PostgreSQL and Gunicorn live only on the internal Docker network.
-- Protecting `/admin/` with Cloudflare Access is strongly recommended.
-- Never run `docker compose down -v` unless permanent data deletion is intentional.
+## 🔐 Seguridad
 
-## 📄 License and ownership
+- Nunca subas `.env`, contraseñas de aplicación ni secretos generados.
+- El acceso público de la aplicación está restringido al túnel seguro.
+- PostgreSQL y Gunicorn permanecen dentro de la red privada de Docker.
+- Se recomienda proteger la administración mediante Cloudflare Access.
+- No elimines los volúmenes salvo que quieras borrar permanentemente los datos.
 
-This repository contains Jalberth Mosquera's personal portfolio and project presentation material. Review the repository's licensing status before reusing its branding, content, photographs or client-related assets.
+![Perímetro de seguridad y aislamiento](docs/assets/architecture/es/security.png)
+
+## 📄 Licencia y propiedad
+
+Este repositorio contiene el portfolio personal y material de presentación de proyectos de Jalberth Mosquera. Revisá el estado de la licencia antes de reutilizar su identidad visual, contenido, fotografías o recursos relacionados con clientes.
