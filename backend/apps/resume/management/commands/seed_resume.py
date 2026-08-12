@@ -104,6 +104,7 @@ class Command(BaseCommand):
                 "phone": "+34 623 73 65 66",
                 "linkedin_url": "https://www.linkedin.com/in/jalberth-mosquera-077975387/",
                 "github_url": "https://github.com/jalmosquera",
+                "portfolio_url": "https://portfolio.mosquerasoft.com/",
                 "public_filename": "Jalberth_Mosquera_CV.pdf",
                 "is_active": True,
             },
