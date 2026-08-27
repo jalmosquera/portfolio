@@ -1,4 +1,14 @@
-export const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
+const LOCAL_API_URL = 'http://127.0.0.1:8000/api'
+const PRODUCTION_API_URL = 'https://adminportfolio.mosquerasoft.com/api'
+const configuredApiUrl = import.meta.env.VITE_API_URL
+const isLoopbackUrl = (url) => /^https?:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?(?:\/|$)/.test(url || '')
+
+// A loopback address in a production bundle points to each visitor's device.
+export const API_BASE_URL = import.meta.env.DEV
+  ? configuredApiUrl || LOCAL_API_URL
+  : isLoopbackUrl(configuredApiUrl)
+    ? PRODUCTION_API_URL
+    : configuredApiUrl || PRODUCTION_API_URL
 
 const BACKEND_BASE_URL = API_BASE_URL.replace(/\/api\/?$/, '')
 
