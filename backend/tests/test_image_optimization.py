@@ -73,3 +73,14 @@ def test_optimize_images_command_converts_existing_file_once(settings, tmp_path)
 
     assert optimized_name.endswith('.webp')
     assert project.image.name == optimized_name
+
+
+@pytest.mark.django_db
+def test_optimize_images_command_skips_missing_files(settings, tmp_path, capsys):
+    settings.MEDIA_ROOT = tmp_path
+    project = ProjectFactory()
+    type(project).objects.filter(pk=project.pk).update(image='projects/missing.jpg')
+
+    call_command('optimize_images')
+
+    assert 'Skipped missing image: projects/missing.jpg' in capsys.readouterr().err
