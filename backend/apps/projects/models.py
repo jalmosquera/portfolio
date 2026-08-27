@@ -1,5 +1,6 @@
 from django.db import models
 from parler.models import TranslatableModel, TranslatedFields
+from core.images import optimize_raster_image
 
 
 class Project(models.Model):
@@ -29,6 +30,13 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if self.image and not self.image._committed:
+            optimized = optimize_raster_image(self.image)
+            if optimized:
+                self.image = optimized
+        super().save(*args, **kwargs)
 
 
 class ProjectContent(TranslatableModel):
