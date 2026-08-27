@@ -25,7 +25,6 @@ from .health import api_root, health
 urlpatterns = [
     path('api/', api_root, name='api-root'),
     path('api/health/', health, name='health'),
-    path('', admin.site.urls),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
@@ -39,6 +38,7 @@ urlpatterns = [
     path('api/', include('apps.tech_details.api.routes')),
     path('api/', include('apps.lessons.api.routes')),
     path('api/', include('apps.problem_solution.api.routes')),
+    path('', admin.site.urls),
 ]
 
 if settings.DEBUG:
