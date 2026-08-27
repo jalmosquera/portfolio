@@ -18,6 +18,9 @@ class Command(BaseCommand):
                 image = instance.image
                 if Path(image.name).suffix.lower() == '.webp':
                     continue
+                if not image.storage.exists(image.name):
+                    self.stderr.write(self.style.WARNING(f'Skipped missing image: {image.name}'))
+                    continue
 
                 image.open('rb')
                 try:
