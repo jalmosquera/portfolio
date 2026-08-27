@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
+from django.views.static import serve
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from .health import api_root, health
 
@@ -38,6 +39,7 @@ urlpatterns = [
     path('api/', include('apps.tech_details.api.routes')),
     path('api/', include('apps.lessons.api.routes')),
     path('api/', include('apps.problem_solution.api.routes')),
+    path('media/<path:path>', serve, {'document_root': settings.MEDIA_ROOT}),
     path('', admin.site.urls),
 ]
 
