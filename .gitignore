@@ -38,3 +38,6 @@ staticfiles/
 
 # Server-only persistent bind mounts, if introduced later
 data/
+
+scripts/populate-railway-content.sh
+
