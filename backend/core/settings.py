@@ -192,18 +192,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Email
 EMAIL_NOTIFICATIONS_ENABLED = env_bool('EMAIL_NOTIFICATIONS_ENABLED', False)
-EMAIL_BACKEND = os.getenv(
-    'EMAIL_BACKEND',
-    'django.core.mail.backends.console.EmailBackend' if DEBUG else 'django.core.mail.backends.smtp.EmailBackend',
-)
-EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
-EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
-EMAIL_USE_TLS = env_bool('EMAIL_USE_TLS', True)
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = env_or_file('EMAIL_HOST_PASSWORD', '').replace(' ', '')
-EMAIL_TIMEOUT = int(os.getenv('EMAIL_TIMEOUT', '10'))
+RESEND_API_KEY = env_or_file('RESEND_API_KEY', '')
+RESEND_FROM_EMAIL = os.getenv('RESEND_FROM_EMAIL', 'Portfolio <noreply@mosquerasoft.com>')
 CONTACT_EMAIL_ASYNC = env_bool('CONTACT_EMAIL_ASYNC', True)
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'Jalberth Mosquera <jmosquera2305@gmail.com>')
 CONTACT_NOTIFICATION_EMAIL = os.getenv('CONTACT_NOTIFICATION_EMAIL', 'jmosquera2305@gmail.com')
 
 REST_FRAMEWORK = {
