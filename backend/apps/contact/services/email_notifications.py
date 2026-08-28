@@ -1,9 +1,9 @@
 import logging
 from threading import Thread
 
+import resend
 from django.conf import settings
 from django.db import close_old_connections
-from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils import timezone
 
@@ -20,15 +20,22 @@ def _close_database_connections():
 
 
 def _message(*, subject, text, template, context, to, reply_to):
-    message = EmailMultiAlternatives(
-        subject=subject,
-        body=text,
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        to=to,
-        reply_to=reply_to,
-    )
-    message.attach_alternative(render_to_string(template, context), "text/html")
-    return message
+    return {
+        'from': settings.RESEND_FROM_EMAIL,
+        'to': to,
+        'subject': subject,
+        'text': text,
+        'html': render_to_string(template, context),
+        'reply_to': reply_to,
+    }
+
+
+def _send(message):
+    if not settings.RESEND_API_KEY:
+        raise RuntimeError('RESEND_API_KEY is not configured')
+
+    resend.api_key = settings.RESEND_API_KEY
+    resend.Emails.send(message)
 
 
 def send_contact_emails(inquiry, language):
@@ -58,9 +65,9 @@ def send_contact_emails(inquiry, language):
         reply_to=[inquiry.email],
     )
     try:
-        notification.send(fail_silently=False)
+        _send(notification)
         updates["notification_sent_at"] = timezone.now()
-    except Exception as exc:  # SMTP failures must not discard the saved inquiry.
+    except Exception as exc:  # Delivery failures must not discard the saved inquiry.
         logger.exception("Unable to send contact notification for inquiry %s", inquiry.pk)
         errors.append(f"notification: {exc}")
 
@@ -84,9 +91,9 @@ def send_contact_emails(inquiry, language):
         reply_to=[settings.CONTACT_NOTIFICATION_EMAIL],
     )
     try:
-        confirmation.send(fail_silently=False)
+        _send(confirmation)
         updates["confirmation_sent_at"] = timezone.now()
-    except Exception as exc:  # SMTP failures must not discard the saved inquiry.
+    except Exception as exc:  # Delivery failures must not discard the saved inquiry.
         logger.exception("Unable to send contact confirmation for inquiry %s", inquiry.pk)
         errors.append(f"confirmation: {exc}")
 
