@@ -70,7 +70,7 @@ export function TechStack({ technologies = [] }) {
           </Reveal>
 
           <Reveal
-            className="hidden items-center justify-center lg:flex"
+            className="flex items-center justify-center"
             delay={180}
             distance="lg"
           >
@@ -80,7 +80,7 @@ export function TechStack({ technologies = [] }) {
               loading="lazy"
               decoding="async"
               fetchPriority="low"
-              className="w-full max-w-107.5 object-contain opacity-95 xl:max-w-117.5 2xl:max-w-130 min-[2200px]:max-w-145"
+              className="w-full max-w-80 object-contain opacity-95 sm:max-w-96 lg:max-w-107.5 xl:max-w-117.5 2xl:max-w-130 min-[2200px]:max-w-145"
             />
           </Reveal>
         </div>
