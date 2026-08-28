@@ -1,12 +1,22 @@
 import logging
+from threading import Thread
 
 from django.conf import settings
+from django.db import close_old_connections
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils import timezone
 
 
 logger = logging.getLogger(__name__)
+
+
+def _close_database_connections():
+    try:
+        close_old_connections()
+    except Exception:
+        # A daemon task can outlive a test database or a process shutdown.
+        pass
 
 
 def _message(*, subject, text, template, context, to, reply_to):
@@ -82,3 +92,24 @@ def send_contact_emails(inquiry, language):
 
     updates["email_error"] = "\n".join(errors)[:2000]
     type(inquiry).objects.filter(pk=inquiry.pk).update(**updates)
+
+
+def queue_contact_emails(inquiry, language):
+    if not settings.CONTACT_EMAIL_ASYNC:
+        send_contact_emails(inquiry, language)
+        return
+
+    def send_in_background():
+        _close_database_connections()
+        try:
+            from apps.contact.models import ContactInquiry
+
+            send_contact_emails(ContactInquiry.objects.get(pk=inquiry.pk), language)
+        except ContactInquiry.DoesNotExist:
+            logger.warning("Contact inquiry %s was removed before notification delivery", inquiry.pk)
+        except Exception:
+            logger.exception("Unable to start notification delivery for inquiry %s", inquiry.pk)
+        finally:
+            _close_database_connections()
+
+    Thread(target=send_in_background, name=f"contact-email-{inquiry.pk}", daemon=True).start()
