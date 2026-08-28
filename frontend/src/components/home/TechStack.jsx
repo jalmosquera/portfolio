@@ -70,19 +70,19 @@ export function TechStack({ technologies = [] }) {
           </Reveal>
 
           <Reveal
-            className="flex items-center justify-center"
-            delay={180}
-            distance="lg"
-          >
-            <img
-              src={stackIllustration}
-              alt={t('techAlt')}
-              loading="lazy"
-              decoding="async"
-              fetchPriority="low"
-              className="w-full max-w-80 object-contain opacity-95 sm:max-w-96 lg:max-w-107.5 xl:max-w-117.5 2xl:max-w-130 min-[2200px]:max-w-145"
-            />
-          </Reveal>
+  className="flex items-center justify-center"
+  delay={180}
+  distance="lg"
+>
+  <img
+    src={stackIllustration}
+    alt={t('techAlt')}
+    loading="lazy"
+    decoding="async"
+    fetchPriority="low"
+    className="relative -left-3 w-full max-w-80 object-contain opacity-95 sm:max-w-96 lg:left-0 lg:max-w-107.5 xl:max-w-117.5 2xl:max-w-130 min-[2200px]:max-w-145"
+  />
+</Reveal>
         </div>
       </div>
     </section>
