@@ -5,7 +5,7 @@ from rest_framework.throttling import ScopedRateThrottle
 from core.i18n import request_language
 
 from ..models import ContactInquiry
-from ..services.email_notifications import send_contact_emails
+from ..services.email_notifications import queue_contact_emails
 from .serializers import ContactInquirySerializer
 
 
@@ -19,4 +19,4 @@ class ContactInquiryCreateView(CreateAPIView):
 
     def perform_create(self, serializer):
         inquiry = serializer.save()
-        send_contact_emails(inquiry, request_language(self.request))
+        queue_contact_emails(inquiry, request_language(self.request))

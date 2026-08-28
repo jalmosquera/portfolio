@@ -49,6 +49,7 @@ def test_contact_api_does_not_require_csrf_for_admin_session():
 
 @override_settings(
     EMAIL_NOTIFICATIONS_ENABLED=True,
+    CONTACT_EMAIL_ASYNC=False,
     EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
     DEFAULT_FROM_EMAIL="Jalberth Mosquera <jmosquera2305@gmail.com>",
     CONTACT_NOTIFICATION_EMAIL="jmosquera2305@gmail.com",
@@ -75,7 +76,7 @@ def test_contact_api_sends_notification_and_spanish_confirmation(api_client):
     assert inquiry.email_error == ""
 
 
-@override_settings(EMAIL_NOTIFICATIONS_ENABLED=True)
+@override_settings(EMAIL_NOTIFICATIONS_ENABLED=True, CONTACT_EMAIL_ASYNC=False)
 @pytest.mark.django_db
 def test_contact_api_keeps_inquiry_when_smtp_fails(api_client):
     with patch(
@@ -89,6 +90,17 @@ def test_contact_api_keeps_inquiry_when_smtp_fails(api_client):
     assert inquiry.notification_sent_at is None
     assert inquiry.confirmation_sent_at is None
     assert "SMTP unavailable" in inquiry.email_error
+
+
+@pytest.mark.django_db
+def test_contact_api_queues_email_delivery_by_default(api_client):
+    with patch("apps.contact.api.views.queue_contact_emails") as queue_emails:
+        response = api_client.post("/api/contact/", VALID_PAYLOAD, format="json")
+
+    assert response.status_code == status.HTTP_201_CREATED
+    queue_emails.assert_called_once()
+    assert queue_emails.call_args.args[0].pk == ContactInquiry.objects.get().pk
+    assert queue_emails.call_args.args[1] == "en"
 
 
 @pytest.mark.django_db

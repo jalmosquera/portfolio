@@ -202,6 +202,7 @@ EMAIL_USE_TLS = env_bool('EMAIL_USE_TLS', True)
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = env_or_file('EMAIL_HOST_PASSWORD', '').replace(' ', '')
 EMAIL_TIMEOUT = int(os.getenv('EMAIL_TIMEOUT', '10'))
+CONTACT_EMAIL_ASYNC = env_bool('CONTACT_EMAIL_ASYNC', True)
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'Jalberth Mosquera <jmosquera2305@gmail.com>')
 CONTACT_NOTIFICATION_EMAIL = os.getenv('CONTACT_NOTIFICATION_EMAIL', 'jmosquera2305@gmail.com')
 

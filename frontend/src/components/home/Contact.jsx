@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { sileo } from 'sileo'
 import { createContactInquiry } from '../../lib/api/contact'
 import { SOCIAL_LINKS } from '../../lib/config/routes'
 import { useLanguage } from '../../context/useLanguage'
@@ -41,7 +42,11 @@ export function Contact() {
     setError('')
 
     try {
-      await createContactInquiry(form, language)
+      await sileo.promise(() => createContactInquiry(form, language), {
+        loading: { title: t('sending') },
+        success: { title: t('sent'), duration: 6000 },
+        error: { title: t('sendError') },
+      })
       trackEvent('contact_click', { target: 'form_submit' })
       setForm(INITIAL_FORM)
       setSent(true)
