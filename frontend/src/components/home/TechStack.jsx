@@ -1,4 +1,4 @@
-import stackIllustration from '../../assets/myStack.jpg'
+import stackIllustration from '../../assets/myStack.png'
 import { useLanguage } from '../../context/useLanguage'
 import { technologyIcon } from '../../lib/technology-icons'
 import { Reveal } from '../ui/Reveal'
