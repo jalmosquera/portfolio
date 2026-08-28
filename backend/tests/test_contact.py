@@ -1,7 +1,6 @@
 from unittest.mock import patch
 
 import pytest
-from django.core import mail
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.test import override_settings
@@ -50,38 +49,40 @@ def test_contact_api_does_not_require_csrf_for_admin_session():
 @override_settings(
     EMAIL_NOTIFICATIONS_ENABLED=True,
     CONTACT_EMAIL_ASYNC=False,
-    EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
-    DEFAULT_FROM_EMAIL="Jalberth Mosquera <jmosquera2305@gmail.com>",
+    RESEND_API_KEY="re_test",
+    RESEND_FROM_EMAIL="Portfolio <noreply@mosquerasoft.com>",
     CONTACT_NOTIFICATION_EMAIL="jmosquera2305@gmail.com",
 )
 @pytest.mark.django_db
 def test_contact_api_sends_notification_and_spanish_confirmation(api_client):
-    response = api_client.post(
-        "/api/contact/",
-        VALID_PAYLOAD,
-        format="json",
-        HTTP_ACCEPT_LANGUAGE="es",
-    )
+    with patch("apps.contact.services.email_notifications.resend.Emails.send") as send_email:
+        response = api_client.post(
+            "/api/contact/",
+            VALID_PAYLOAD,
+            format="json",
+            HTTP_ACCEPT_LANGUAGE="es",
+        )
 
     assert response.status_code == status.HTTP_201_CREATED
-    assert len(mail.outbox) == 2
-    assert mail.outbox[0].to == ["jmosquera2305@gmail.com"]
-    assert mail.outbox[0].reply_to == [VALID_PAYLOAD["email"]]
-    assert mail.outbox[1].to == [VALID_PAYLOAD["email"]]
-    assert mail.outbox[1].subject == "Recibí tu mensaje"
-    assert "Tenés una nueva consulta" in mail.outbox[0].alternatives[0].content
+    assert send_email.call_count == 2
+    notification, confirmation = [call.args[0] for call in send_email.call_args_list]
+    assert notification["to"] == ["jmosquera2305@gmail.com"]
+    assert notification["reply_to"] == [VALID_PAYLOAD["email"]]
+    assert confirmation["to"] == [VALID_PAYLOAD["email"]]
+    assert confirmation["subject"] == "Recibí tu mensaje"
+    assert "Tenés una nueva consulta" in notification["html"]
     inquiry = ContactInquiry.objects.get()
     assert inquiry.notification_sent_at is not None
     assert inquiry.confirmation_sent_at is not None
     assert inquiry.email_error == ""
 
 
-@override_settings(EMAIL_NOTIFICATIONS_ENABLED=True, CONTACT_EMAIL_ASYNC=False)
+@override_settings(EMAIL_NOTIFICATIONS_ENABLED=True, CONTACT_EMAIL_ASYNC=False, RESEND_API_KEY="re_test")
 @pytest.mark.django_db
 def test_contact_api_keeps_inquiry_when_smtp_fails(api_client):
     with patch(
-        "apps.contact.services.email_notifications.EmailMultiAlternatives.send",
-        side_effect=OSError("SMTP unavailable"),
+        "apps.contact.services.email_notifications.resend.Emails.send",
+        side_effect=OSError("Resend unavailable"),
     ):
         response = api_client.post("/api/contact/", VALID_PAYLOAD, format="json")
 
@@ -89,7 +90,7 @@ def test_contact_api_keeps_inquiry_when_smtp_fails(api_client):
     inquiry = ContactInquiry.objects.get()
     assert inquiry.notification_sent_at is None
     assert inquiry.confirmation_sent_at is None
-    assert "SMTP unavailable" in inquiry.email_error
+    assert "Resend unavailable" in inquiry.email_error
 
 
 @pytest.mark.django_db
